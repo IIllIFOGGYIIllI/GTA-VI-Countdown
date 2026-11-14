@@ -355,3 +355,16 @@ body{font-synthesis:none;text-rendering:optimizeLegibility}
   .milestone,.news-card,.media-video,.gallery-card,.viewer-app,.hero-actions .btn{transition:none}
   .milestone:hover,.news-card:hover,.hero-actions .btn:hover{transform:none}
 }
+
+
+/* v2.2 — no punctuation ornaments on headings, labels or branding */
+.brand-dot,.heading-period,.pink-dot{display:none!important}
+.countdown-heading>span,.footer-brand>span,.viewer-modal-brand>span{display:none!important}
+.hero h1.hero-title{padding-right:0}
+.hero-title-city{padding-right:.06em}
+.app-update-tools{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:16px 0 6px}
+.update-check{border:1px solid rgba(117,252,229,.55);color:#b0fff0;background:#171c39b0;border-radius:4px;font-size:11px;font-weight:900;padding:9px 12px;letter-spacing:.06em;min-height:36px}
+.update-check:hover{background:rgba(88,218,204,.19);border-color:#8affec}
+.update-check:disabled{opacity:.6;cursor:progress}
+.app-version{font-size:10px;color:#ffdcc8;letter-spacing:.17em;font-weight:900}
+@media(max-width:600px){.app-update-tools{gap:8px}.app-version{font-size:9px}}

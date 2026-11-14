@@ -100,3 +100,12 @@ An opt-in 138-image screenshot catalogue is sourced from Rockstar's official GTA
 - Enhanced skyline colour, copy readability, countdown typography, timer contrast, and time-zone metadata.
 - Unified the below-the-fold cards and the Privacy, Terms and Spoiler Policy pages with the Ocean Drive theme.
 - Rebuilt the PWA cache version (`vice-city-countdown-v5`) for stylesheet changes. No countdown, news, or gallery JavaScript behaviour changed.
+
+## v2.2 — Remove heading punctuation and repair installed PWA updates
+
+- Remove ornamental periods from all headings, titles, site logos, news-card art and policy pages; ordinary prose punctuation remains unchanged.
+- A separate `Refresh to latest version` control on the PWA panel issues an update check and navigates with a cache-busting query parameter.
+- Install the service worker with `updateViaCache: none`, check for updates when the application is opened or focused, and reload after the next service worker takes control.
+- Use **network-first navigation** rather than serving old cached HTML by default. Maintain an offline cached fallback.
+- Publish a new service worker cache version (`v6`), versioned JS/CSS asset URLs, and an update stamp (`APP v2.2`).
+- The first load of an already-installed older PWA may still use its existing service worker. Use the new Refresh control once available, or do one hard refresh of the PWA/browser to pick up the new worker.

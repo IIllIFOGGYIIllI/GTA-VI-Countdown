@@ -1,38 +1,76 @@
-// Vice City Countdown PWA v2.1
-// App-shell: cache-first for near-instant repeat launches; network updates in background.
-const CACHE='vice-city-countdown-v5';
-const CORE=['./','./index.html','./styles.css?v=2.1.0','./app.js?v=2.0.0','./assets/vice-city-theme.css?v=2.1.0','./assets/vice-city-skyline.svg','./data/news.json?v=2.0.0','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./privacy.html','./terms.html','./spoilers.html'];
+/* Vice City Countdown · PWA v2.2 · Fresh-online + offline fallback */
+const CACHE='vice-city-countdown-v6';
+const CORE=[
+  './','./index.html',
+  './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0',
+  './app.js?v=2.2.0','./assets/vice-city-skyline.svg',
+  './data/news.json?v=2.2.0','./manifest.webmanifest',
+  './assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
+  './privacy.html','./terms.html','./spoilers.html'
+];
 self.addEventListener('install',event=>{
- event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
+  event.waitUntil((async()=>{
+    const cache=await caches.open(CACHE);
+    // Avoid a browser/CDN's locally cached outdated app-shell resources.
+    await cache.addAll(CORE.map(path=>new Request(path,{cache:'reload'})));
+    await self.skipWaiting();
+  })());
 });
 self.addEventListener('activate',event=>{
- event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('vice-city-countdown-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
+  event.waitUntil((async()=>{
+    const keys=await caches.keys();
+    await Promise.all(keys.filter(k=>k.startsWith('vice-city-countdown-')&&k!==CACHE).map(k=>caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
 self.addEventListener('fetch',event=>{
- const req=event.request;
- if(req.method!=='GET')return;
- const url=new URL(req.url);
- if(url.origin!==self.location.origin)return;
- if(!url.pathname.startsWith(new URL(self.registration.scope).pathname))return;
- // News must stay fresh: the approved feed is checked online rather than frozen in the PWA cache.
- if(url.pathname.endsWith('/data/news.json')){
-   event.respondWith(fetch(req,{cache:'no-store'}).catch(async()=>await caches.match('./data/news.json?v=2.0.0')||new Response('{"articles":[]}',{headers:{'Content-Type':'application/json'}})));
-   return;
- }
- if(req.mode==='navigate'){
-   event.respondWith((async()=>{
-     const cached=await caches.match(req);
-     const refresh=fetch(req).then(response=>{
-       if(response.ok){const copy=response.clone();const updating=caches.open(CACHE).then(cache=>cache.put(req,copy));event.waitUntil(updating);}
-       return response;
-     }).catch(()=>null);
-     return cached || await refresh || await caches.match('./index.html') || Response.error();
-   })());
-   return;
- }
- // Versioned assets cached for offline operation. New version is fetched on install.
- event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(response=>{
-   if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put(req,copy)));}
-   return response;
- })));
+  const request=event.request;
+  if(request.method!=='GET')return;
+  const url=new URL(request.url);
+  if(url.origin!==self.location.origin)return;
+  if(!url.pathname.startsWith(new URL(self.registration.scope).pathname))return;
+
+  // Documents are network-first: installed PWAs cannot remain on old HTML
+  // simply because they already have a cached copy.
+  if(request.mode==='navigate'){
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(request,{cache:'no-store'});
+        if(response.ok){
+          const copy=response.clone();
+          event.waitUntil(caches.open(CACHE).then(c=>c.put(request,copy)));
+        }
+        return response;
+      }catch{
+        return (await caches.match(request)) ||
+          (await caches.match('./index.html')) || Response.error();
+      }
+    })());
+    return;
+  }
+
+  // Editor-approved news always tries the live published JSON first.
+  if(url.pathname.endsWith('/data/news.json')){
+    event.respondWith(fetch(request,{cache:'no-store'}).then(response=>{
+      if(response.ok){
+        const copy=response.clone();
+        event.waitUntil(caches.open(CACHE).then(c=>c.put(request,copy)));
+      }
+      return response;
+    }).catch(async()=>await caches.match('./data/news.json?v=2.2.0') ||
+      new Response('{"articles":[]}',{headers:{'Content-Type':'application/json'}})));
+    return;
+  }
+
+  // Versioned assets are cache-first for quick repeat launches. Changes
+  // always get a new URL version and cache namespace.
+  event.respondWith(caches.match(request).then(cached=>cached ||
+    fetch(request).then(response=>{
+      if(response.ok){
+        const copy=response.clone();
+        event.waitUntil(caches.open(CACHE).then(c=>c.put(request,copy)));
+      }
+      return response;
+    })
+  ));
 });

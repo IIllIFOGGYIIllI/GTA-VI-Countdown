@@ -148,14 +148,14 @@
       safe.forEach((item,i)=>{
         const card=document.createElement('article');card.className='news-card';card.dataset.category=item.category;
         const visual=document.createElement('div');visual.className='news-visual news-visual-'+(i%3+1);visual.setAttribute('aria-hidden','true');
-        const heading=document.createElement('span');heading.className='news-visual-big';heading.textContent=item.category==='preload'?'READY.':i%3===1?'19 / 11':'VI.';
+        const heading=document.createElement('span');heading.className='news-visual-big';heading.textContent=item.category==='preload'?'READY':i%3===1?'19 / 11':'VI';
         const number=document.createElement('span');number.className='news-visual-corner';number.textContent=String(i+1).padStart(2,'0');visual.append(heading,number);
         const content=document.createElement('div');content.className='news-content';
         const metadata=document.createElement('div');metadata.className='news-meta';
         const label=document.createElement('span');label.textContent=String(item.tag||item.category).slice(0,28).toUpperCase();
         const published=document.createElement('time');published.dateTime=item.date;published.textContent=new Date(item.date+'T12:00:00Z').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}).toUpperCase();
         metadata.append(label,published);
-        const title=document.createElement('h3');title.textContent=item.title;
+        const title=document.createElement('h3');title.textContent=item.title.replace(/\.+$/,'');
         const summary=document.createElement('p');summary.textContent=item.summary;
         const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Open official source for '+item.title);link.textContent='OPEN OFFICIAL SOURCE  ↗';
         content.append(metadata,title,summary,link);card.append(visual,content);fragment.append(card);
@@ -307,5 +307,56 @@
     toast(apple?'On iPhone: tap Share, then Add to Home Screen.':'Use your browser menu and choose Install app or Add to Home Screen.');
   });
   window.addEventListener('appinstalled',()=>{deferredInstall=null;toast('Vice City Countdown installed!');});
-  if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
+
+  // Update-aware PWA: request fresh service-worker code and reload once when
+  // a new worker takes control, while keeping offline fallback functional.
+  const APP_VERSION='2.2.0';
+  const refreshButton=$('check-updates');
+  if(refreshButton){
+    refreshButton.addEventListener('click',async()=>{
+      refreshButton.disabled=true;
+      refreshButton.textContent='Checking for updates…';
+      try {
+        if('serviceWorker' in navigator) {
+          const registration=await navigator.serviceWorker.getRegistration('./');
+          if(registration)await registration.update();
+        }
+      }catch{/* A hard-refresh URL still works without an active service worker. */}
+      const target=new URL(window.location.href);
+      target.searchParams.set('refresh',String(Date.now()));
+      window.location.replace(target.href);
+    });
+  }
+  if('serviceWorker' in navigator){
+    let hadController=Boolean(navigator.serviceWorker.controller);
+    let reloading=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(!hadController){hadController=true;return;}
+      if(reloading)return;
+      const key='vice-city-updated-'+APP_VERSION;
+      try{
+        if(sessionStorage.getItem(key)==='yes')return;
+        sessionStorage.setItem(key,'yes');
+      }catch{/* Private browsing may disable session storage. */}
+      reloading=true;
+      window.location.reload();
+    });
+    window.addEventListener('load',async()=>{
+      try{
+        const registration=await navigator.serviceWorker.register('./sw.js',{
+          scope:'./',updateViaCache:'none'
+        });
+        let lastChecked=0;
+        const check=()=>{
+          if(Date.now()-lastChecked<60000)return;
+          lastChecked=Date.now();
+          registration.update().catch(()=>{});
+        };
+        check();
+        window.addEventListener('focus',check);
+        document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
+      }catch{/* The normal website remains usable when SW registration fails. */}
+    });
+  }
+
 })();
