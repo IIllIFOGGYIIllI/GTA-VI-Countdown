@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Check out the website
         uses: actions/checkout@v4
+      - name: Verify spoiler-safe news filters offline
+        run: python3 -m unittest discover -s tests -p 'test_news.py' -v
       - name: Check Rockstar Newswire without publishing
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

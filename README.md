@@ -109,3 +109,24 @@ An opt-in 138-image screenshot catalogue is sourced from Rockstar's official GTA
 - Use **network-first navigation** rather than serving old cached HTML by default. Maintain an offline cached fallback.
 - Publish a new service worker cache version (`v6`), versioned JS/CSS asset URLs, and an update stamp (`APP v2.2`).
 - The first load of an already-installed older PWA may still use its existing service worker. Use the new Refresh control once available, or do one hard refresh of the PWA/browser to pick up the new worker.
+
+## v2.3 — Mobile and news reliability
+
+### Mobile experience
+- Four-button bottom navigation for Countdown, News, Media and App, with safe-area padding on iOS and Android.
+- A responsive hero structure presents the countdown immediately after the Vice City title on phones; secondary description and buttons appear below it.
+- More compact countdown typography, larger tap targets, horizontally scrollable filter chips, and improved card grids.
+- Full-screen screenshot viewer with navigation controls and swipe support on small touch screens.
+- Smaller PWA install section, optimized backgrounds and fewer decorative mobile animations.
+- The desktop design is retained. assets/mobile-experience.css is loaded after the main theme and included in the offline PWA shell.
+- PWA v2.3 and cache v7 keep the existing update functionality.
+
+### News checker reliability
+- scripts/check_news.py now tries Rockstar's standard Newswire GraphQL query and a minimal fallback query, using official metadata only. Both are read-only. If both fail, public website content remains unchanged.
+- Duplicate Newswire post IDs are suppressed within each run.
+- tests/test_news.py verifies date parsing, spoiler-topic exclusions, strict Rockstar-only source links, GraphQL fallback and review-only operation.
+- tests/test_site.py verifies HTML IDs, mobile navigation, approved-news sources, 138-image gallery and offline mobile CSS.
+- GitHub Actions Verify GTA VI Countdown runs Python tests and JavaScript / JSON validation whenever main changes.
+- The scheduled news-check workflow runs its safety tests before contacting Rockstar.
+
+**Operational note:** The workflows are committed, but a successful scheduled Newswire fetch has not been independently verified in this chat. View the repository Actions tab; GitHub can delay or disable scheduled jobs. Manually run Check Official GTA VI News (review only) to verify connectivity and permissions. Publication still requires a separate maintainer action.

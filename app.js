@@ -131,7 +131,7 @@
     const grid=$('news-grid'),status=$('news-status'),verified=$('news-verified');
     if(!grid||!status)return;
     try{
-      const response=await fetch('./data/news.json?v=2.0.0',{cache:'no-store'});
+      const response=await fetch('./data/news.json?v=2.3.0',{cache:'no-store'});
       if(!response.ok)throw Error('Approved news is unavailable');
       const feed=await response.json();
       if(!Array.isArray(feed.articles))throw Error('Invalid approved-news format');
@@ -297,6 +297,39 @@
       if(open){loadScreenshots();mediaContent.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});}else if(galleryModal.open)closeScreenshot();
     });
   }
+
+  // Mobile PWA navigation: native anchor links with active-section tracking.
+  const mobileTabs=[...document.querySelectorAll('.mobile-tab-link')];
+  if(mobileTabs.length){
+    const setActiveMobileTab=(sectionId)=>{
+      for(const tab of mobileTabs){
+        const active=tab.dataset.section===sectionId;
+        tab.classList.toggle('is-active',active);
+        if(active)tab.setAttribute('aria-current','page');
+        else tab.removeAttribute('aria-current');
+      }
+    };
+    for(const tab of mobileTabs){
+      tab.addEventListener('click',()=>setActiveMobileTab(tab.dataset.section));
+    }
+    if('IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{
+        if(window.innerWidth>900)return;
+        for(const entry of entries){
+          if(entry.isIntersecting){setActiveMobileTab(entry.target.id);break;}
+        }
+      },{rootMargin:'-18% 0px -67% 0px',threshold:0});
+      for(const tab of mobileTabs){
+        const section=document.getElementById(tab.dataset.section);
+        if(section)observer.observe(section);
+      }
+    }
+    const initialHash=window.location.hash.slice(1);
+    if(mobileTabs.some(tab=>tab.dataset.section===initialHash)){
+      setActiveMobileTab(initialHash);
+    }
+  }
+
   let deferredInstall;
   const installBtn=$('install-btn');
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;installBtn.textContent='Install the PWA ↗';});
@@ -310,7 +343,7 @@
 
   // Update-aware PWA: request fresh service-worker code and reload once when
   // a new worker takes control, while keeping offline fallback functional.
-  const APP_VERSION='2.2.0';
+  const APP_VERSION='2.3.0';
   const refreshButton=$('check-updates');
   if(refreshButton){
     refreshButton.addEventListener('click',async()=>{

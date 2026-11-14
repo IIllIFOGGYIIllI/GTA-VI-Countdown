@@ -1,0 +1,251 @@
+/* Vice City Countdown — mobile-first interaction polish, v2.3
+   Desktop layout is intentionally unchanged.  */
+
+.mobile-tabbar{display:none}
+
+/* Tablet layouts: explicit easy navigation and a more compact, legible hero. */
+@media(max-width:900px){
+  :root{scroll-padding-top:77px}
+  html{scroll-padding-top:77px}
+  body{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px));overflow-x:clip}
+  body:after{display:none}
+  .shell{width:calc(100% - 36px)}
+  .site-header{z-index:90;position:sticky;top:0;isolation:isolate}
+  .nav-wrap{height:66px;gap:12px}
+  .brand{gap:10px;min-width:0}
+  .brand-symbol{font-size:35px}
+  .brand-words{font-size:8px;letter-spacing:.13em;line-height:1.3}
+  .nav-cta{font-size:10px;min-width:0;padding:9px 12px;letter-spacing:.06em}
+  .nav-cta .live-dot{flex-shrink:0}
+  .desktop-nav{display:none}
+  .mobile-tabbar{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:90;
+    padding:7px max(10px,env(safe-area-inset-left,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-right,0px));
+    gap:5px;
+    border-top:1px solid rgba(125,245,222,.62);
+    background:linear-gradient(135deg,rgba(27,18,55,.97),rgba(13,22,45,.98));
+    box-shadow:0 -8px 32px rgba(8,8,26,.65);
+    -webkit-backdrop-filter:blur(18px);
+    backdrop-filter:blur(18px);
+  }
+  .mobile-tab-link{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    justify-content:center;
+    align-items:center;
+    color:#cfc5da;
+    min-width:0;
+    min-height:53px;
+    border-radius:8px;
+    font-size:10px;
+    letter-spacing:.025em;
+    font-weight:800;
+    line-height:1.2;
+    text-align:center;
+    transition:background .16s,color .16s;
+  }
+  .mobile-tab-link svg{height:22px;width:22px;flex:none}
+  .mobile-tab-link:is(.is-active,[aria-current="page"]){
+    background:linear-gradient(145deg,rgba(91,60,114,.75),rgba(21,72,76,.4));
+    color:#8efbe8;
+    box-shadow:inset 0 1px rgba(120,247,229,.18);
+  }
+  .mobile-tab-link:focus-visible{outline-offset:-3px}
+  .hero{padding-top:35px;padding-bottom:25px;min-height:0}
+  .hero-grid{display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .hero-copy{display:contents}
+  .hero-splash{order:0;position:relative;align-self:stretch;min-width:0;margin-bottom:22px}
+  .hero-splash .eyebrow{max-width:100%;font-size:10px}
+  .hero-splash .hero-kicker{margin:18px 0 4px}
+  .hero h1.hero-title{margin:9px 0 0;font-size:clamp(88px,12vw,125px)}
+  .hero-extras{order:2;align-self:stretch;padding:25px 0 0;max-width:650px;margin:auto}
+  .hero-extras .hero-intro{font-size:16px;line-height:1.7;margin:0 0 12px;text-shadow:0 2px 12px #070923}
+  .hero-extras .city-stamp{margin:6px 0 14px}
+  .hero-extras .hero-tags{margin:14px 0 16px}
+  .hero-extras .hero-actions{margin-top:10px}
+  .countdown-card{order:1;align-self:center;width:100%;max-width:650px;margin:0 auto;transform:none;box-shadow:0 0 0 4px #271c40a1,0 0 0 5px #65eadb75,0 23px 54px #06071ccd}
+  .hero-visual{height:1080px;background-size:auto 1080px;background-position:center 0}
+  .hero-visual:before{background:linear-gradient(90deg,rgba(13,9,31,.67),rgba(24,12,42,.18)),linear-gradient(to bottom,rgba(15,8,28,.02),rgba(11,9,30,.4) 58%,#101027ec 98%)}
+  .city-marquee{margin-top:35px}
+  .hero-bottom{margin-top:19px;gap:12px}
+  .strip{margin-top:0}
+  .strip-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+  .strip-grid>div{padding:4px 14px;border-left:1px solid rgba(91,51,75,.45)}
+  .strip-grid>div:nth-child(odd){padding-left:0;border-left:0}
+  .section{padding-top:76px;scroll-margin-top:80px}
+  .section-header{gap:16px}
+  .section-header>p{max-width:640px}
+  .milestone-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .milestone-grid .milestone:last-child{grid-column:span 2}
+  .milestone{min-height:280px}
+  .news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .news-grid .news-card:last-child{grid-column:auto}
+  .news-card{min-width:0}
+  .news-tools{align-items:stretch;flex-wrap:wrap}
+  .filters{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding:0 2px 8px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scroll-snap-type:x proximity}
+  .filter{white-space:nowrap;flex:none;scroll-snap-align:start}
+  .news-verified{align-self:flex-start}
+  .media-lock{grid-template-columns:1fr;gap:15px}
+  .media-lock .btn{grid-column:1}
+  .media-video-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .viewer-toolbar{gap:12px}
+  .viewer-filters{flex-wrap:nowrap;overflow-x:auto;width:100%;padding:0 2px 8px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scroll-snap-type:x proximity}
+  .viewer-filter{white-space:nowrap;flex:none;scroll-snap-align:start}
+  .viewer-search{flex:1 1 230px}
+  .viewer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .app-panel{grid-template-columns:minmax(0,1fr) 240px}
+  .app-copy{padding:35px 18px 30px 30px}
+  .app-copy h2{font-size:clamp(36px,5vw,53px)}
+  .faq{padding-bottom:60px}
+  .footer{padding-bottom:30px}
+  .footer-main,.footer-bottom{gap:18px}
+}
+
+/* Phone portrait: show the actual timer before secondary introduction
+   or promotional buttons; keep thumb controls reachable. */
+@media(max-width:600px){
+  html{scroll-padding-top:70px}
+  .shell{width:calc(100% - 28px)}
+  .nav-wrap{height:62px}
+  .brand-symbol{font-size:32px}
+  .brand-words{font-size:8px}
+  .nav-cta{font-size:9px;line-height:1.1}
+  .nav-cta .live-dot{width:6px;height:6px}
+  .hero{padding-top:20px}
+  .hero-splash{margin-bottom:19px}
+  .hero-splash .eyebrow{letter-spacing:.075em;font-size:9px;padding:7px 9px;gap:7px}
+  .hero-splash .eyebrow-line{width:17px}
+  .hero-splash .hero-kicker{font-size:clamp(16px,5vw,20px);letter-spacing:.10em;margin:16px 0 0}
+  .hero h1.hero-title{font-size:clamp(65px,16.2vw,89px);line-height:.87;margin:10px 0 0;padding:0 5px 3px 0}
+  .hero-title-vice{text-shadow:2px 2px #ed8bb0,4px 5px #562755}
+  .hero-title-city{margin-top:-.07em}
+  .hero-visual{height:1000px;background-position:57% top;background-size:auto 1000px}
+  .hero-visual:before{background:linear-gradient(90deg,#100c28c2,#23123e43),linear-gradient(to bottom,transparent 0%,rgba(12,9,34,.18) 42%,#111027f5 97%)}
+  .countdown-card{max-width:100%;border-width:1px;outline:1px solid rgba(121,249,220,.6);outline-offset:3px;box-shadow:0 20px 55px #08071ab0}
+  .card-bar{padding:12px 12px}
+  .card-status,.serial{font-size:8px;letter-spacing:.085em}
+  .card-status{gap:7px}
+  .small-label{letter-spacing:.1em;font-size:9px}
+  .card-inner{padding:19px 13px 18px}
+  .countdown-heading{font-size:clamp(23px,6.8vw,34px);line-height:1.05;margin:8px 0 5px}
+  .count-subtext{font-size:12px;line-height:1.45;margin-bottom:17px}
+  .count-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .count-item{min-width:0;padding:13px 1px 11px}
+  .count-value{font-size:clamp(27px,7.55vw,41px);letter-spacing:-.075em;line-height:1.12}
+  .count-label{font-size:8px;letter-spacing:0;margin-top:5px}
+  .count-progress{margin-top:15px}
+  .zone-head{margin-top:16px}
+  .zone-head label{font-size:9px;letter-spacing:.05em}
+  .text-button{font-size:11px;min-height:37px}
+  .select-wrap select{font-size:14px;min-height:45px}
+  .zone-details{grid-template-columns:minmax(0,1fr) minmax(0,.78fr);gap:6px;padding-top:12px;margin-top:12px}
+  .zone-details strong{font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+  .meta-caption{font-size:8px;letter-spacing:.035em}
+  .zone-help{font-size:10px;line-height:1.55;margin-top:12px}
+  .card-bottom{padding:11px 13px}
+  .card-bottom>span:last-child{display:none}
+  .hero-extras{padding-top:25px}
+  .hero-extras .hero-intro{font-size:14px;line-height:1.75}
+  .hero-extras .city-stamp{font-size:9px;line-height:1.45;margin:10px 0}
+  .hero-extras .hero-tags{gap:6px}
+  .hero-extras .hero-tags span{font-size:9px;padding:6px 7px}
+  .hero-extras .hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .hero-actions .btn{min-width:0;min-height:45px;font-size:10px;letter-spacing:.025em;padding:10px 7px;gap:5px}
+  .city-marquee{margin-top:25px}
+  .hero-bottom{font-size:8px;letter-spacing:.12em}
+  .strip-grid{gap:10px}
+  .strip-grid strong{font-size:19px}
+  .strip-grid span{font-size:8px;letter-spacing:.03em}
+  .section{padding-top:67px}
+  .section:before{top:40px;left:14px}
+  .section h2{font-size:clamp(36px,9.1vw,49px);line-height:1.04}
+  .section-header>p{font-size:13px}
+  .section-index{font-size:9px;letter-spacing:.15em}
+  .milestone-grid,.news-grid{grid-template-columns:1fr}
+  .milestone-grid .milestone:last-child,.news-grid .news-card:last-child{grid-column:auto}
+  .milestone{min-height:unset;padding:22px}
+  .milestone-symbol{margin:19px 0}
+  .milestone h3{font-size:25px}
+  .news-tools{gap:10px}
+  .news-verified{font-size:9px}
+  .news-visual{height:155px}
+  .news-content{padding:20px}
+  .news-content h3{font-size:20px}
+  .news-status-line{padding:11px;font-size:11px}
+  .media-lock{padding:17px;gap:12px}
+  .media-lock .btn{width:100%;min-height:45px}
+  .media-video-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .media-video{padding:13px;min-height:154px}
+  .media-video strong{font-size:15px;min-height:unset}
+  .media-no{font-size:20px}
+  .media-no span{font-size:8px}
+  .gallery-card{min-height:180px;padding:20px}
+  .gallery-symbol{font-size:100px}
+  .gallery-card strong{font-size:22px}
+  .viewer-app{padding:14px}
+  .viewer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .viewer-tile-caption{padding:26px 8px 8px}
+  .viewer-tile-caption strong{font-size:10px;line-height:1.2}
+  .viewer-tile-caption small{font-size:9px}
+  .viewer-modal{width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:0;max-width:none;margin:0}
+  .viewer-modal-shell{height:100dvh;max-height:100dvh}
+  .viewer-modal-header{padding:calc(12px + env(safe-area-inset-top,0px)) 12px 10px}
+  .viewer-modal-stage{padding:4px 34px}
+  .viewer-modal-footer{padding:11px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+  .viewer-arrow{height:44px;width:30px;font-size:30px}
+  .viewer-prev{left:2px}.viewer-next{right:2px}
+  .app-panel{display:flex;flex-direction:column}
+  .app-copy{padding:29px 22px 8px}
+  .app-copy h2{font-size:clamp(39px,11vw,55px);line-height:1.02}
+  .app-copy>p{font-size:13px;line-height:1.7}
+  .app-points{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .app-copy .btn{min-height:48px}
+  .phone-wrap{min-height:160px;max-height:160px;margin-top:7px;overflow:hidden}
+  .phone{transform:scale(.55) rotate(7deg) translateY(50px);transform-origin:top center}
+  .phone-orbit{height:200px;width:200px}
+  .faq{padding-bottom:45px}
+  .faq-list summary{font-size:14px}
+  .faq-list details{padding:17px 0}
+  .footer{padding:33px 0 32px}
+  .footer-links{gap:13px}
+  .footer-bottom{font-size:10px;line-height:1.6}
+}
+@media(max-width:360px){
+  .nav-cta span:last-child{display:none}
+  .nav-cta{min-width:36px;min-height:36px;justify-content:center}
+  .hero h1.hero-title{font-size:clamp(58px,16vw,70px)}
+  .card-inner{padding:16px 10px}
+  .countdown-heading{font-size:23px}
+  .count-value{font-size:26px}
+  .zone-details{grid-template-columns:1fr}
+  .zone-side{text-align:left}
+  .mobile-tab-link{font-size:9px}
+}
+@media(orientation:landscape) and (max-height:520px) and (max-width:900px){
+  .mobile-tabbar{padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom,0px))}
+  .mobile-tab-link{min-height:39px;flex-direction:row;gap:6px}
+  .mobile-tab-link svg{width:17px;height:17px}
+  body{padding-bottom:calc(55px + env(safe-area-inset-bottom,0px))}
+  .hero{padding-top:16px}
+  .hero-grid{gap:0}
+  .hero h1.hero-title{font-size:clamp(59px,10vw,88px)}
+  .hero-splash{margin-bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .mobile-tab-link{transition:none}
+}
+
+/* Avoid expensive fixed backgrounds and decorative animations on mobile
+   browsers; these can otherwise make the timer feel slow while scrolling. */
+@media(max-width:900px){
+  body{background-attachment:scroll}
+  .hero-visual{animation:none!important;filter:none}
+  .art-vi,.city-marquee{animation:none!important}
+}

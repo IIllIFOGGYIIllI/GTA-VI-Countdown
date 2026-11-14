@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="2.2.0">
+  <meta name="app-version" content="2.3.0">
   <meta name="theme-color" content="#241739">
   <meta name="description" content="A spoiler-free GTA VI release countdown with regional launch times, verified Rockstar news and an installable PWA. Unofficial fan project.">
   <meta property="og:title" content="Vice City Countdown | GTA VI">
@@ -18,6 +18,7 @@
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
   <link rel="stylesheet" href="./styles.css?v=2.2.0">
   <link rel="stylesheet" href="./assets/vice-city-theme.css?v=2.2.0">
+  <link rel="stylesheet" href="./assets/mobile-experience.css?v=2.3.0">
   <script src="./app.js?v=2.2.0" defer></script>
 </head>
 <body>
@@ -48,13 +49,17 @@
       </div>
       <div class="hero-grid">
         <div class="hero-copy">
+          <div class="hero-splash">
           <div class="eyebrow"><span class="eyebrow-line"></span> LIVE FROM LEONIDA · EST. 2026 <span class="star">✦</span></div>
           <p class="hero-kicker">Greetings from</p>
           <h1 id="hero-heading" class="hero-title"><span class="hero-title-vice">VICE</span><span class="hero-title-city">CITY</span></h1>
+          </div>
+          <div class="hero-extras">
           <p class="hero-intro">Sunset skies. Neon nights. One final countdown. Track the launch of Grand Theft Auto VI across the globe, without ruining a second of the story.</p>
           <div class="city-stamp"><strong>✦</strong> Ocean Drive atmosphere <strong>✦</strong> No story spoilers</div>
           <div class="hero-tags" aria-label="Launch facts"><span>19 NOV 2026</span><span>PS5 · XBOX SERIES X|S</span><span>100% SPOILER-CONSCIOUS</span></div>
           <div class="hero-actions"><a class="btn btn-primary" href="#countdown-panel">See the countdown <span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="#news">Latest updates <span aria-hidden="true">↓</span></a></div>
+          </div>
         </div>
         <div class="countdown-card" id="countdown-panel">
           <div class="card-bar"><span class="card-status"><span class="live-dot" aria-hidden="true"></span> LIVE · YOUR REGION</span><span class="serial">VC—006 / 2026</span></div>
@@ -171,6 +176,24 @@
       <details><summary>Is this an official Rockstar Games website?</summary><p>No. This is a free, unofficial fan-made countdown, not endorsed by or affiliated with Rockstar Games or Take-Two Interactive.</p></details>
     </div></section>
   </main>
+  <nav class="mobile-tabbar" aria-label="Mobile quick navigation">
+    <a href="#countdown" class="mobile-tab-link is-active" data-section="countdown" aria-current="page">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span>Countdown</span>
+    </a>
+    <a href="#news" class="mobile-tab-link" data-section="news">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 12h8M8 15h5"/></svg>
+      <span>News</span>
+    </a>
+    <a href="#media" class="mobile-tab-link" data-section="media">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m3 17 6-5 4 3 3-3 5 5"/></svg>
+      <span>Media</span>
+    </a>
+    <a href="#app" class="mobile-tab-link" data-section="app">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+      <span>The app</span>
+    </a>
+  </nav>
   <footer class="footer"><div class="shell"><div class="footer-main"><div><a href="./" class="footer-brand">VICE CITY COUNTDOWN</a><p>Wish you were here. No spoilers, only sunsets.</p></div><div class="footer-links"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./spoilers.html">Spoiler policy</a><a href="https://github.com/IIllIFOGGYIIllI/GTA-VI-Countdown/issues" target="_blank" rel="noopener noreferrer">Feedback ↗</a></div></div><div class="footer-bottom"><span>© <span id="current-year">2026</span> Vice City Countdown. Unofficial fan project.</span><span>Grand Theft Auto VI and associated marks belong to Rockstar Games / Take-Two Interactive. Not affiliated or endorsed.</span></div></div></footer>
   <div class="toast" role="status" id="toast" hidden></div>
 </body>

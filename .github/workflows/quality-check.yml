@@ -1,0 +1,29 @@
+name: Verify GTA VI Countdown
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+      - name: Validate newsroom and mobile site
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Validate JavaScript
+        run: |
+          node --check app.js
+          node --check sw.js
+      - name: Validate JSON
+        run: |
+          python3 -m json.tool data/news.json > /dev/null
+          python3 -m json.tool data/screenshots.json > /dev/null
+          python3 -m json.tool manifest.webmanifest > /dev/null

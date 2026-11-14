@@ -43,6 +43,16 @@ query ViceCityNewswire {
   }
 }
 """
+# Rockstar's endpoint is undocumented. If the tag field stops working,
+# use the minimal publicly observed query, but keep the publication gate.
+QUERY_FALLBACK = """
+query ViceCityNewswireFallback {
+  posts(locale:"en_us", limit:75) {
+    results { id title url created }
+  }
+}
+"""
+
 
 
 def request(url: str, *, method: str = "GET", payload=None, auth=False):
@@ -65,7 +75,7 @@ def recent(value):
     if not value:
         return False
     value = str(value).strip()
-    for fmt in ("%m/%d/%y, %I:%M %p", "%m/%d/%Y, %I:%M %p", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%d"):
+    for fmt in ("%m/%d/%y, %I:%M %p", "%m/%d/%Y, %I:%M %p", "%m/%d/%y %I:%M %p", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d"):
         try:
             dt = datetime.strptime(value, fmt)
             if dt.tzinfo is None:
@@ -90,21 +100,26 @@ def safe_url(raw: str):
 
 
 def fetch_newswire():
-    # Rockstar's Newswire is driven by its public GraphQL API (not an RSS feed).
-    params = urllib.parse.urlencode({"query": QUERY})
+    """Read original Rockstar headline metadata only; fail closed on errors."""
     errors = []
-    for method in ("GET", "POST"):
-        try:
-            if method == "GET":
-                data = request(GRAPH + "?" + params)
-            else:
-                data = request(GRAPH, method="POST", payload={"query": QUERY})
-            if data.get("errors"):
-                raise ValueError("Rockstar GraphQL returned errors")
-            return data["data"]["posts"]["results"]
-        except Exception as exc:
-            errors.append(f"{method}: {type(exc).__name__}: {exc}")
-    raise RuntimeError("Could not read Rockstar's official feed. " + " | ".join(errors))
+    for query in (QUERY, QUERY_FALLBACK):
+        params = urllib.parse.urlencode({"query": query})
+        for method in ("GET", "POST"):
+            try:
+                if method == "GET":
+                    data = request(GRAPH + "?" + params)
+                else:
+                    data = request(GRAPH, method="POST", payload={"query": query})
+                if not isinstance(data, dict) or data.get("errors"):
+                    raise ValueError("Rockstar GraphQL returned an error")
+                posts = data.get("data", {}).get("posts", {})
+                results = posts.get("results") if isinstance(posts, dict) else None
+                if not isinstance(results, list):
+                    raise ValueError("Rockstar feed has no valid results list")
+                return results
+            except Exception as exc:
+                errors.append(f"{method}: {type(exc).__name__}: {exc}")
+    raise RuntimeError("Official Newswire unavailable. " + " | ".join(errors))
 
 
 def issue_inventory():
@@ -142,6 +157,7 @@ def run():
     known_urls = {str(x.get("url", "")).rstrip("/") for x in approved.get("articles", [])}
     known_ids = issue_inventory()
     candidates = []
+    seen_candidate_ids = set()
     for post in feed:
         if not isinstance(post, dict) or not str(post.get("id", "")).isdigit():
             continue
@@ -153,9 +169,11 @@ def run():
         if not recent(post.get("created")) or not LOGISTICS.search(title) or BLOCKED.search(title):
             continue
         link = safe_url(post.get("url"))
-        if not link or link.rstrip("/") in known_urls or str(post["id"]) in known_ids:
+        item_id = str(post["id"])
+        if not link or link.rstrip("/") in known_urls or item_id in known_ids or item_id in seen_candidate_ids:
             continue
-        candidates.append({"id": str(post["id"]), "url": link, "created": str(post["created"])})
+        seen_candidate_ids.add(item_id)
+        candidates.append({"id": item_id, "url": link, "created": str(post["created"])})
     if not candidates:
         print("No new safe-to-review official logistics announcements.")
         return
