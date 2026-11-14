@@ -3,6 +3,12 @@ name: Check Official GTA VI News (review only)
 on:
   schedule:
     - cron: '17 */6 * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/news-check.yml'
+      - 'scripts/check_news.py'
   workflow_dispatch:
 
 permissions:
