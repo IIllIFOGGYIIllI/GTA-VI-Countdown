@@ -130,6 +130,16 @@
     element.textContent=message;element.hidden=false;
     clearTimeout(toastTimer);toastTimer=setTimeout(()=>element.hidden=true,4000);
   }
+  const mediaToggle=$('media-toggle'), mediaContent=$('media-content');
+  if(mediaToggle&&mediaContent){
+    mediaToggle.addEventListener('click',()=>{
+      const open=mediaContent.hidden;
+      mediaContent.hidden=!open;
+      mediaToggle.setAttribute('aria-expanded',String(open));
+      mediaToggle.textContent=open?'Hide official media ↑':'Reveal official media ↗';
+      if(open)mediaContent.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
+    });
+  }
   let deferredInstall;
   const installBtn=$('install-btn');
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;installBtn.textContent='Install the PWA ↗';});

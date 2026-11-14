@@ -45,3 +45,17 @@ Open a GitHub issue for bugs and requests. Please do not post story spoilers.
 Independent fan-made project. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive. Their trademarks remain their property. The site is provided as-is. See Terms of Use.
 
 Licensed under the MIT license in this repository (software code only; does not grant rights to third-party trademarks).
+
+
+## Official trailers and screenshots
+
+A user-initiated reveal section links all five official Rockstar videos (including YouTube) and the full official Rockstar gallery of 138 screenshots. The site **does not** embed YouTube or host Rockstar's promotional images. Titles and direct outbound links are intentionally hidden until the visitor chooses to reveal them. Video and image galleries on external sites may contain spoilers. The media page was verified 15 November 2026.
+
+Official Rockstar collections:
+- https://www.rockstargames.com/VI/media/videos
+- https://www.rockstargames.com/VI/media/screenshots
+- https://www.rockstargames.com/VI/launch-gallery
+
+## PWA startup performance
+
+From v1.1 onward the service worker caches the full app shell and uses a cache-first strategy for repeat navigations, refreshing cached HTML in the background. This is intended to improve installed-app startup latency on slow networks. Initial navigation remains subject to GitHub Pages and connection speed.

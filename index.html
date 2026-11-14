@@ -15,8 +15,8 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
-  <link rel="stylesheet" href="./styles.css?v=1.0.0">
-  <script src="./app.js?v=1.0.0" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=1.1.0">
+  <script src="./app.js?v=1.1.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -29,7 +29,7 @@
         <span class="brand-words">VICE CITY<br><strong>COUNTDOWN</strong></span>
       </a>
       <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="#countdown">Countdown</a><a href="#milestones">Launch info</a><a href="#news">News</a><a href="#app">The app</a>
+        <a href="#countdown">Countdown</a><a href="#milestones">Launch info</a><a href="#news">News</a><a href="#media">Media</a><a href="#app">The app</a>
       </nav>
       <a class="nav-cta" href="#countdown"><span class="live-dot" aria-hidden="true"></span><span>LIVE COUNTDOWN</span></a>
     </div>
@@ -100,12 +100,34 @@
       <div class="news-foot"><span><strong>THE SPOILER SHIELD.</strong> Headlines and summaries here are reviewed; linked external pages are outside our control and may show additional content.</span><a href="./spoilers.html">How we protect your experience ↗</a></div>
     </div></section>
 
+    
+    <section class="section shell official-media" id="media" aria-labelledby="media-title">
+      <div class="section-header"><div><div class="section-index">04 — ROCKSTAR'S OFFICIAL MEDIA</div><h2 id="media-title">SEE IT <em>YOUR WAY.</em></h2></div><p>All five official videos and the complete screenshot collection, without surprise previews.</p></div>
+      <div class="media-lock" id="media-lock"><div class="media-lock-art" aria-hidden="true">◈</div><div><span class="media-lock-label">SPOILER SHIELD · ACTIVE</span><h3>YOUR FIRST LOOK. YOUR CHOICE.</h3><p>Revealing this section shows only video titles and links—no images, thumbnails, videos or sound load. Rockstar's trailers and screenshot galleries may contain story or gameplay details.</p></div><button class="btn btn-primary" id="media-toggle" type="button" aria-controls="media-content" aria-expanded="false">Reveal official media ↗</button></div>
+      <div class="media-reveal" id="media-content" hidden>
+        <div class="media-subhead"><div><span class="section-index">ALL FIVE · ROCKSTAR GAMES</span><h3>OFFICIAL VIDEOS</h3></div><span>OPENS ON YOUTUBE</span></div>
+        <div class="media-video-grid">
+          <a class="media-video" href="https://www.youtube.com/watch?v=_yl5ELcmugI" target="_blank" rel="noopener noreferrer"><span class="media-no">01 <span>10 NOV 2026</span></span><strong>PRE-LOAD NOW</strong><span class="media-link">Watch on YouTube ↗</span></a>
+          <a class="media-video" href="https://www.youtube.com/watch?v=rz1B4B2yBZY" target="_blank" rel="noopener noreferrer"><span class="media-no">02 <span>15 OCT 2026</span></span><strong>LAUNCH TRAILER</strong><span class="media-link">Watch on YouTube ↗</span></a>
+          <a class="media-video" href="https://www.youtube.com/watch?v=tJbzMqJGH4k" target="_blank" rel="noopener noreferrer"><span class="media-no">03 <span>27 AUG 2026</span></span><strong>AN EXTENDED LOOK</strong><span class="media-link">Watch on YouTube ↗</span></a>
+          <a class="media-video" href="https://www.youtube.com/watch?v=VQRLujxTm3c" target="_blank" rel="noopener noreferrer"><span class="media-no">04 <span>06 MAY 2025</span></span><strong>TRAILER 2</strong><span class="media-link">Watch on YouTube ↗</span></a>
+          <a class="media-video" href="https://www.youtube.com/watch?v=QdBZY2fkU-0" target="_blank" rel="noopener noreferrer"><span class="media-no">05 <span>04 DEC 2023</span></span><strong>TRAILER 1</strong><span class="media-link">Watch on YouTube ↗</span></a>
+        </div>
+        <div class="media-subhead gallery-heading"><div><span class="section-index">138 OFFICIAL SCREENSHOTS</span><h3>THE LEONIDA GALLERY</h3></div><span>ROCKSTAR GAMES · EXTERNAL GALLERY</span></div>
+        <div class="gallery-grid">
+          <a class="gallery-card gallery-main" href="https://www.rockstargames.com/VI/media/screenshots" target="_blank" rel="noopener noreferrer"><span class="gallery-symbol" aria-hidden="true">138</span><div><span class="gallery-index">COMPLETE COLLECTION</span><strong>ALL 138 SCREENSHOTS.</strong><p>Rockstar's official media gallery, including characters, Vice City and regions across Leonida.</p><span class="gallery-link">Browse every screenshot ↗</span></div></a>
+          <a class="gallery-card gallery-second" href="https://www.rockstargames.com/VI/launch-gallery" target="_blank" rel="noopener noreferrer"><span class="gallery-symbol" aria-hidden="true">✦</span><div><span class="gallery-index">05 NOVEMBER 2026</span><strong>THE LAUNCH GALLERY.</strong><p>Rockstar's dedicated collection of new pre-launch images.</p><span class="gallery-link">View launch gallery ↗</span></div></a>
+        </div>
+        <p class="media-disclaimer">Official promotional media can reveal scenes, gameplay and characters. Links open Rockstar Games or Rockstar's YouTube channel; our site does not embed or automatically preload their content. Images are not rehosted here.</p>
+      </div>
+    </section>
+
     <section class="section shell" id="app" aria-labelledby="app-title"><div class="app-panel">
-      <div class="app-copy"><div class="section-index">04 — TAKE THE COUNTDOWN WITH YOU</div><h2 id="app-title">VICE CITY.<br><em>IN YOUR POCKET.</em></h2><p>Install the countdown as a lightweight web app. No account, no clutter, and the countdown keeps working offline.</p><div class="app-points"><span>✓ Android & desktop</span><span>✓ iPhone & iPad</span><span>✓ Offline countdown</span><span>✓ Saved timezone</span></div><button id="install-btn" class="btn btn-primary" type="button">Install the app <span aria-hidden="true">↗</span></button><p class="install-hint" id="install-hint">On iPhone, tap Share → Add to Home Screen. On desktop or Android, use your browser's Install option.</p></div>
+      <div class="app-copy"><div class="section-index">05 — TAKE THE COUNTDOWN WITH YOU</div><h2 id="app-title">VICE CITY.<br><em>IN YOUR POCKET.</em></h2><p>Install the countdown as a lightweight web app. No account, no clutter, and the countdown keeps working offline.</p><div class="app-points"><span>✓ Android & desktop</span><span>✓ iPhone & iPad</span><span>✓ Offline countdown</span><span>✓ Saved timezone</span></div><button id="install-btn" class="btn btn-primary" type="button">Install the app <span aria-hidden="true">↗</span></button><p class="install-hint" id="install-hint">On iPhone, tap Share → Add to Home Screen. On desktop or Android, use your browser's Install option.</p></div>
       <div class="phone-wrap" aria-hidden="true"><div class="phone"><div class="phone-pill"></div><div class="phone-content"><span class="phone-brand">VICE CITY COUNTDOWN</span><span class="phone-art">VI</span><span class="phone-title">ALMOST<br>THERE.</span><span class="phone-count">00 : 00 : 00 : 00</span><span class="phone-small">19 NOVEMBER 2026</span></div></div><span class="phone-orbit"></span></div>
     </div></section>
 
-    <section class="section shell faq" id="faq"><div class="section-header"><div><div class="section-index">05 — NEED TO KNOW</div><h2>THE <em>DETAILS.</em></h2></div></div><div class="faq-list">
+    <section class="section shell faq" id="faq"><div class="section-header"><div><div class="section-index">06 — NEED TO KNOW</div><h2>THE <em>DETAILS.</em></h2></div></div><div class="faq-list">
       <details><summary>Does the countdown automatically detect my timezone?</summary><p>Yes. The browser's timezone is selected by default, and you can change it to another region. Your selection is saved on this device only.</p></details>
       <details><summary>Does the countdown use my exact console unlock time?</summary><p>It uses Rockstar's published midnight-local release schedule. Your PlayStation or Xbox account region may differ from your current location, so choose the corresponding region and verify with your console store.</p></details>
       <details><summary>Will this site show GTA VI story spoilers or leaks?</summary><p>We do not publish leaks, plot details, story reveals, datamined content or unreviewed auto-imported articles. External official links may contain media or additional information, so open them at your discretion.</p></details>
