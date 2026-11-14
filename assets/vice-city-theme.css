@@ -135,3 +135,223 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opac
 .news-visual{background-clip:padding-box}
 .news-grid:empty{min-height:170px}
 @media(max-width:650px){.news-status-line{align-items:start;flex-wrap:wrap;font-size:11px}.news-status-line>a{margin-left:18px}.city-stamp{flex-wrap:wrap}}
+
+
+/* ─────────────────────────────────────────────────────────────
+   v2.1 — Sunset polish: cleaner typography, richer depth,
+   consistent section surfaces, precise mobile geometry.
+   Deliberately CSS-only to preserve countdown/news/gallery JS.
+   ───────────────────────────────────────────────────────────── */
+
+/* The global scanline layer degraded lettering and contrast.
+   Limit the effect to the scenery, beneath all interactive content. */
+body::after{display:none!important}
+.hero-visual::after{
+  background:repeating-linear-gradient(0deg,transparent 0 5px,rgba(13,8,33,.16) 6px,transparent 7px);
+  opacity:.16;
+  mix-blend-mode:multiply;
+}
+body{font-synthesis:none;text-rendering:optimizeLegibility}
+.hero-visual{
+  background-position:center 33%;
+  filter:saturate(1.12);
+}
+.hero-visual::before{
+  background:
+    radial-gradient(ellipse at 67% 33%,rgba(255,172,121,.17),transparent 32%),
+    linear-gradient(90deg,rgba(12,10,29,.65) 0%,rgba(17,10,35,.22) 45%,rgba(20,9,32,.16) 100%),
+    linear-gradient(to bottom,rgba(15,8,28,.06),transparent 48%,#111027ef 98%);
+}
+
+/* Keep VICE / CITY as one typographic mark; keep the neon dot
+   attached to CITY rather than stranded on its own line. */
+.hero h1.hero-title{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  width:fit-content;
+  max-width:100%;
+  margin:13px 0 29px;
+  padding:0 .13em .08em 0;
+  font-size:clamp(79px,8.1vw,138px);
+  line-height:.86;
+  letter-spacing:normal;
+  white-space:normal;
+  filter:none;
+  text-shadow:none;
+}
+.hero-title-vice{
+  display:block;
+  color:#fff3e0;
+  font:italic 1000 1em/.9 Impact,'Arial Black',sans-serif;
+  letter-spacing:-.035em;
+  text-shadow:3px 3px 0 #ed8bb0,7px 7px 0 #562755,0 9px 26px rgba(19,5,40,.56);
+  transform:skewX(-3deg);
+}
+.hero-title-city{
+  display:block;
+  margin-top:-.08em;
+  padding:0 .045em .045em .025em;
+  font:italic 900 .91em/.94 Georgia,'Times New Roman',serif;
+  letter-spacing:-.078em;
+  white-space:nowrap;
+  background:linear-gradient(165deg,#fff7ca 5%,#ffe3ac 22%,#ff9d98 55%,#f36bb5 94%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(3px 4px 0 #5b265a) drop-shadow(0 9px 22px rgba(17,8,31,.55));
+}
+.hero h1.hero-title .heading-period{
+  display:inline;
+  position:static;
+  margin-left:.006em;
+  font:inherit;
+  font-size:.68em;
+  line-height:1;
+  letter-spacing:0;
+  vertical-align:baseline;
+  color:#6affeb;
+  -webkit-text-fill-color:#72f9eb;
+  text-shadow:none;
+  filter:drop-shadow(0 0 10px rgba(99,253,230,.5));
+}
+.hero-copy{min-width:0}
+.hero-copy .hero-intro{
+  max-width:515px;
+  font-size:16px;
+  font-weight:600;
+  line-height:1.75;
+  color:#fff0ef;
+  text-shadow:0 2px 10px #130d27,0 1px 2px #130d27;
+}
+.hero-kicker{letter-spacing:.16em;text-shadow:1px 2px #85305d,0 7px 19px #09091f}
+.eyebrow{backdrop-filter:blur(5px);color:#a2fff1;line-height:1.45}
+.city-stamp{color:#ffe6d1}
+.hero-tags{margin-top:20px;gap:8px}
+.hero-tags span{font-size:10px;line-height:1.3;letter-spacing:.035em}
+.hero-actions .btn{min-height:49px;transition:transform .18s ease,box-shadow .18s ease}
+.hero-actions .btn:hover{transform:translateY(-2px);box-shadow:0 11px 24px #0a0c29c2}
+
+/* Clearer timer, sharper panel and more balanced metadata. */
+.countdown-card{
+  transform:none;
+  border-color:#ffd3b8c9;
+  box-shadow:0 0 0 5px rgba(39,28,64,.8),0 0 0 6px rgba(111,242,222,.47),0 23px 66px rgba(8,5,28,.64);
+}
+.countdown-heading{
+  font-size:clamp(29px,2.9vw,41px);
+  line-height:1.12;
+  letter-spacing:.008em;
+  text-shadow:2px 2px #592b60;
+  margin:8px 0 9px;
+}
+.count-subtext{color:#edcddd;font-size:13px;line-height:1.45}
+.card-bar{padding:17px 25px}
+.card-inner{padding:29px 27px 25px}
+.small-label{letter-spacing:.19em;font-size:10px;color:#ffd3a9}
+.count-grid{gap:9px}
+.count-item{
+  padding:17px 2px 14px;
+  border-color:rgba(255,191,183,.43);
+  background:linear-gradient(180deg,#342548,#17142b);
+  box-shadow:inset 0 1px rgba(255,252,243,.12),0 5px 15px rgba(8,5,29,.4);
+}
+.count-value{
+  display:block;
+  font-variant-numeric:tabular-nums;
+  font-size:clamp(32px,3.05vw,48px);
+  letter-spacing:-.055em;
+  line-height:1.2;
+  text-shadow:0 3px 14px #e875a440;
+}
+.count-label{color:#e9cbd9;font-size:10px;letter-spacing:.1em;margin-top:5px}
+.zone-head{margin-top:24px}
+.zone-details{padding-top:18px;margin-top:16px}
+.zone-details strong{font-weight:850;letter-spacing:.006em}
+.meta-caption{font-size:9px;color:#d9c1d3;line-height:1.55}
+.zone-help{max-width:100%;line-height:1.7;color:#c7b5cb}
+.countdown-card .select-wrap select{min-height:48px}
+.card-bottom{font-size:10px}
+
+/* Consistent art-deco rhythm below the fold. */
+.section-header{margin-bottom:35px}
+.section-header>p{color:#e8d5e4;font-size:14px;line-height:1.75}
+.section h2{font-size:clamp(40px,4.8vw,70px);line-height:1.03;text-shadow:2px 3px #42214e}
+.section h2 em{text-shadow:1px 2px #5b2862}
+.section-index{line-height:1.65;letter-spacing:.19em}
+.strip-grid>div{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.milestone,.news-card,.media-video,.gallery-card,.viewer-app{
+  transition:border-color .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.milestone,.news-card{border-color:rgba(255,197,179,.52)}
+.milestone:hover,.news-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(126,254,234,.8);
+  box-shadow:0 11px 31px rgba(5,8,24,.44),4px 5px 0 rgba(89,36,89,.6);
+}
+.milestone h3{line-height:1.15}
+.milestone p,.news-content p{color:#ead9e6;font-size:13px;line-height:1.78}
+.milestone a,.news-content a,.news-foot a{font-weight:900}
+.news-visual-big{letter-spacing:-.015em}
+.news-card .news-content{padding:25px}
+.news-meta{letter-spacing:.09em}
+.news-section .news-verified{color:#c3fff4}
+.media-lock{gap:24px}
+.media-lock p,.media-disclaimer,.viewer-note{color:#e0cfe0}
+.viewer-tile-caption{background:linear-gradient(0deg,rgba(9,8,26,.96),rgba(15,8,29,.65) 55%,transparent)}
+.viewer-tile-caption strong{color:#fff5ef}
+.viewer-filter,.filter{min-height:38px}
+.gallery-card p{color:#f5e5ed}
+.faq-list summary{line-height:1.5}
+.faq-list details p{color:#ead8e4}
+.footer-main p,.footer-bottom{color:#d5c0d3}
+.footer-links a{transition:color .2s ease}
+.legal-card p,.legal-card li{color:#e2d5e5}
+.legal-card a:not(.btn){color:#91fff0}
+.legal-card h2{font-family:Georgia,serif;font-style:italic;color:#ffcfbc;letter-spacing:-.025em}
+.legal-card .last-updated{color:#9cfff2}
+
+/* Mobile and tablet polish — no horizontal overflow or clipped timer. */
+@media(max-width:1100px){
+  .hero h1.hero-title{font-size:clamp(78px,8.5vw,115px)}
+  .count-value{font-size:clamp(29px,3.3vw,45px)}
+}
+@media(max-width:900px){
+  .hero h1.hero-title{font-size:clamp(88px,12.5vw,122px);margin-bottom:24px}
+  .hero-copy .hero-intro{max-width:660px}
+  .countdown-card{margin:auto}
+  .count-value{font-size:clamp(34px,7vw,51px)}
+  .hero-visual::before{
+    background:linear-gradient(90deg,rgba(13,9,31,.69),rgba(21,14,45,.17)),
+    linear-gradient(to bottom,rgba(12,9,26,.02),rgba(11,9,30,.25) 58%,#111027f0 100%);
+  }
+}
+@media(max-width:600px){
+  .hero h1.hero-title{font-size:clamp(65px,15vw,94px);margin:12px 0 20px;padding-right:.08em}
+  .hero-title-vice{text-shadow:2px 2px #ed8bb0,4px 5px #562755}
+  .hero-title-city{margin-top:-.06em;filter:drop-shadow(2px 3px 0 #5b265a)}
+  .hero-copy .hero-intro{font-size:14px;line-height:1.78}
+  .hero-tags span{font-size:9px}
+  .card-inner{padding:22px 16px 23px}
+  .card-bar{padding:15px 17px}
+  .countdown-heading{font-size:clamp(27px,7.9vw,34px)}
+  .count-grid{gap:6px}
+  .count-item{padding:13px 1px 12px}
+  .count-value{font-size:clamp(27px,7.4vw,41px)}
+  .count-label{font-size:8px;letter-spacing:.07em}
+  .card-bottom{font-size:9px}
+  .zone-details{gap:12px}
+  .zone-details strong{font-size:12px}
+  .section h2{font-size:clamp(38px,9.4vw,53px)}
+  .section-header{margin-bottom:27px}
+  .milestone,.news-card{box-shadow:none}
+  .milestone:hover,.news-card:hover{transform:none}
+  .news-card .news-content{padding:21px}
+  .strip-grid strong{font-size:18px}
+  .news-status-line{line-height:1.65}
+  .legal-page .legal-card{padding:24px}
+}
+@media(prefers-reduced-motion:reduce){
+  .milestone,.news-card,.media-video,.gallery-card,.viewer-app,.hero-actions .btn{transition:none}
+  .milestone:hover,.news-card:hover,.hero-actions .btn:hover{transform:none}
+}

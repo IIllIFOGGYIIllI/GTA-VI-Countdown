@@ -92,3 +92,11 @@ An opt-in 138-image screenshot catalogue is sourced from Rockstar's official GTA
 - The PWA fetches the approved news JSON over the network on each visit, with a cached approved feed available offline. Images and trailers remain opt-in.
 
 **Operational note:** GitHub Actions must be enabled in Settings → Actions. These workflow files are installed, but execution and successful API responses must be checked on the repository's Actions tab.
+
+## v2.1 — Vice City visual polish
+
+- Joined the VICE / CITY display lockup and attached the neon period to CITY.
+- Removed the page-wide scanline treatment; kept subtle texture inside the scenic backdrop only.
+- Enhanced skyline colour, copy readability, countdown typography, timer contrast, and time-zone metadata.
+- Unified the below-the-fold cards and the Privacy, Terms and Spoiler Policy pages with the Ocean Drive theme.
+- Rebuilt the PWA cache version (`vice-city-countdown-v5`) for stylesheet changes. No countdown, news, or gallery JavaScript behaviour changed.
