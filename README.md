@@ -59,3 +59,15 @@ Official Rockstar collections:
 ## PWA startup performance
 
 From v1.1 onward the service worker caches the full app shell and uses a cache-first strategy for repeat navigations, refreshing cached HTML in the background. This is intended to improve installed-app startup latency on slow networks. Initial navigation remains subject to GitHub Pages and connection speed.
+
+## Full in-site screenshot gallery (v1.2)
+
+An opt-in 138-image screenshot catalogue is sourced from Rockstar's official GTA VI media page. The catalogue lives in data/screenshots.json.
+
+- All 138 Rockstar screenshot entries are represented.
+- Images are not requested until the visitor clicks Reveal official media.
+- Filter by region, or browse characters; search screenshot titles.
+- Show more thumbnails 18 at a time, open fullscreen, navigate with keyboard arrows, on-screen buttons and touch swipe.
+- Screenshots load directly from Rockstar Games and are not copied into this repository or offline PWA cache.
+- External source: https://www.rockstargames.com/VI/media/screenshots
+- Update screenshot entries if Rockstar changes its URLs. Their official gallery remains linked as a fallback.

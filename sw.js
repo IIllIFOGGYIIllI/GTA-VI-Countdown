@@ -1,7 +1,7 @@
-// Vice City Countdown PWA v1.1
+// Vice City Countdown PWA v1.2
 // App-shell: cache-first for near-instant repeat launches; network updates in background.
-const CACHE='vice-city-countdown-v2';
-const CORE=['./','./index.html','./styles.css?v=1.1.0','./app.js?v=1.1.0','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./privacy.html','./terms.html','./spoilers.html'];
+const CACHE='vice-city-countdown-v3';
+const CORE=['./','./index.html','./styles.css?v=1.2.0','./app.js?v=1.2.0','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./privacy.html','./terms.html','./spoilers.html'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });

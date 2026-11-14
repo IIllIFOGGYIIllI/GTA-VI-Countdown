@@ -15,8 +15,8 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
-  <link rel="stylesheet" href="./styles.css?v=1.1.0">
-  <script src="./app.js?v=1.1.0" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=1.2.0">
+  <script src="./app.js?v=1.2.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -103,7 +103,7 @@
     
     <section class="section shell official-media" id="media" aria-labelledby="media-title">
       <div class="section-header"><div><div class="section-index">04 — ROCKSTAR'S OFFICIAL MEDIA</div><h2 id="media-title">SEE IT <em>YOUR WAY.</em></h2></div><p>All five official videos and the complete screenshot collection, without surprise previews.</p></div>
-      <div class="media-lock" id="media-lock"><div class="media-lock-art" aria-hidden="true">◈</div><div><span class="media-lock-label">SPOILER SHIELD · ACTIVE</span><h3>YOUR FIRST LOOK. YOUR CHOICE.</h3><p>Revealing this section shows only video titles and links—no images, thumbnails, videos or sound load. Rockstar's trailers and screenshot galleries may contain story or gameplay details.</p></div><button class="btn btn-primary" id="media-toggle" type="button" aria-controls="media-content" aria-expanded="false">Reveal official media ↗</button></div>
+      <div class="media-lock" id="media-lock"><div class="media-lock-art" aria-hidden="true">◈</div><div><span class="media-lock-label">SPOILER SHIELD · ACTIVE</span><h3>YOUR FIRST LOOK. YOUR CHOICE.</h3><p>Videos and images stay hidden until you choose to reveal this section. Rockstar's official promotional material may show gameplay, characters or other details.</p></div><button class="btn btn-primary" id="media-toggle" type="button" aria-controls="media-content" aria-expanded="false">Reveal official media ↗</button></div>
       <div class="media-reveal" id="media-content" hidden>
         <div class="media-subhead"><div><span class="section-index">ALL FIVE · ROCKSTAR GAMES</span><h3>OFFICIAL VIDEOS</h3></div><span>OPENS ON YOUTUBE</span></div>
         <div class="media-video-grid">
@@ -118,7 +118,38 @@
           <a class="gallery-card gallery-main" href="https://www.rockstargames.com/VI/media/screenshots" target="_blank" rel="noopener noreferrer"><span class="gallery-symbol" aria-hidden="true">138</span><div><span class="gallery-index">COMPLETE COLLECTION</span><strong>ALL 138 SCREENSHOTS.</strong><p>Rockstar's official media gallery, including characters, Vice City and regions across Leonida.</p><span class="gallery-link">Browse every screenshot ↗</span></div></a>
           <a class="gallery-card gallery-second" href="https://www.rockstargames.com/VI/launch-gallery" target="_blank" rel="noopener noreferrer"><span class="gallery-symbol" aria-hidden="true">✦</span><div><span class="gallery-index">05 NOVEMBER 2026</span><strong>THE LAUNCH GALLERY.</strong><p>Rockstar's dedicated collection of new pre-launch images.</p><span class="gallery-link">View launch gallery ↗</span></div></a>
         </div>
-        <p class="media-disclaimer">Official promotional media can reveal scenes, gameplay and characters. Links open Rockstar Games or Rockstar's YouTube channel; our site does not embed or automatically preload their content. Images are not rehosted here.</p>
+
+        <div class="viewer-app" id="gallery-browser">
+          <div class="viewer-heading">
+            <div><span class="section-index">IN-SITE BROWSER · OFFICIAL IMAGES</span><h3>EXPLORE THE SCREENSHOTS<span class="pink-dot">.</span></h3></div>
+            <span class="viewer-total" id="gallery-total">138 OFFICIAL IMAGES</span>
+          </div>
+          <div class="viewer-toolbar">
+            <div class="viewer-filters" id="gallery-filters" role="group" aria-label="Screenshot category">
+              <button type="button" class="viewer-filter active" data-category="All" aria-pressed="true">All</button>
+              <button type="button" class="viewer-filter" data-category="Vice City" aria-pressed="false">Vice City</button>
+              <button type="button" class="viewer-filter" data-category="Characters" aria-pressed="false">Characters</button>
+              <button type="button" class="viewer-filter" data-category="Leonida Keys" aria-pressed="false">Leonida Keys</button>
+              <button type="button" class="viewer-filter" data-category="Port Gellhorn" aria-pressed="false">Port Gellhorn</button>
+              <button type="button" class="viewer-filter" data-category="Grassrivers" aria-pressed="false">Grassrivers</button>
+              <button type="button" class="viewer-filter" data-category="Ambrosia" aria-pressed="false">Ambrosia</button>
+              <button type="button" class="viewer-filter" data-category="Mount Kalaga" aria-pressed="false">Mount Kalaga</button>
+            </div>
+            <label class="viewer-search"><span class="sr-only">Search screenshot titles</span><input id="gallery-search" type="search" placeholder="Search screenshots…" autocomplete="off"></label>
+          </div>
+          <div class="viewer-status" id="gallery-status" role="status">Unlock the media section to load screenshots.</div>
+          <div class="viewer-grid" id="gallery-grid" aria-label="Official GTA VI screenshots"></div>
+          <div class="viewer-footer"><button type="button" class="btn btn-secondary" id="gallery-more" hidden>Show more screenshots ↓</button><span id="gallery-count" aria-live="polite"></span></div>
+          <div class="viewer-note"><span>Images are hosted by Rockstar Games and only requested after you reveal this section.</span><a href="https://www.rockstargames.com/VI/media/screenshots" target="_blank" rel="noopener noreferrer">Original Rockstar gallery ↗</a></div>
+        </div>
+        <dialog class="viewer-modal" id="gallery-modal" aria-label="Full-screen screenshot viewer">
+          <div class="viewer-modal-shell">
+            <div class="viewer-modal-header"><span class="viewer-modal-brand">VI<span>.</span> / OFFICIAL SCREENSHOT</span><button type="button" class="viewer-close" id="gallery-close" aria-label="Close screenshot viewer">✕ Close</button></div>
+            <div class="viewer-modal-stage" id="gallery-modal-stage"><button type="button" class="viewer-arrow viewer-prev" id="gallery-prev" aria-label="Previous screenshot">‹</button><img id="gallery-large" alt=""><button type="button" class="viewer-arrow viewer-next" id="gallery-next" aria-label="Next screenshot">›</button><p class="viewer-image-error" id="gallery-image-error" hidden>Could not display this image. Open the original from Rockstar instead.</p></div>
+            <div class="viewer-modal-footer"><div><strong id="gallery-title"></strong><span id="gallery-position"></span></div><a href="https://www.rockstargames.com/VI/media/screenshots" target="_blank" rel="noopener noreferrer" id="gallery-original">Open original ↗</a></div>
+          </div>
+        </dialog>
+        <p class="media-disclaimer">Official promotional media can reveal scenes, gameplay and characters. Images are loaded here only after you reveal the section and remain hosted on Rockstar's servers. Videos open externally on YouTube; screenshots are not part of the offline app.</p>
       </div>
     </section>
 
