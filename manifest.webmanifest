@@ -1,0 +1,67 @@
+{
+  "id": "./",
+  "name": "Vice City Countdown — GTA VI",
+  "short_name": "VI Countdown",
+  "description": "Unofficial spoiler-free GTA VI countdown with regional release times.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#0c0a16",
+  "theme_color": "#120e28",
+  "orientation": "any",
+  "lang": "en",
+  "categories": [
+    "entertainment",
+    "games"
+  ],
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Live countdown",
+      "short_name": "Countdown",
+      "url": "./#countdown",
+      "icons": [
+        {
+          "src": "./assets/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Spoiler-free news",
+      "short_name": "News",
+      "url": "./#news",
+      "icons": [
+        {
+          "src": "./assets/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
