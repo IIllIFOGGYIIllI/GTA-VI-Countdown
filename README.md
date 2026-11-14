@@ -71,3 +71,24 @@ An opt-in 138-image screenshot catalogue is sourced from Rockstar's official GTA
 - Screenshots load directly from Rockstar Games and are not copied into this repository or offline PWA cache.
 - External source: https://www.rockstargames.com/VI/media/screenshots
 - Update screenshot entries if Rockstar changes its URLs. Their official gallery remains linked as a fallback.
+
+## v2.0 — Vice City: Ocean Drive overhaul
+
+- Sitewide pastel-neon / Miami art deco refresh across header, typography, cards, countdown, newsroom, media lounge, screenshot gallery, PWA panel, and policy pages.
+- Original locally hosted vector skyline and palms in assets/vice-city-skyline.svg.
+- Style overrides in assets/vice-city-theme.css, loaded after the core stylesheet. No third-party fonts, trackers, or artwork.
+
+## Official Newswire monitoring + manual publishing
+
+**The scheduled workflow NEVER publishes a headline or screenshot automatically.** It creates review issues only. The public PWA reads only approved entries from data/news.json.
+
+- The workflow in .github/workflows/news-check.yml is scheduled every six hours while GitHub Actions is enabled. It queries Rockstar's public Newswire GraphQL endpoint, considers recently published release / pre-load logistics, excludes sensitive topics, and creates at most four review issues per run with the news-review label.
+- Newswire has no documented RSS feed, and the underlying GraphQL API may change. A failure leaves the website unchanged. Inspect Actions → Check Official GTA VI News (review only), or use Run workflow to test manually.
+- The review issue contains an official link and ID, not a republished article or its images. Review the source carefully offsite; the source itself may contain spoilers.
+- To publish: go to Actions → Publish Reviewed GTA VI News → Run workflow. Enter an OPEN review issue number, a carefully written spoiler-free headline and summary, the category (launch / preload / updates), a short label, and official publication date in YYYY-MM-DD format.
+- The publish script validates the issue, Rockstar domain and editorial text; commits an approved entry to data/news.json and closes the issue only after successful push. A rejected item can be closed without publishing.
+- GitHub Issues in a public repo are publicly readable, but their contents do NOT automatically appear on the website. Avoid entering story details even in review issue comments.
+- News is safely rendered as DOM text, never untrusted HTML. Existing approved cards are retained as an offline fallback.
+- The PWA fetches the approved news JSON over the network on each visit, with a cached approved feed available offline. Images and trailers remain opt-in.
+
+**Operational note:** GitHub Actions must be enabled in Settings → Actions. These workflow files are installed, but execution and successful API responses must be checked on the repository's Actions tab.

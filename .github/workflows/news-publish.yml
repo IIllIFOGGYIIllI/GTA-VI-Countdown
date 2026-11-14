@@ -1,0 +1,62 @@
+name: Publish Reviewed GTA VI News
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Number of an open news-review issue"
+        required: true
+        type: string
+      headline:
+        description: "Safe, editor-reviewed headline (no plot or gameplay)"
+        required: true
+        type: string
+      summary:
+        description: "Original, verified spoiler-safe summary"
+        required: true
+        type: string
+      category:
+        description: "News category"
+        required: true
+        type: choice
+        options:
+          - launch
+          - preload
+          - updates
+      tag:
+        description: "Short visible label (e.g. LAUNCH UPDATE)"
+        required: true
+        type: string
+      date:
+        description: "Official article publication date (YYYY-MM-DD)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: vc-news-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out current main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Publish only manually reviewed, verified official news
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EDITOR_ISSUE: ${{ inputs.issue_number }}
+          EDITOR_HEADLINE: ${{ inputs.headline }}
+          EDITOR_SUMMARY: ${{ inputs.summary }}
+          EDITOR_CATEGORY: ${{ inputs.category }}
+          EDITOR_TAG: ${{ inputs.tag }}
+          EDITOR_DATE: ${{ inputs.date }}
+        run: python3 scripts/publish_news.py

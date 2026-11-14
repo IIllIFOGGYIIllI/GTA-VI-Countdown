@@ -1,0 +1,137 @@
+/* Vice City Countdown | Ocean Drive design language | v2.0 */
+:root{--bg:#0c0a19;--surface:#221a37;--surface2:#382347;--stroke:rgba(255,197,173,.24);--cream:#fff5e6;--muted:#d1b9cf;--pink:#ff55ab;--orange:#ff8c6d;--teal:#62f3e5;--yellow:#ffd49d;--radius:12px;--shell:1270px}
+body{background:#090c21;color:var(--cream);background-image:radial-gradient(ellipse at 52% 6%,#4b205a44,transparent 48%),radial-gradient(ellipse at 90% 48%,#1e788044,transparent 45%),linear-gradient(180deg,#11102b 0%,#0b0b22 54%,#101029 100%);background-attachment:fixed}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.06;background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,#fff 4px,transparent 5px);mix-blend-mode:screen}
+.ambient{display:none}
+.shell{max-width:var(--shell)}
+.site-header{background:rgba(18,14,37,.9);border-bottom:2px solid #e66aa049;box-shadow:0 6px 28px #0907178c}
+.site-header:after{content:"";position:absolute;inset:auto 0 -3px;height:1px;background:linear-gradient(90deg,transparent,#ff8d96a3 35%,#71fff4d7 70%,transparent)}
+.nav-wrap{height:82px}
+.brand{gap:15px}
+.brand-symbol{font-size:44px;color:#ffe6d9;filter:drop-shadow(2px 3px 0 #f66fbb) drop-shadow(1px 3px 0 #43b3b8)}
+.brand-words{font-size:10px;letter-spacing:.21em}
+.desktop-nav a{letter-spacing:.08em;font-size:11px;text-transform:uppercase;position:relative}
+.desktop-nav a:hover{color:#73f8e7}
+.desktop-nav a:after{content:"";position:absolute;bottom:-10px;left:0;right:100%;height:2px;background:var(--pink);transition:right .22s}
+.desktop-nav a:hover:after{right:0}
+.nav-cta{border-radius:4px;border-color:#7ef7e58c;background:linear-gradient(90deg,#20525491,#282043);color:#a7ffed;box-shadow:inset 0 0 15px #8ffff20c,0 0 18px #7dfbe315}
+.hero{min-height:740px;padding-top:122px;padding-bottom:27px;isolation:isolate}
+.hero-visual{inset:0 calc(-1 * max(16px,(100vw - var(--shell))/2)) auto;z-index:0;height:790px;background-image:linear-gradient(to bottom,#10102b33 3%,#11102916 45%,#11102bc9 86%,#11102b 100%),url('./vice-city-skyline.svg');background-size:cover;background-position:center 33%;overflow:hidden;opacity:1}
+.hero-visual:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,10,29,.78) 0%,rgba(16,11,31,.36) 44%,rgba(20,9,32,.24) 100%),linear-gradient(to bottom,rgba(15,8,28,.1),transparent 50%,#111027e3 96%);z-index:1}
+.hero-visual:after{content:"";position:absolute;inset:0;border-top:1px solid #ffb7bd21;box-shadow:inset 0 110px 100px -100px #ffb5a12d;pointer-events:none;z-index:2}
+.hero-visual .sun-disc,.hero-visual .skyline,.hero-visual .horizon,.hero-visual .grid-floor{display:none}
+.hero-visual .art-vi{font-size:clamp(360px,43vw,750px);right:1%;top:0;z-index:2;color:transparent;-webkit-text-stroke:2px #ffe0c91e;text-shadow:0 0 30px #ff6bac25;opacity:.7}
+.hero-grid,.hero-bottom{z-index:2;position:relative}
+.hero-grid{grid-template-columns:minmax(0,1fr) minmax(480px,.88fr);gap:5%;align-items:center}
+.hero-copy{padding-bottom:38px}
+.eyebrow{display:inline-flex;background:#0c1629b5;color:#8bfff2;border:1px solid #96e8e666;padding:9px 12px;letter-spacing:.23em;font-size:10px;box-shadow:0 5px 30px #101024bb}
+.hero-kicker{font-family:Georgia,serif;font-style:italic;text-transform:uppercase;font-size:clamp(17px,2vw,29px);letter-spacing:.08em;font-weight:bold;color:#fff7da;text-shadow:0 2px #ac3866,0 5px 13px #44143b;margin:34px 0 1px}
+.hero h1{font-family:Impact,'Arial Black',sans-serif;font-style:italic;font-stretch:condensed;font-size:clamp(85px,8.2vw,140px);font-weight:1000;letter-spacing:-.061em;margin:4px 0 22px;line-height:.88;filter:drop-shadow(5px 7px 0 #4a2156) drop-shadow(0 9px 20px #060a21c0)}
+.hero h1 em{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:900;letter-spacing:-.09em;text-transform:uppercase;background:linear-gradient(145deg,#fff9c8 5%,#ffdbac 20%,#ff7f97 54%,#ff60c2 92%);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;line-height:1.05;font-size:.92em}
+.hero h1 .heading-period{color:#67f9e7;text-shadow:0 0 20px #6bf7e880;display:inline-block}
+.hero-intro{font-size:17px;max-width:510px;font-weight:550;color:#f5ddef;text-shadow:0 2px 7px #100921;margin-top:0;line-height:1.65}
+.hero-tags span{background:#171a35cb;border-color:#e986b566;color:#ffe5c7;box-shadow:0 2px 10px #0004;font-weight:900}
+.hero-actions .btn{border-radius:3px;text-transform:uppercase;letter-spacing:.1em}
+.btn-primary{background:linear-gradient(95deg,#ffd59d 0%,#ff8d97 38%,#ff61ab 100%);color:#271331;border:1px solid #ffe4b1;box-shadow:0 8px 0 -5px #62f3e5,0 13px 40px #f6489480}
+.btn-primary:hover{background:linear-gradient(95deg,#ffe1b9,#ff6d9b)}
+.btn-secondary{border-color:#8dece0a1;background:#221f47d4;box-shadow:inset 0 1px #9ae9dd3d}
+.countdown-card{border:2px solid #ffc1c2c2;background:linear-gradient(145deg,#261c40f8,#130e2dfb);border-radius:9px;box-shadow:0 0 0 6px #271c40a1,0 0 0 7px #65eadb75,0 30px 85px #08051dcc;transform:rotate(.3deg)}
+.countdown-card:before{width:500px;height:400px;right:-100px;top:-210px;background:radial-gradient(ellipse,#ff68ac5c,transparent 65%)}
+.card-bar{border-bottom:1px solid #ffbca45e;background:linear-gradient(90deg,#5c2b55,#22213f);color:#ffe6c5}
+.card-status{color:#a5ffea}
+.card-inner{padding:31px 30px 27px}
+.small-label{color:#ffcba0;letter-spacing:.32em}
+.countdown-heading{font-family:Impact,'Arial Black',sans-serif;font-size:clamp(30px,3vw,43px);font-style:italic;letter-spacing:.02em;text-shadow:3px 3px #5b2b66}
+.countdown-heading span{color:#6ff9e1}
+.count-item{border:1px solid #fcadab80;background:linear-gradient(180deg,#37254c,#17152c);border-radius:4px;box-shadow:inset 0 1px #fff2,0 5px 13px #08051b66}
+.count-value{font-family:'Arial Black',system-ui,sans-serif;color:#ffefdf;text-shadow:0 0 22px #ffb7d54d}
+.count-item:last-child .count-value{color:#75ffe7}
+.count-label{color:#e0bccd}
+.count-progress{background:#7b4171;height:5px;border-radius:0}
+.progress-bar{background:linear-gradient(90deg,#63f1ec,#fda4b3,#ffe9a8)}
+.zone-head label,.meta-caption{color:#edd5da}
+.select-wrap select{background:#181830;border-color:#76e9db81;color:#ffe9ee}
+.zone-details{border-color:#f6c3bc48}
+.zone-help{color:#bfb0c8}
+.card-bottom{background:linear-gradient(90deg,#422b55,#262042);color:#ffe6dc;border-top-color:#d786a66a}
+.hero-bottom{margin-top:70px;color:#fbd1c3;letter-spacing:.24em}
+.scroll-note{color:#76f8e4}
+.strip{position:relative;background:linear-gradient(95deg,#ff9da1,#f6a9bd 43%,#ffcd9f);color:#2b1839;border-top:2px solid #fff3cf;border-bottom:3px solid #ff62bb;box-shadow:0 13px 30px #110b2480}
+.strip-grid{padding:19px 0}
+.strip-grid>div{border-left-color:#79334a66}
+.strip-grid strong{font-size:23px;color:#291330;font-family:Impact,'Arial Black',sans-serif;font-style:italic;letter-spacing:.01em}
+.strip-grid span{color:#62334b;letter-spacing:.12em}
+.section{position:relative}
+.section:before{content:"";position:absolute;top:68px;left:max(16px,calc((100vw - var(--shell))/2));width:64px;height:4px;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--teal))}
+.section-index{color:#65ffec;letter-spacing:.25em;font-weight:1000}
+.section h2{font-family:Impact,'Arial Black',sans-serif;font-style:italic;text-transform:uppercase;letter-spacing:.004em;line-height:.98;font-size:clamp(43px,5vw,74px);text-shadow:3px 4px #4e215e}
+.section h2 em{font-family:Georgia,serif;font-style:italic;text-transform:uppercase;font-weight:900;letter-spacing:-.06em;color:#ff89b9;text-shadow:1px 2px #6b2c70}
+.section-header>p{color:#e6ccdb}
+.milestone-grid{gap:20px}
+.milestone{background:linear-gradient(165deg,#352243,#1c1b3a 83%);border:1px solid #e5a6b768;border-radius:7px;box-shadow:7px 7px 0 #0b132d,8px 8px 0 #6ee4da62;position:relative;overflow:hidden;min-height:325px}
+.milestone:before{content:"";height:5px;position:absolute;top:0;left:0;right:0;background:linear-gradient(90deg,#ff77a9,#ffce97,#81eee7)}
+.milestone-feature{background:linear-gradient(145deg,#703b67,#2c254d 84%)}
+.milestone-symbol{color:#ffe1b0;text-shadow:4px 5px #ee7ba075}
+.milestone h3{font-family:Impact,'Arial Black',sans-serif;font-style:italic;font-size:27px;letter-spacing:.01em}
+.milestone a,.news-card a{color:#7ef8ea}
+.news-section{background:radial-gradient(ellipse at 10% 65%,#53295e99,transparent 49%),linear-gradient(150deg,#16142d,#1c1636);border-top:1px solid #aa638349;border-bottom:1px solid #60d9da35;padding-bottom:75px}
+.news-tools{margin-top:22px}
+.news-verified{color:#76ffe2;background:#173f43a6;border:1px solid #81e8dd80;padding:8px 11px;border-radius:3px}
+.filter,.viewer-filter{border-radius:3px;text-transform:uppercase;letter-spacing:.07em}
+.filter.active,.viewer-filter.active{background:linear-gradient(110deg,#f7a4ae,#ffd4a0);border-color:#ffc2a7;color:#1c1429}
+.news-card{background:#261f3b;border:1px solid #dda8bd8c;border-radius:5px;box-shadow:5px 5px 0 #160d30;overflow:hidden}
+.news-visual{height:195px}
+.news-visual-1{background:linear-gradient(135deg,#e97d99,#8b396a 54%,#2b235c)}
+.news-visual-2{background:linear-gradient(145deg,#72ddd5,#2d7d98 52%,#241c58)}
+.news-visual-3{background:linear-gradient(135deg,#e9a078,#af5391 50%,#372457)}
+.news-visual-big{font-family:Impact,'Arial Black',sans-serif;font-style:italic;letter-spacing:-.045em;text-shadow:5px 5px #1c1546}
+.news-content h3{font-size:22px;font-weight:950}
+.news-meta{color:#ffd2a3}
+.news-meta time{color:#e0c6d5}
+.news-foot{border-top:1px solid #f1a7af47;margin-top:30px}
+.media-lock{border-radius:5px;background:linear-gradient(115deg,#16454d,#271b43 70%,#482958);border:1px solid #68f8e7a8;box-shadow:7px 7px 0 #311839}
+.media-lock-art{border-radius:4px;color:#78ffec;border-color:#77ffeb}
+.media-video{border-radius:5px;border-color:#f5b4b56b;box-shadow:4px 4px #070b25}
+.gallery-card{border-radius:6px;border-color:#ffbca775;box-shadow:5px 5px #180e2e}
+.viewer-app{background:linear-gradient(160deg,#382342,#1d213e);border-radius:7px;border-color:#fca7bd65}
+.viewer-tile{border-radius:4px;border-color:#e8abc277}
+.viewer-modal{border-radius:5px}
+.app-panel{background:linear-gradient(110deg,#5a2854,#332657 55%,#1b5362);border:2px solid #ffb29a;border-radius:7px;box-shadow:10px 10px 0 #171b40,11px 11px 0 #71ecdd88;overflow:hidden}
+.app-panel:before{content:"";position:absolute;width:450px;height:450px;border-radius:50%;right:-80px;top:-150px;background:radial-gradient(circle,#ffb36e6e 0%,#f85d9a33 46%,transparent 67%)}
+.app-copy h2{font-size:clamp(48px,5vw,72px)}
+.app-copy>p{color:#fff2ea}
+.phone{border-color:#191028;background:linear-gradient(160deg,#ff9c9f,#a54c84 45%,#29244a);box-shadow:0 0 0 2px #ffbda9,0 20px 80px #07091ad9}
+.phone-content .phone-art{color:#ffe4c8;text-shadow:3px 4px #f35baf}
+.phone-title{font-family:Impact,'Arial Black',sans-serif;font-size:30px;font-style:italic}
+.faq{padding-bottom:125px}
+.faq-list{border-top-color:#e9a5b56b}
+.faq-list details{border-bottom-color:#df9db277}
+.faq-list summary{font-size:17px}
+.footer{background:linear-gradient(140deg,#341f43,#11182f 77%);border-top:3px solid #ff9f9b;position:relative}
+.footer:before{content:"";position:absolute;inset:0 0 auto;height:7px;background:linear-gradient(90deg,#6ff8e7,#ff82a8,#ffd6a2,#6ff8e7);opacity:.45}
+.footer-brand{font-family:Impact,'Arial Black',sans-serif;font-style:italic;font-size:29px;letter-spacing:.02em}
+.footer-links a{color:#ffdfce}
+.legal-page .legal-card{background:linear-gradient(160deg,#362443,#1a1b37);border:1px solid #ffa9bc88;box-shadow:8px 8px 0 #100b2f;border-radius:6px}
+.legal-card h1{font-family:Impact,'Arial Black',sans-serif;font-style:italic;letter-spacing:0;text-shadow:3px 4px #8f3169}
+.city-stamp{display:inline-flex;align-items:center;gap:10px;border-left:3px solid #78ffed;padding:4px 0 4px 13px;margin:12px 0 0;color:#ffe1be;font-size:11px;font-weight:950;letter-spacing:.18em;text-transform:uppercase;text-shadow:0 2px 6px #171126}
+.city-stamp strong{color:#7affee}
+.city-marquee{position:relative;z-index:2;overflow:hidden;margin-top:26px;background:#140e31d9;border-top:1px solid #ffc2ba70;border-bottom:1px solid #7bf8e89c;transform:rotate(-.7deg);padding:7px 0;box-shadow:0 13px 27px #02041368}
+.city-marquee-inner{white-space:nowrap;text-align:center;color:#ffe6c8;font-size:11px;letter-spacing:.34em;font-weight:1000;display:flex;justify-content:space-around;gap:24px}
+.city-marquee-inner b{color:#76ffee}
+.city-marquee-inner i{color:#ff88ac;font-size:14px}
+.city-palm-divider{height:32px;background:linear-gradient(90deg,transparent,#f87aac 18%,#ffdea6 50%,#72f7e5 83%,transparent);-webkit-mask:linear-gradient(to bottom,transparent 38%,#000 39%,#000 43%,transparent 44%);mask:linear-gradient(to bottom,transparent 38%,#000 39%,#000 43%,transparent 44%)}
+@media(max-width:1100px){.hero-grid{grid-template-columns:minmax(0,1fr) 465px;gap:18px}.hero h1{font-size:clamp(76px,8.8vw,124px)}.hero-visual{height:780px}.hero-copy{padding-bottom:10px}}
+@media(max-width:900px){.hero{padding-top:80px}.hero-grid{grid-template-columns:1fr;gap:48px}.hero h1{font-size:clamp(94px,13vw,140px)}.hero-visual{height:1090px;background-size:auto 1090px;background-position:center top}.hero-visual:before{background:linear-gradient(90deg,#100f2cc9,#16112d64),linear-gradient(to bottom,transparent,#0f102cdd 95%)}.countdown-card{max-width:620px;transform:none}.city-marquee{margin-top:36px}.hero-bottom{margin-top:35px}}
+@media(max-width:600px){.nav-wrap{height:72px}.brand-symbol{font-size:36px}.hero{padding-top:64px}.hero-visual{height:1040px;background-position:55% top;background-size:auto 1040px}.hero h1{font-size:clamp(72px,15.6vw,106px)}.hero-kicker{font-size:21px}.hero-intro{font-size:14px;line-height:1.75}.hero-grid{gap:38px}.city-marquee-inner{justify-content:flex-start;gap:11px;font-size:9px;letter-spacing:.13em;flex-wrap:nowrap;padding:0 10px}.countdown-card{box-shadow:0 0 0 4px #271c40a1,0 0 0 5px #65eadb75,0 18px 45px #08051dcc}.card-inner{padding:22px 16px}.countdown-heading{font-size:31px}.strip-grid strong{font-size:19px}.section h2{font-size:clamp(37px,10vw,52px)}.news-section{padding-bottom:48px}.news-card{box-shadow:4px 4px #160d30}.app-panel{box-shadow:5px 5px 0 #171b40,6px 6px 0 #71ecdd88}.footer-brand{font-size:26px}.city-stamp{font-size:9px}}
+@media(prefers-reduced-motion:no-preference){.art-vi{animation:vice-art-glow 8s ease-in-out infinite alternate}.city-marquee{animation:vc-marquee-in 1.1s ease-out both}.hero-visual{animation:city-fade-in 1.1s ease-out both}@keyframes vice-art-glow{0%{opacity:.4}100%{opacity:.75}}@keyframes vc-marquee-in{0%{opacity:0;transform:translateY(10px) rotate(-.7deg)}100%{opacity:1;transform:translateY(0) rotate(-.7deg)}}@keyframes city-fade-in{0%{opacity:.75}100%{opacity:1}}}
+
+/* Editorial newsroom health and official source status */
+.news-status-line{display:flex;gap:13px;align-items:center;margin:16px 0 0;padding:13px 16px;background:linear-gradient(90deg,#152e3f,#2b2247);border:1px solid #7be9e67c;box-shadow:inset 0 1px #a1fff41c;font-size:12px;color:#e6d7e3;line-height:1.55}
+.news-status-line .live-dot{flex:none}
+.news-status-line>a{margin-left:auto;white-space:nowrap;color:#91ffee;font-size:11px;font-weight:950}
+.news-status-line>a:hover{text-decoration:underline}
+.news-card[hidden]{display:none!important}
+.news-content .news-meta{gap:8px}
+.news-visual{background-clip:padding-box}
+.news-grid:empty{min-height:170px}
+@media(max-width:650px){.news-status-line{align-items:start;flex-wrap:wrap;font-size:11px}.news-status-line>a{margin-left:18px}.city-stamp{flex-wrap:wrap}}

@@ -1,7 +1,7 @@
-// Vice City Countdown PWA v1.2
+// Vice City Countdown PWA v2.0
 // App-shell: cache-first for near-instant repeat launches; network updates in background.
-const CACHE='vice-city-countdown-v3';
-const CORE=['./','./index.html','./styles.css?v=1.2.0','./app.js?v=1.2.0','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./privacy.html','./terms.html','./spoilers.html'];
+const CACHE='vice-city-countdown-v4';
+const CORE=['./','./index.html','./styles.css?v=2.0.0','./app.js?v=2.0.0','./assets/vice-city-theme.css?v=2.0.0','./assets/vice-city-skyline.svg','./data/news.json?v=2.0.0','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png','./privacy.html','./terms.html','./spoilers.html'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });
@@ -14,6 +14,11 @@ self.addEventListener('fetch',event=>{
  const url=new URL(req.url);
  if(url.origin!==self.location.origin)return;
  if(!url.pathname.startsWith(new URL(self.registration.scope).pathname))return;
+ // News must stay fresh: the approved feed is checked online rather than frozen in the PWA cache.
+ if(url.pathname.endsWith('/data/news.json')){
+   event.respondWith(fetch(req,{cache:'no-store'}).catch(async()=>await caches.match('./data/news.json?v=2.0.0')||new Response('{"articles":[]}',{headers:{'Content-Type':'application/json'}})));
+   return;
+ }
  if(req.mode==='navigate'){
    event.respondWith((async()=>{
      const cached=await caches.match(req);
