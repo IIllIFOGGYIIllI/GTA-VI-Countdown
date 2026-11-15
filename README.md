@@ -187,3 +187,14 @@ The previous three hand-drawn motifs were not convincing fireworks. The preview 
 - Adjustable density, reduced motion and stage fullscreen, with the engine's Canvas 2D fallback.
 - No gameplay, story spoilers, Rockstar soundtrack or external photo assets.
 - GitHub Chromium QA verifies real engine mounting and active particle/rocket counts at phone/tablet/desktop widths, grand finale activation, replay, sound opt-in and isolation from the main PWA.
+
+### Midnight Spectacular v2.2 — Final ten-second music cue
+
+- The standalone preview now begins with a **20-second demo countdown**. Its final ten seconds change the stage appearance and cue a visitor-selected local audio recording.
+- GTA VI Trailer 1's song is **Tom Petty — Love Is a Long Road**. The copyrighted recording is **not included** in this repository or served to visitors. For private testing, use the preview's local file picker to choose a recording you are allowed to play, then select the cue's start position in seconds.
+- Local audio is decoded via the browser's Web Audio API. It stays in memory and is never uploaded, cached or sent to a server. Reloading the preview clears it. File size limit: 35 MB.
+- Music and fireworks sound remain **off by default** and require explicit opt-in. At T−10 the selected file fades in; at simulated midnight it fades out as the original Ocean Drive at Midnight synthwave soundtrack starts and the first fireworks fire.
+- **Preview final 10 seconds** restarts a short 11-second simulation so the T−10 trigger can be tested quickly without waiting for the full 20-second countdown.
+- The pyrotechnics sequence is now choreographed as **Act I — Skyline Salute** (gold shell opening), **Act II — Neon Rush** (alternating colourful salvos), and **Act III — Grand Finale** (layered carrier rockets, crackles and gold waterfall), approximately 42 seconds in total.
+- Browser QA verifies local WAV decoding, cue start at ten seconds, local-only audio, offset selection, fade-out at midnight, fireworks particles, mobile and desktop layouts, replay and existing PWA integrity.
+- Public hosting or automatic playback of Tom Petty's commercial recording would require the appropriate music licence; this personal file selection is a preview-only alternative.

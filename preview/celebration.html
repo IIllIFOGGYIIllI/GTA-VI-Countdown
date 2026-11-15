@@ -7,9 +7,9 @@
   <meta name="description" content="A live, cinematic, spoiler-free Vice City countdown celebration with realistic fireworks and an original midnight synthwave soundtrack.">
   <title>Midnight Spectacular · GTA VI Countdown Concept</title>
   <link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
-  <link rel="stylesheet" href="./celebration.css?v=2.1.0">
+  <link rel="stylesheet" href="./celebration.css?v=2.2.0">
   <script src="./vendor/GrandFireworks.min.js?v=1.11.1" defer></script>
-  <script src="./celebration.js?v=2.1.0" defer></script>
+  <script src="./celebration.js?v=2.2.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#stage-title">Skip to the live show</a>
@@ -33,7 +33,8 @@
         <div class="stage-intro" id="stage-intro">
           <p>THE CITY IS WAITING</p>
           <h1 id="stage-title">MIDNIGHT <em>CALLING</em></h1>
-          <div class="stage-countdown" id="stage-countdown"><span id="demo-seconds">08</span><span>SECONDS TO THE DEMO SHOW</span></div>
+          <div class="stage-countdown" id="stage-countdown"><span id="demo-seconds">20</span><span id="countdown-unit">SECONDS TO MIDNIGHT</span></div>
+          <div class="ten-second-caption" id="ten-second-caption" role="status" aria-live="polite" hidden><span aria-hidden="true">♫</span> THE FINAL TEN SECONDS · YOUR MUSIC CUE</div>
         </div>
         <div class="midnight-message" id="midnight-message" hidden>
           <span>✦ THE WAIT IS OVER ✦</span>
@@ -51,24 +52,32 @@
     <section class="console" aria-labelledby="console-heading">
       <div class="console-title">
         <div><span class="eyebrow">01 / THE MIDNIGHT SHOW</span><h2 id="console-heading">LET THE SKY <em>LIGHT UP</em></h2></div>
-        <p>One professionally choreographed fireworks display, not decorative shapes. Watch rockets climb above Vice City, build through multiple salvos, and finish with a grand finale.</p>
+        <p>Three deliberate acts: a golden skyline salute, a neon rush of aerial shells, and a sweeping grand finale. The music cue begins at the final ten-second mark.</p>
       </div>
       <div class="control-grid">
         <div class="control-panel big-control">
           <span class="number">THE SHOW</span>
           <h3>READY FOR MIDNIGHT?</h3>
-          <p>The eight-second demo starts automatically. Fire the show immediately, or restart the countdown.</p>
+          <p>The 20-second demo builds to a ten-second music cue, followed by an increasingly dramatic midnight fireworks performance.</p>
           <div class="buttons">
             <button id="launch-now" type="button" class="button button-primary">✦ Fire the show now</button>
             <button id="replay" type="button" class="button">↻ Replay show</button>
-            <button id="demo-30" type="button" class="button button-subtle">Restart 8-second countdown</button>
+            <button id="demo-30" type="button" class="button button-subtle">↻ Restart 20-second countdown</button>
+            <button id="preview-ten" type="button" class="button button-subtle">♫ Preview final 10 seconds</button>
           </div>
           <button id="finale" type="button" class="finale-button">✹ Trigger grand finale</button>
         </div>
         <div class="control-panel">
           <span class="number">ORIGINAL SOUNDTRACK</span>
-          <h3>OCEAN DRIVE AT MIDNIGHT</h3>
-          <p>Our original synthwave track and procedural firework booms. Audio is off until you enable it.</p>
+          <h3>YOUR FINAL TEN SECONDS</h3>
+          <p>Load your own copy of <strong>Tom Petty's Love Is a Long Road</strong> to hear it during the final 10 seconds. At midnight it fades into our original <em>Ocean Drive at Midnight</em> instrumental and the fireworks.</p>
+          <div class="cue-upload">
+            <label class="control-label" for="cue-file">LOCAL AUDIO FILE · NOT UPLOADED</label>
+            <input id="cue-file" type="file" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.flac">
+            <label class="control-label" for="cue-offset">START THE SONG AT (SECONDS INTO FILE)</label>
+            <input id="cue-offset" type="number" inputmode="numeric" min="0" max="1800" value="0" step="1">
+            <span class="small-status" id="cue-status" role="status" aria-live="polite">No track loaded · choose a file for your private preview</span>
+          </div>
           <button id="audio-toggle" type="button" class="button sound-button" aria-pressed="false">♫ Enable music + fireworks sound</button>
           <label class="volume-label" for="volume">Volume <output id="volume-value">45%</output></label>
           <input type="range" id="volume" min="0" max="100" value="45" step="5">
@@ -88,7 +97,7 @@
           <button id="fullscreen" type="button" class="button fullscreen-button">⛶ View fireworks full-screen</button>
         </div>
       </div>
-      <div class="notes"><span>✦ NO GAMEPLAY SPOILERS</span><span>Fireworks by Grand Fireworks JS · original synthwave composition</span><span>Music requires a tap to start · no autoplay audio</span></div>
+      <div class="notes"><span>✦ NO GAMEPLAY SPOILERS</span><span>Fireworks by Grand Fireworks JS · original synthwave composition</span><span>Song file stays on your device · no copyrighted music is bundled · audio requires a tap</span></div>
     </section>
   </main>
   <footer><span>VICE CITY COUNTDOWN / MIDNIGHT CONCEPT</span><a href="../">Back to the live countdown ↗</a></footer>

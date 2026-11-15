@@ -22,6 +22,23 @@ async function serverReady(){
   }
   throw new Error('Local preview server failed to start');
 }
+// A synthetic 14-second sine-wave WAV created in memory for testing the
+// visitor-provided cue path. No commercial recording is ever bundled.
+function createCueTestWav(){
+  const sampleRate=8000,duration=14,frames=sampleRate*duration;
+  const out=Buffer.allocUnsafe(44+frames*2);
+  out.write('RIFF',0);out.writeUInt32LE(out.length-8,4);
+  out.write('WAVE',8);out.write('fmt ',12);out.writeUInt32LE(16,16);
+  out.writeUInt16LE(1,20);out.writeUInt16LE(1,22);
+  out.writeUInt32LE(sampleRate,24);out.writeUInt32LE(sampleRate*2,28);
+  out.writeUInt16LE(2,32);out.writeUInt16LE(16,34);
+  out.write('data',36);out.writeUInt32LE(frames*2,40);
+  for(let i=0;i<frames;i++){
+    const v=Math.round(Math.sin(i/sampleRate*Math.PI*2*330)*1600);
+    out.writeInt16LE(v,44+i*2);
+  }
+  return out;
+}
 const failures=[];
 async function runCase(name,fn){
   try{await fn();console.log('PASS '+name);}
@@ -180,10 +197,30 @@ async function main(){
           const audioStatus=await page.locator('#audio-status').textContent();
           assert.ok(audioStatus.includes('Armed')||audioStatus.includes('blocked'),
             'Audio opt-in did not respond: '+audioStatus);
+          if(vw===360){
+            await page.locator('#cue-file').setInputFiles({
+              name:'private-test.wav',mimeType:'audio/wav',buffer:createCueTestWav()
+            });
+            await page.waitForFunction(()=>window.ViceMidnightShow.getCueState().loaded,undefined,{timeout:9000});
+            assert.ok((await page.locator('#cue-status').textContent()).includes('Not uploaded'));
+            await page.locator('#cue-offset').fill('2');
+            await page.locator('#preview-ten').click();
+            await page.waitForFunction(()=>window.ViceMidnightShow.getCueState().tenTriggered,undefined,{timeout:7000});
+            await page.waitForFunction(()=>window.ViceMidnightShow.getCueState().playing,undefined,{timeout:7000});
+            assert.equal(await page.locator('#ten-second-caption').isVisible(),true);
+            assert.ok((await page.locator('#stage-phase').textContent()).includes('FINAL TEN'));
+            const cue=await page.evaluate(()=>window.ViceMidnightShow.getCueState());
+            assert.equal(cue.offset,2);
+            await page.screenshot({path:path.join(SHOTS,'final-ten-music-cue-mobile.png')});
+          }
           // Launch explicitly; no need to wait for the demo countdown.
           await page.locator('#launch-now').click();
           await page.waitForFunction(()=>window.ViceMidnightShow.hasStarted());
           assert.equal(await page.locator('#midnight-message').isVisible(),true);
+          if(vw===360){
+            const cueAfter=await page.evaluate(()=>window.ViceMidnightShow.getCueState());
+            assert.equal(cueAfter.playing,false,'T−10 recording must fade at midnight');
+          }
           await page.waitForFunction(()=>{
             const stats=window.ViceMidnightShow.getStats();
             return stats && (stats.particles>20||stats.rockets>0);
