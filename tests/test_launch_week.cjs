@@ -65,8 +65,9 @@ for(const pathName of [
  assert.ok(site.includes(pathName),'Missing app-shell asset: '+pathName);
  assert.ok(worker.includes(pathName),'Missing offline cache asset: '+pathName);
 }
-assert.ok(worker.includes('vice-city-countdown-v16'));
-assert.ok(worker.includes('data/official-guide.json?v=2.9.0'));
+assert.ok(worker.includes('vice-city-countdown-v17'));
+assert.ok(!worker.split('];',1)[0].includes("'./data/official-guide.json?v=2.9.0'"),
+  'Private Leonida facts must not be downloaded by PWA installation');
 assert.ok(worker.includes('data/news.json?v=2.9.0'));
 assert.ok(site.includes('assets/editorial-images.css?v=2.9.0'));
 assert.ok(site.includes('app.js?v=2.9.0'));
