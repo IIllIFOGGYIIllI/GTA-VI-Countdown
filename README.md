@@ -212,3 +212,12 @@ No third-party imagery, autoplay audio, commercial music or story spoilers are i
 ### v2.6.1 visual polish
 
 The simulated final-ten button now disappears as soon as the countdown reaches its final-ten sequence and stays hidden after the welcome transition. The separate fireworks concept link is accessible only in the explicit preview, not forced upon visitors at real midnight. Browser QA captures the completed welcome fade-in and includes an additional 320px narrow-mobile test. Static PWA cache namespace is `vice-city-countdown-v11`; existing region clock and spoiler controls remain unchanged.
+
+
+### v2.7.0 — Actual midnight fireworks integrated
+
+The cinematic launch mode now plays the **real Grand Fireworks JS** particle show **inside the main site** at the selected region's scheduled midnight, and at zero in the user-triggered simulation. No redirect to the separate concept preview is required. Real aerial rockets, shell bursts, spark trails and a 38-second sequence with a staged grand finale display behind a slightly lowered welcome title; **Replay fireworks** is available after the simulated or actual midnight transition.
+
+The commercial recording/music concept remains **out of the main website**. Fireworks are silent, audio is never requested or unlocked and no copyrighted song is included. Reduced-motion users get lower-density effects. Closing or restarting the cinematic experience destroys the fireworks renderer and cancels pending cues; replay replaces the renderer rather than piling up canvases. The already vendored MIT Grand Fireworks JS v1.11.1 is cached in the PWA core at `preview/vendor/GrandFireworks.min.js?v=1.11.1` (cache namespace `vice-city-countdown-v12`). Existing spoiler safeguards, user's selected release region, and no auto-launch-after-dismiss behaviour are preserved.
+
+Automated Chromium checks verify real particles, playback and replay on 320/360/1440-pixel viewports and automatic Sydney-midnight fireworks with no regression to timezone and offline-PWA tests.

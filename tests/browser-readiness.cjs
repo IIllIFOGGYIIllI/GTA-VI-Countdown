@@ -177,15 +177,35 @@ async function main(){
           await page.clock.runFor(7500);
           assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
           assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'launched');
+          assert.equal(await page.locator('#vc-cinema-replay-fireworks').isVisible(),true);
+          assert.equal(await page.locator('#vc-cinema-fireworks-stage .grand-fireworks-root').count(),1,
+            'The fireworks engine must mount inside the launch overlay');
+          assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).fireworksPlaying,true);
+          await page.waitForFunction(()=>{
+            const stats=window.ViceCinematicLaunch.getFireworksStats();
+            return stats&&(stats.particles>20||stats.rockets>0);
+          },undefined,{timeout:12000});
+          const fireworkStats=await page.evaluate(()=>window.ViceCinematicLaunch.getFireworksStats());
+          assert.ok(['canvas2d','webgl2'].includes(fireworkStats.renderer),
+            'A real particle engine must render the midnight celebration');
+          await page.locator('#vc-cinema-replay-fireworks').click();
+          assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).fireworksPlaying,true);
+          assert.equal(await page.locator('#vc-cinema-fireworks-stage .grand-fireworks-root').count(),1,
+            'Replay must replace the engine, never stack another canvas');
           assert.equal(await page.locator('#launch-hub').isVisible(),false,
             'Preview must not falsely launch the actual countdown');
           assert.equal(await page.evaluate(()=>window.ViceCountdown.getState().release),originalRelease);
-          if(width===1440){
-            // The welcome screen deliberately fades in; capture its finished
-            // presentation rather than the nearly-transparent first frame.
+          if(width===1440||width===360){
+            // Capture real, active shell particles with the finished welcome
+            // presentation (not the earlier static 'welcome' mockup).
             await page.locator('#vc-cinema-welcome').evaluate(el=>
               el.getAnimations().forEach(animation=>animation.finish()));
-            await page.screenshot({path:path.join(SHOTS,'cinematic-welcome-desktop.png')});
+            await page.waitForTimeout(2300);
+            await page.locator('#vc-cinema').screenshot({
+              path:path.join(SHOTS,width===1440
+                ?'cinematic-welcome-fireworks-desktop.png'
+                :'cinematic-welcome-fireworks-mobile.png')
+            });
           }
           assert.equal(await page.locator('#vc-cinema-sim-controls').isVisible(),false,
             'The jump-to-ten action must disappear after the welcome transition');
@@ -231,6 +251,9 @@ async function main(){
         await page.clock.runFor(12000);
         assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
         assert.equal(await page.locator('#launch-hub').isVisible(),true);
+        assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).fireworksPlaying,true,
+          'Actual selected-region midnight must trigger fireworks');
+        assert.equal(await page.locator('#vc-cinema-fireworks-stage .grand-fireworks-root').count(),1);
         await page.locator('#vc-cinema-close').click();
         await page.locator('#timezone').selectOption('America/Los_Angeles');
         assert.equal(await page.locator('#launch-hub').isVisible(),false);
@@ -372,7 +395,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v11');
+          return keys.includes('vice-city-countdown-v12');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

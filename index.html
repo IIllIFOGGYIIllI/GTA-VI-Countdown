@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="2.6.1">
+  <meta name="app-version" content="2.7.0">
   <meta name="theme-color" content="#241739">
   <meta name="description" content="A spoiler-free GTA VI release countdown with regional launch times, verified Rockstar news and an installable PWA. Unofficial fan project.">
   <meta property="og:title" content="Vice City Countdown | GTA VI">
@@ -21,11 +21,12 @@
   <link rel="stylesheet" href="./assets/mobile-experience.css?v=2.3.0">
   <link rel="stylesheet" href="./assets/launch-mode.css?v=2.4.0">
   <link rel="stylesheet" href="./assets/launch-week.css?v=2.5.0">
-  <link rel="stylesheet" href="./assets/cinematic-launch.css?v=2.6.0">
+  <link rel="stylesheet" href="./assets/cinematic-launch.css?v=2.7.0">
   <script src="./app.js?v=2.5.0" defer></script>
   <script src="./assets/launch-week-core.js?v=2.5.0" defer></script>
   <script src="./assets/launch-week.js?v=2.5.0" defer></script>
-  <script src="./assets/cinematic-launch.js?v=2.6.1" defer></script>
+  <script src="./preview/vendor/GrandFireworks.min.js?v=1.11.1" defer></script>
+  <script src="./assets/cinematic-launch.js?v=2.7.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -324,6 +325,7 @@
     <div class="vc-cinema-skyline" aria-hidden="true"></div>
     <div class="vc-cinema-horizon" aria-hidden="true"></div>
     <div class="vc-cinema-vignette" aria-hidden="true"></div>
+    <div id="vc-cinema-fireworks-stage" class="vc-cinema-fireworks-stage" aria-hidden="true"></div>
     <header class="vc-cinema-header">
       <div class="vc-cinema-brand" aria-hidden="true"><strong>VI</strong><span>VICE CITY<small>COUNTDOWN</small></span></div>
       <div class="vc-cinema-top-actions">
@@ -350,6 +352,7 @@
         <h1 class="vc-cinema-welcome-title">WELCOME TO <em>VICE CITY</em></h1>
         <p class="vc-cinema-welcome-copy">The scheduled midnight milestone has arrived in your selected region. The city is yours to explore when your platform grants access.</p>
         <p class="vc-cinema-welcome-note">19 NOVEMBER 2026 · NO STORY SPOILERS</p>
+        <p class="vc-cinema-fireworks-caption" id="vc-cinema-fireworks-status" role="status" aria-live="polite"></p>
       </div>
     </div>
     <div class="vc-cinema-standalone-actions">
@@ -357,7 +360,7 @@
         <button class="vc-cinema-button" type="button" id="vc-cinema-skip">↗ Jump to final 10 seconds</button>
       </div>
       <button class="vc-cinema-button" type="button" id="vc-cinema-restart" hidden>↻ Replay 60-second preview</button>
-      <a class="vc-cinema-button" id="vc-cinema-fireworks" href="./preview/celebration.html" hidden>View optional fireworks concept ↗</a>
+      <button class="vc-cinema-button vc-cinema-replay-fireworks" type="button" id="vc-cinema-replay-fireworks" hidden>✹ Replay fireworks</button>
     </div>
     <div class="vc-cinema-footer">
       <p class="vc-cinema-footnote" id="vc-cinema-description">Launch milestone follows your selected region, not an account entitlement.</p>
