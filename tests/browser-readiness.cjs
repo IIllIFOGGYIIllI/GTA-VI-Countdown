@@ -191,11 +191,14 @@ async function main(){
           const stats=await page.evaluate(()=>window.ViceMidnightShow.getStats());
           assert.ok(['canvas2d','webgl2'].includes(stats.renderer),
             'Expected actual particle renderer, got '+stats.renderer);
+          // The launch overlay must be in view; screenshots of the control
+          // panel alone can't demonstrate whether the fireworks look convincing.
+          await page.waitForTimeout(2300);
           if(vw===360){
-            await page.screenshot({path:path.join(SHOTS,'cinematic-fireworks-mobile.png')});
+            await page.locator('#show-stage').screenshot({path:path.join(SHOTS,'cinematic-fireworks-mobile.png')});
           }
           if(vw===1440){
-            await page.screenshot({path:path.join(SHOTS,'cinematic-fireworks-desktop.png')});
+            await page.locator('#show-stage').screenshot({path:path.join(SHOTS,'cinematic-fireworks-desktop.png')});
           }
           await page.locator('#intensity').selectOption('high');
           await page.locator('#finale').click();
@@ -203,7 +206,8 @@ async function main(){
           await page.waitForFunction(()=>window.ViceMidnightShow.getStats().particles>20,
             {timeout:10000});
           if(vw===1440){
-            await page.screenshot({path:path.join(SHOTS,'cinematic-grand-finale-desktop.png')});
+            await page.waitForTimeout(3000);
+            await page.locator('#show-stage').screenshot({path:path.join(SHOTS,'cinematic-grand-finale-desktop.png')});
           }
           await page.locator('#replay').click();
           assert.equal(await page.locator('#midnight-message').isVisible(),true);
