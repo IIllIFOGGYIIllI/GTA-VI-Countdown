@@ -1,10 +1,10 @@
-/* Vice City Countdown · PWA v2.3 · Fresh-online + offline fallback */
-const CACHE='vice-city-countdown-v7';
+/* Vice City Countdown · PWA v2.4 · Fresh-online + offline fallback */
+const CACHE='vice-city-countdown-v8';
 const CORE=[
   './','./index.html',
-  './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0',
-  './app.js?v=2.3.0','./assets/vice-city-skyline.svg',
-  './data/news.json?v=2.3.0','./manifest.webmanifest',
+  './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0','./assets/launch-mode.css?v=2.4.0',
+  './app.js?v=2.4.0','./assets/vice-city-skyline.svg',
+  './data/news.json?v=2.4.0','./manifest.webmanifest',
   './assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
   './privacy.html','./terms.html','./spoilers.html'
 ];

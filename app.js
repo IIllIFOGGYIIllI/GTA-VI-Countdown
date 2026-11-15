@@ -80,12 +80,43 @@
   function pad(n){return String(n).padStart(2,'0');}
   let selectedZone=zoneSelect.value,release=0;
   let lastDisplaySecond=-1;
+  // Launch mode is calculated from the selected region's midnight,
+  // not merely the viewer's device date or clock timezone.
+  let currentLaunchMode=null;
+  function updateLaunchMode(launched){
+    const mode=launched?'launched':'countdown';
+    if(mode===currentLaunchMode)return;
+    currentLaunchMode=mode;
+    const region=zoneSelect.selectedOptions?.[0]?.textContent?.trim()||selectedZone.replaceAll('_',' ').replaceAll('/',' / ');
+    const showTimer=!launched;
+    $('count-grid').hidden=!showTimer;
+    $('count-progress').hidden=!showTimer;
+    $('launch-state').hidden=!launched;
+    $('launch-hub').hidden=!launched;
+    $('countdown-heading').textContent=launched?'THE WAIT IS OVER':'MIDNIGHT CALLING';
+    $('countdown-intro').textContent=launched
+      ?'Scheduled release time reached · 19 November 2026'
+      :'Until midnight · 19 November 2026';
+    $('card-status-label').textContent=launched?'LAUNCH MILESTONE · REGION':'LIVE · YOUR REGION';
+    $('header-state-label').textContent=launched?'LAUNCH DAY':'LIVE COUNTDOWN';
+    $('hero-primary-label').textContent=launched?'Launch guide':'See the countdown';
+    $('hero-primary-action').href=launched?'#launch-hub':'#countdown-panel';
+    $('hero-chapter').textContent=launched?'01 / THE CITY IS YOURS':'01 / THE FINAL COUNTDOWN';
+    $('hero-intro').textContent=launched
+      ?'The wait is over in your selected region. Explore official launch information, keep your first playthrough spoiler-free, and welcome back to Vice City.'
+      :'Sunset skies. Neon nights. One final countdown. Track the launch of Grand Theft Auto VI across the globe, without ruining a second of the story.';
+    $('launch-region-name').textContent=region;
+    $('launch-state-message').textContent=
+      'The scheduled midnight release time has arrived for '+region+'. Check your console storefront for availability.';
+    document.body.classList.toggle('has-launched',launched);
+  }
+
   function selectZone(zone){
     try { release=releaseEpoch(zone); selectedZone=zone; saveZone(zone); }
     catch { selectedZone='Australia/Sydney';zoneSelect.value=selectedZone;release=releaseEpoch(selectedZone); }
     const releaseDate = new Date(release);
     $('zone-time').textContent=localTime(releaseDate,selectedZone,{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
-    $('countdown-intro').textContent='Until 12:00 AM · 19 November 2026';
+    currentLaunchMode=null;
     lastDisplaySecond=-1;
     tick();
   }
@@ -94,7 +125,7 @@
     const second=Math.floor(now/1000);
     if(second===lastDisplaySecond)return;
     lastDisplaySecond=second;
-    let seconds=Math.max(0,Math.floor((release-now)/1000));
+    let seconds=Math.max(0,Math.ceil((release-now)/1000));
     const days=Math.floor(seconds/86400);seconds%=86400;
     const hours=Math.floor(seconds/3600);seconds%=3600;
     const minutes=Math.floor(seconds/60),secs=seconds%60;
@@ -108,8 +139,16 @@
     const pct=Math.max(0,Math.min(100,((now-initial)/(release-initial))*100));
     $('progress-bar').style.width=pct.toFixed(2)+'%';
     const launched=now>=release;
-    $('count-done').hidden=!launched;
-    document.title=launched?'GTA VI Launch Day | Vice City Countdown':(days+'d '+pad(hours)+'h '+pad(minutes)+'m | GTA VI Countdown');
+    updateLaunchMode(launched);
+    if(launched){
+      const since=Math.max(0,Math.floor((now-release)/1000));
+      const elapsedDays=Math.floor(since/86400);
+      const elapsedHours=Math.floor((since%86400)/3600);
+      const elapsedMinutes=Math.floor((since%3600)/60);
+      $('launch-elapsed').textContent=
+        (elapsedDays>0?elapsedDays+'D ':'')+pad(elapsedHours)+'H '+pad(elapsedMinutes)+'M';
+    }
+    document.title=launched?'GTA VI Launch Milestone | Vice City Countdown':(days+'d '+pad(hours)+'h '+pad(minutes)+'m | GTA VI Countdown');
   }
   fillZones();
   selectZone(zoneSelect.value);
@@ -343,7 +382,7 @@
 
   // Update-aware PWA: request fresh service-worker code and reload once when
   // a new worker takes control, while keeping offline fallback functional.
-  const APP_VERSION='2.3.0';
+  const APP_VERSION='2.4.0';
   const refreshButton=$('check-updates');
   if(refreshButton){
     refreshButton.addEventListener('click',async()=>{

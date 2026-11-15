@@ -130,3 +130,20 @@ An opt-in 138-image screenshot catalogue is sourced from Rockstar's official GTA
 - The scheduled news-check workflow runs its safety tests before contacting Rockstar.
 
 **Operational note:** The workflows are committed, but a successful scheduled Newswire fetch has not been independently verified in this chat. View the repository Actions tab; GitHub can delay or disable scheduled jobs. Manually run Check Official GTA VI News (review only) to verify connectivity and permissions. Publication still requires a separate maintainer action.
+
+
+## v2.4 — Launch-day experience
+
+- At the selected region's midnight on **19 November 2026**, the live countdown automatically switches to a **GTA VI HAS LAUNCHED** panel and the standalone launch guide. The transition is tied to the selected IANA timezone and the same release timestamp as the original countdown.
+- Before the scheduled release, the original countdown stays visible. At midnight, the zeroed-out timer and progress bar are hidden; after launch the panel displays time elapsed since the scheduled release.
+- Users can select another region at any time, including one where midnight has **not** arrived. The view switches correctly in either direction without a page reload.
+- The site retains its news, trailer links and spoiler-gated screenshot gallery. Nothing in the release transition loads external images or unmasks the media section.
+- The launch guide links to official PlayStation, Xbox and Rockstar support, and explains that actual availability depends on the player's platform account, store and eligibility. This is a scheduled-time indicator, **not** a real-time guarantee that an account can access the game.
+- The installed PWA caches the launch stylesheet and script under **v2.4 / cache v8**.
+- **Tests:** Node integration test tests/test_launch.cjs simulates Sydney midnight, a still-pending Los Angeles release, switching back and elapsed-time behaviour after one day. Static site tests check launch markup and hidden-state CSS. Both run in the GitHub Actions verification workflow.
+
+Official source: https://support.rockstargames.com/articles/29jV3Cv2cCgvwM1XgtMO5o/grand-theft-auto-vi-regional-pre-load-and-release-times-on-playstation-5-and-xbox-series-x-or-s
+
+### Editorial review closure
+
+The November 2026 pre-load review issue #1 was closed as a duplicate: the manually approved news feed already covers the pre-load announcement. This does **not** change automatic review behaviour for future unique announcements.

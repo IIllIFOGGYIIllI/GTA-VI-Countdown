@@ -38,7 +38,9 @@ class SiteTests(unittest.TestCase):
     def test_expected_sections_and_controls(self):
         for id_ in ('main','countdown','countdown-panel','timezone','days','hours',
                     'minutes','seconds','news','news-grid','media','gallery-browser',
-                    'gallery-modal','app','check-updates','faq'):
+                    'gallery-modal','app','check-updates','faq','launch-state',
+                    'launch-hub','launch-hub-title','count-grid','count-progress',
+                    'launch-elapsed','launch-region-name','hero-primary-action'):
             self.assertIn(id_,self.parser.ids)
         self.assertEqual(len(self.parser.ids),len(set(self.parser.ids)),'Duplicate HTML IDs found')
     def test_mobile_tab_links_are_valid(self):
@@ -65,6 +67,22 @@ class SiteTests(unittest.TestCase):
         self.assertIn('.hero-copy{display:contents}',mobile)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn("mobile-experience.css?v=2.3.0",worker)
+        self.assertIn("launch-mode.css?v=2.4.0",worker)
+        self.assertIn("vice-city-countdown-v8",worker)
+
+    def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
+        self.assertIn('id="launch-state" hidden',self.html)
+        self.assertIn('id="launch-hub" hidden',self.html)
+        self.assertIn("GTA VI HAS LAUNCHED",self.html)
+        self.assertNotIn("autoplay",self.html.split('id="launch-hub"')[1].split('</section>')[0])
+        css=(ROOT/'assets/launch-mode.css').read_text(encoding='utf-8')
+        self.assertIn('#launch-hub[hidden]',css)
+        self.assertIn('#count-grid[hidden]',css)
+        app=(ROOT/'app.js').read_text(encoding='utf-8')
+        self.assertIn('updateLaunchMode(launched)',app)
+        self.assertIn("currentLaunchMode=null",app)
+        self.assertIn("now>=release",app)
+
 
 if __name__=='__main__':
     unittest.main()
