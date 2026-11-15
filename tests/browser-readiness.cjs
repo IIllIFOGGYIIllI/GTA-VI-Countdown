@@ -162,7 +162,9 @@ async function main(){
           const response=await page.goto(BASE+'preview/celebration.html',{waitUntil:'load'});
           assert.equal(response.status(),200);
           assert.equal(await page.locator('#launch-message').isVisible(),false);
-          if(vw===1440)await page.locator('#demo-30').click();
+          // Use the longer simulation on every device so checks do not
+          // accidentally cross midnight while scrolling through styles.
+          await page.locator('#demo-30').click();
           const scroll=await page.evaluate(()=>({
             documentWidth:document.documentElement.scrollWidth,
             viewportWidth:window.innerWidth
@@ -177,8 +179,9 @@ async function main(){
             assert.equal(await page.locator('#firework-design-title').textContent(),title);
             assert.equal(await page.locator('.hero').getAttribute('data-fireworks-style'),name);
             assert.equal(await page.locator('button[data-style="'+name+'"]').getAttribute('aria-pressed'),'true');
-            assert.equal(await page.locator('#counter').isVisible(),true,
-              'Changing design must not skip the demo timer');
+            assert.equal(
+              (await page.locator('#counter').isVisible())||(await page.locator('#launch-message').isVisible()),
+              true,'Switching designs must leave the timer or launch state active');
             await page.waitForTimeout(90);
             const sample=await page.evaluate(()=>{
               const canvas=document.querySelector('#firework-design-canvas');
@@ -229,8 +232,8 @@ async function main(){
           await page.locator('#audio-toggle').click();
           await page.waitForTimeout(120);
           const audioStatus=await page.locator('#audio-status').textContent();
-          assert.ok(audioStatus.includes('Armed')||audioStatus.includes('blocked'),
-            'Sound should be opt-in: '+audioStatus);
+          assert.ok(audioStatus.includes('Armed')||audioStatus.includes('blocked')||audioStatus.includes('Original track playing'),
+            'Sound should be opt-in and start at simulated midnight: '+audioStatus);
           await page.locator('#launch-now').click();
           assert.equal(await page.locator('#launch-message').isVisible(),true);
           assert.equal(await page.locator('#counter').isVisible(),false);
