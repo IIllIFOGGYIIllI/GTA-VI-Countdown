@@ -13,11 +13,10 @@ const filters=$('guide-filters');
 const search=$('guide-search');
 const count=$('guide-count');
 const lock=$('guide-lock-status');
-const strict=$('kit-strict');
-if(!toggle||!panel||!grid||!strict)return;
+if(!toggle||!panel||!grid||!filters||!search)return;
 let items=null,selected='all',requestId=0;
 const labels={story:'Story',characters:'Characters',places:'Locations',world:'World & Features'};
-const locked=()=>strict.checked||document.documentElement.classList.contains('vc-strict-spoilers');
+const locked=()=>document.documentElement.classList.contains('vc-strict-spoilers');
 const officialScreenshot=value=>{
  try{
   if(typeof value!=='string')return '';
@@ -138,7 +137,7 @@ async function reveal(){
  toggle.disabled=true;toggle.textContent='Preparing official files…';
  lock.textContent='Loading only approved, Rockstar-confirmed facts…';
  try{
-  const response=await fetch('./data/official-guide.json?v=3.0.1');
+  const response=await fetch('./data/official-guide.json?v=3.1.0');
   if(!response.ok)throw Error('Official archive unavailable');
   const documentData=await response.json();
   if(attempt!==requestId||locked())return;
@@ -177,7 +176,9 @@ filters.addEventListener('click',e=>{
  render();
 });
 search.addEventListener('input',render);
-strict.addEventListener('change',syncLock);
+window.addEventListener('storage',syncLock);
+window.addEventListener('focus',syncLock);
+document.addEventListener('vice:preferences',syncLock);
 $('kit-reset-settings')?.addEventListener('click',syncLock);
 window.addEventListener('pageshow',syncLock);
 window.ViceOfficialIntel=Object.freeze({

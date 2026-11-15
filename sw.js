@@ -1,19 +1,46 @@
 /* Vice City Countdown · PWA v2.9 · Official editorial card artwork + offline fallback */
-const CACHE='vice-city-countdown-v20';
+const CACHE='vice-city-countdown-v21';
 const CORE=[
-  './','./index.html','./launch-info.html','./launch-kit.html','./news.html','./leonida-files.html','./media.html','./app.html',
-  './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0','./assets/launch-mode.css?v=2.4.0','./assets/launch-week.css?v=2.5.0',
-  './app.js?v=3.0.1','./assets/launch-week-core.js?v=2.5.0','./assets/launch-week.js?v=3.0.1',
-  './assets/site-pages.css?v=3.0.0','./assets/site-pages.js?v=3.0.0',
-  './assets/official-guide.css?v=2.8.0','./assets/editorial-images.css?v=2.9.1',
-  './assets/official-guide.js?v=3.0.1',
-  './assets/cinematic-launch.css?v=2.7.2','./assets/cinematic-launch.js?v=2.7.1',
-  './preview/vendor/GrandFireworks.min.js?v=1.11.1','./assets/vice-city-skyline.svg',
-  // Keep optional story facts out of install-time downloads. The guide is fetched and cached only when explicitly revealed.
-  './data/news.json?v=3.0.1','./manifest.webmanifest',
-  './assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
-  './privacy.html','./terms.html','./spoilers.html'
+  "./",
+  "./index.html",
+  "./launch-info.html",
+  "./launch-kit.html",
+  "./news.html",
+  "./leonida-files.html",
+  "./media.html",
+  "./app.html",
+  "./styles.css?v=2.2.0",
+  "./assets/vice-city-theme.css?v=2.2.0",
+  "./assets/mobile-experience.css?v=2.3.0",
+  "./assets/site-pages.css?v=3.1.0",
+  "./assets/launch-mode.css?v=2.4.0",
+  "./assets/cinematic-launch.css?v=2.7.2",
+  "./assets/site-pages.js?v=3.1.0",
+  "./app.js?v=3.1.0",
+  "./preview/vendor/GrandFireworks.min.js?v=1.11.1",
+  "./assets/cinematic-launch.js?v=2.7.1",
+  "./assets/region-clock.js?v=3.1.0",
+  "./assets/launch-week.css?v=2.5.0",
+  "./assets/launch-week-core.js?v=2.5.0",
+  "./assets/launch-week.js?v=3.1.0",
+  "./assets/editorial-images.css?v=2.9.1",
+  "./assets/news.js?v=3.1.0",
+  "./assets/official-guide.css?v=2.8.0",
+  "./assets/official-guide.js?v=3.1.0",
+  "./assets/media.js?v=3.1.0",
+  "./assets/install.js?v=3.1.0",
+  "./data/news.json?v=3.1.0",
+  "./manifest.webmanifest",
+  "./assets/icon.svg",
+  "./assets/icon-192.png",
+  "./assets/icon-512.png",
+  "./assets/vice-city-skyline.svg",
+  "./privacy.html",
+  "./terms.html",
+  "./spoilers.html"
 ];
+// Optional Leonida story data and full screenshots are not pre-fetched.
+self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(CACHE);
@@ -63,7 +90,7 @@ self.addEventListener('fetch',event=>{
         event.waitUntil(caches.open(CACHE).then(c=>c.put(request,copy)));
       }
       return response;
-    }).catch(async()=>await caches.match('./data/news.json?v=3.0.1') ||
+    }).catch(async()=>await caches.match('./data/news.json?v=3.1.0') ||
       new Response('{"articles":[]}',{headers:{'Content-Type':'application/json'}})));
     return;
   }

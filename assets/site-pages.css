@@ -57,17 +57,7 @@
 .page-directory a strong {font-size:16px;color:#fff2e4}
 .page-directory a small {color:#decbdc;font-size:12px;line-height:1.5}
 .page-directory a span {color:#9bfff0;font-size:11px;font-weight:900}
-body[data-page]:not([data-page="home"]) main > section {display:none!important}
-body[data-page="launch-info"] main > #milestones,
-body[data-page="launch-info"] main > #launch-hub:not([hidden]),
-body[data-page="launch-kit"] main > #launch-kit,
-body[data-page="news"] main > #news,
-body[data-page="leonida-files"] main > #intel,
-body[data-page="media"] main > #media,
-body[data-page="app"] main > #app,
-body[data-page="app"] main > #faq {display:block!important}
-body[data-page]:not([data-page="home"]) .page-directory {display:none!important}
-body[data-page]:not([data-page="home"]) main > section:not(#launch-hub) {scroll-margin-top:100px}
+body[data-page]:not([data-page="home"]) main > section {scroll-margin-top:100px}
 body[data-page="news"] #news,body[data-page="media"] #media,body[data-page="leonida-files"] #intel {padding-top:42px}
 body[data-page="app"] #app,body[data-page="launch-info"] #milestones,body[data-page="launch-kit"] #launch-kit {padding-top:30px}
 body[data-page="leonida-files"] .vc-intel {border-radius:13px}
@@ -89,3 +79,16 @@ body[data-page="leonida-files"] .vc-intel {border-radius:13px}
 }
 @media(min-width:651px) and (max-width:950px) {.page-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.page-directory a{transition:none}.page-directory a:hover{transform:none}}
+
+/* v3.1 finish: robust focus, mobile tap targets, deliberate motion and transparent card states */
+:focus-visible{outline:3px solid #91fff0!important;outline-offset:3px}
+.site-pages-menu nav a{min-height:44px;display:flex;align-items:center}
+.mobile-tab-link{min-height:46px}
+.page-lead-inner{min-height:172px}
+.section-header{align-items:start}
+.news-card,.vc-intel-card,.viewer-tile{transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.news-card:hover,.vc-intel-card:hover{box-shadow:0 13px 35px rgba(4,8,24,.4)}
+.news-visual-image,.vc-intel-card-image{background:#22243e}
+.news-visual-image[alt],.vc-intel-card-image[alt]{font-size:0}
+@media(max-width:650px){.page-lead-inner{min-height:0}.site-pages-menu nav{max-height:65vh;overflow-y:auto}.section-header{gap:12px}}
+@media(prefers-reduced-motion:reduce){.news-card,.vc-intel-card,.viewer-tile{transition:none!important;transform:none!important}}

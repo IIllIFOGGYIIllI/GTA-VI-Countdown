@@ -48,6 +48,7 @@
     $('kit-motion').checked=settings.motion;
     $('kit-sounds').checked=settings.sounds;
     $('kit-strict').checked=settings.strict;
+    document.dispatchEvent(new Event('vice:preferences'));
   }
   function persistSettings(){
     const stored=writeLocal(SETTINGS_KEY,settings);
