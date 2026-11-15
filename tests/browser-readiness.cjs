@@ -147,13 +147,14 @@ async function main(){
       }finally{await context.close();}
     });
 
-    // Preview remains isolated from production; verify its actual animation,
-    // responsive layout, sound opt-in and controls before deploying.
+    // The professional fireworks engine must render *real* rocket/particle
+    // effects across phone, tablet and desktop. No fake static motif tests.
     for(const [vw,vh] of [[360,780],[768,920],[1440,900]]){
-      await runCase('interactive celebration preview '+vw+'px',async()=>{
+      await runCase('cinematic midnight fireworks '+vw+'px',async()=>{
         const context=await browser.newContext({
           viewport:{width:vw,height:vh},deviceScaleFactor:1,
-          serviceWorkers:'block',reducedMotion:'no-preference'
+          serviceWorkers:'block',reducedMotion:'no-preference',
+          permissions:[]
         });
         try{
           const page=await context.newPage();
@@ -161,114 +162,57 @@ async function main(){
           page.on('pageerror',e=>errors.push(e.message));
           const response=await page.goto(BASE+'preview/celebration.html',{waitUntil:'load'});
           assert.equal(response.status(),200);
-          assert.equal(await page.locator('#launch-message').isVisible(),false);
-          // Use the longer simulation on every device so checks do not
-          // accidentally cross midnight while scrolling through styles.
-          await page.locator('#demo-30').click();
-          const scroll=await page.evaluate(()=>({
+          await page.waitForFunction(()=>!!window.ViceMidnightShow && window.ViceMidnightShow.engine==='Grand Fireworks JS');
+          assert.equal(await page.locator('#midnight-message').isVisible(),false);
+          assert.equal(await page.locator('#audio-toggle').getAttribute('aria-pressed'),'false',
+            'Sound must be disabled by default');
+          assert.equal(await page.locator('.style-option').count(),0,
+            'Remove the gimmicky design selectors from the professional show');
+          const widths=await page.evaluate(()=>({
             documentWidth:document.documentElement.scrollWidth,
             viewportWidth:window.innerWidth
           }));
-          assert.ok(scroll.documentWidth<=scroll.viewportWidth+2,
-            'Celebration layout overflow '+JSON.stringify(scroll));
-          // Designs must visibly load on selection, *before* midnight,
-          // with a separate running motif canvas and a matching main sky.
-          assert.equal(await page.locator('#firework-design-canvas').isVisible(),true);
-          for(const [name,title] of [['deco','ART DECO'],['vi','VI FINALE'],['palms','NEON PALMS']]){
-            await page.locator('button[data-style="'+name+'"]').click({noWaitAfter:true});
-            assert.equal(await page.locator('#firework-design-title').textContent(),title);
-            assert.equal(await page.locator('.hero').getAttribute('data-fireworks-style'),name);
-            assert.equal(await page.locator('button[data-style="'+name+'"]').getAttribute('aria-pressed'),'true');
-            assert.equal(
-              (await page.locator('#counter').isVisible())||(await page.locator('#launch-message').isVisible()),
-              true,'Switching designs must leave the timer or launch state active');
-            await page.waitForTimeout(90);
-            const sample=await page.evaluate(()=>{
-              const canvas=document.querySelector('#firework-design-canvas');
-              const pixels=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
-              let lit=0;
-              for(let i=3;i<pixels.length;i+=64)if(pixels[i]>12)lit++;
-              return lit;
-            });
-            assert.ok(sample>15,'Design '+name+' has no visible sample: '+sample);
-            const sky=await page.evaluate(()=>{
-              const renderer=window.ViceFireworksPreview;
-              const main=document.querySelector('#fireworks');
-              const pixels=main.getContext('2d').getImageData(0,0,main.width,main.height).data;
-              let lit=0;
-              for(let i=3;i<pixels.length;i+=64)if(pixels[i]>12)lit++;
-              return {
-                selected:renderer.selectedDesign(),
-                largeMotifs:renderer.largeMotifTypes(),
-                shared:renderer.previewAndSkyShareRenderer,
-                pixels:lit
-              };
-            });
-            assert.equal(sky.selected,name,'Selected large design mismatch');
-            assert.equal(sky.shared,true,'The preview and sky must use one shared renderer');
-            assert.ok(sky.largeMotifs.length>0 && sky.largeMotifs.every(type=>type===name),
-              'Main fireworks are not showing the selected motif: '+JSON.stringify(sky));
-            assert.ok(sky.pixels>20,
-              'Full-sized '+name+' fireworks did not visibly render: '+sky.pixels);
-            if(vw===1440 && name!=='palms'){
-              await page.screenshot({path:path.join(SHOTS,'celebration-'+name+'-before-midnight.png')});
-            }
+          assert.ok(widths.documentWidth<=widths.viewportWidth+2,
+            'Horizontal overflow '+JSON.stringify(widths));
+          assert.equal(await page.locator('#show-stage .grand-fireworks-root').count(),1,
+            'The professional engine must mount inside the show stage');
+          await page.locator('#audio-toggle').click();
+          const audioStatus=await page.locator('#audio-status').textContent();
+          assert.ok(audioStatus.includes('Armed')||audioStatus.includes('blocked'),
+            'Audio opt-in did not respond: '+audioStatus);
+          // Launch explicitly; no need to wait for the demo countdown.
+          await page.locator('#launch-now').click();
+          await page.waitForFunction(()=>window.ViceMidnightShow.hasStarted());
+          assert.equal(await page.locator('#midnight-message').isVisible(),true);
+          await page.waitForFunction(()=>{
+            const stats=window.ViceMidnightShow.getStats();
+            return stats && (stats.particles>20||stats.rockets>0);
+          },{timeout:12000});
+          const stats=await page.evaluate(()=>window.ViceMidnightShow.getStats());
+          assert.ok(['canvas2d','webgl2'].includes(stats.renderer),
+            'Expected actual particle renderer, got '+stats.renderer);
+          if(vw===360){
+            await page.screenshot({path:path.join(SHOTS,'cinematic-fireworks-mobile.png')});
           }
           if(vw===1440){
-            // All bright bursts have faded; the selected motif must still
-            // remain visible in the full-sized sky just like the live sample.
-            await page.waitForTimeout(3700);
-            const persistent=await page.evaluate(()=>{
-              const sky=document.querySelector('#fireworks');
-              const rgba=sky.getContext('2d').getImageData(0,0,sky.width,sky.height).data;
-              let visible=0;
-              for(let i=3;i<rgba.length;i+=64)if(rgba[i]>12)visible++;
-              return visible;
-            });
-            assert.ok(persistent>20,'Full skyline design vanished between firework bursts');
-            await page.screenshot({path:path.join(SHOTS,'celebration-persistent-background.png')});
+            await page.screenshot({path:path.join(SHOTS,'cinematic-fireworks-desktop.png')});
           }
-          // The sound button must be pressed before the demo midnight.
-          await page.locator('#audio-toggle').click();
-          await page.waitForTimeout(120);
-          const audioStatus=await page.locator('#audio-status').textContent();
-          assert.ok(audioStatus.includes('Armed')||audioStatus.includes('blocked')||audioStatus.includes('Original track playing'),
-            'Sound should be opt-in and start at simulated midnight: '+audioStatus);
-          await page.locator('#launch-now').click();
-          assert.equal(await page.locator('#launch-message').isVisible(),true);
-          assert.equal(await page.locator('#counter').isVisible(),false);
-          await page.waitForTimeout(380);
-          // A real canvas rendering pass should have put some live pixels on screen.
-          const ink=await page.evaluate(()=>{
-            const c=document.querySelector('#fireworks');
-            const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
-            let hits=0;
-            for(let i=3;i<d.length;i+=48)if(d[i]>10)hits++;
-            return hits;
-          });
-          assert.ok(ink>4,'Fireworks canvas did not render visible particles');
-          for(const design of ['deco','vi','palms']){
-            await page.locator('button[data-style="'+design+'"]').click({noWaitAfter:true,timeout:12000});
-            assert.equal(await page.locator('button[data-style="'+design+'"]').getAttribute('aria-pressed'),'true');
-            await page.waitForTimeout(115);
-            const active=await page.evaluate(()=>window.ViceFireworksPreview.largeMotifTypes());
-            assert.ok(active.length>0 && active.every(type=>type===design),
-              'Midnight full-size fireworks must match selected '+design+' design: '+JSON.stringify(active));
-            if(vw===1440){
-              await page.screenshot({path:path.join(SHOTS,'celebration-'+design+'-midnight.png')});
-            }
+          await page.locator('#intensity').selectOption('high');
+          await page.locator('#finale').click();
+          assert.equal(await page.locator('#stage-phase').textContent().then(t=>t.includes('GRAND FINALE')),true);
+          await page.waitForFunction(()=>window.ViceMidnightShow.getStats().particles>20,
+            {timeout:10000});
+          if(vw===1440){
+            await page.screenshot({path:path.join(SHOTS,'cinematic-grand-finale-desktop.png')});
           }
           await page.locator('#replay').click();
-          assert.equal(await page.locator('#launch-message').isVisible(),true);
+          assert.equal(await page.locator('#midnight-message').isVisible(),true);
           await page.locator('#reduced-motion').check();
           assert.equal(await page.locator('body').evaluate(el=>el.classList.contains('reduce-motion')),true);
-          assert.deepEqual(errors,[],'Celebration JS errors '+errors.join(' | '));
-          if(vw===360){
-            await page.screenshot({path:path.join(SHOTS,'celebration-live-mobile.png'),fullPage:true});
-          }
-          if(vw===1440){
-            await page.screenshot({path:path.join(SHOTS,'celebration-live-desktop.png'),fullPage:false});
-          }
+          await page.locator('#demo-30').click();
+          assert.equal(await page.locator('#midnight-message').isVisible(),false);
+          assert.equal(await page.locator('#stage-intro').isVisible(),true);
+          assert.deepEqual(errors,[],'Celebration runtime JS errors: '+errors.join(' | '));
         }finally{await context.close();}
       });
     }

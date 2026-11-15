@@ -1,242 +1,175 @@
-/* Interactive Midnight Celebration
- * Original canvas fireworks and an original Web Audio synthwave arrangement.
- * This isolated preview does not alter the live GTA VI countdown.
- */
+/* Midnight Spectacular — cinematic fireworks + original synthwave
+   Isolated preview only. No production countdown or PWA integration. */
 (()=>{
 'use strict';
 const $=id=>document.getElementById(id);
-const hero=document.querySelector('.hero'),canvas=$('fireworks'),ctx=canvas.getContext('2d',{alpha:true});
-const styleButtons=[...document.querySelectorAll('.style-option')];
-const designCanvas=$('firework-design-canvas'),designCtx=designCanvas.getContext('2d',{alpha:true});
-const DESIGN_INFO={
- palms:{title:'NEON PALMS',description:'Tropical palm-shaped trails with luminous turquoise and pink fronds.',status:'NEON PALMS LIVE PREVIEW'},
- deco:{title:'ART DECO',description:'Golden geometric diamonds, precision starbursts and symmetrical retro-neon rays.',status:'ART DECO LIVE PREVIEW'},
- vi:{title:'VI FINALE',description:'A glowing VI monogram framed by magenta and cyan particles, built for the midnight finale.',status:'VI FINALE LIVE PREVIEW'}
-};
-const preference=window.matchMedia('(prefers-reduced-motion: reduce)');
-const state={duration:12000,left:12000,startedAt:performance.now(),launched:false,launchAt:0,fireworkStyle:'palms',
-intensity:'medium',reduce:preference.matches,pausedAt:0,lastTick:0,nextBurst:0,
-motifs:[],rockets:[],width:0,height:0,dpr:1};
+const stage=$('show-stage');
+const G=window.GrandFireworks;
+if(typeof G!=='function'){
+ $('stage-caption').textContent='FIREWORKS ENGINE UNAVAILABLE';
+ $('stage-phase').textContent='PREVIEW ERROR';
+ return;
+}
+const prefersReduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+const state={countdownStart:performance.now(),countdownDuration:8000,
+ showStarted:false,showEnded:false,showStartAt:0,showDuration:33000,
+ finaled:false,intensity:'medium',reduce:prefersReduce.matches,phase:'standby',
+ timers:[],lastAnimation:0};
 let musicEnabled=false,context=null,master=null,scheduler=null,step=0,nextMusicTime=0,volume=.45;
-const COLORS=['#fe86b9','#ffbad7','#ffcc91','#86fff2','#b590ff','#ffd9a0'];
-const rng=(a,b)=>a+Math.random()*(b-a),pick=arr=>arr[Math.floor(Math.random()*arr.length)];
-const pad=n=>String(Math.max(0,Math.floor(n))).padStart(2,'0');
-function updateCount(){
- const remaining=Math.max(0,Math.ceil(state.left/1000));
- $('d-days').textContent='00';$('d-hours').textContent='00';
- $('d-mins').textContent=pad(Math.floor(remaining/60));$('d-secs').textContent=pad(remaining%60);
- $('timer-fill').style.width=(100-Math.max(0,state.left)/state.duration*100).toFixed(2)+'%';
+const COLORS=[
+ ['#FFDFA4','#FF95C4','#FFFFFF'],
+ ['#7FFFE8','#CCFFF5','#FFF4D7'],
+ ['#FFB88E','#FFDBB7','#FFFFFF'],
+ ['#C19BFF','#FF96CE','#FFF3EB'],
+ ['#FFE196','#FFDEBB','#FF8AB9']
+];
+function performancePreset(){
+ return state.reduce?'low':state.intensity==='low'?'low':state.intensity==='high'?'high':'medium';
 }
-function resetDemo(seconds){
- stopMusic();state.duration=seconds*1000;state.left=state.duration;state.startedAt=performance.now();
- state.launched=false;state.launchAt=0;state.nextBurst=0;
- state.rockets.length=0;state.motifs.length=0;
- hero.classList.remove('launched');
- $('counter').hidden=false;$('timer-line').hidden=false;$('launch-message').hidden=true;
- $('panel-heading').innerHTML='MIDNIGHT <em>CALLING</em>';
- $('panel-status').textContent='COUNTING DOWN · DEMO';
- $('panel-sub').textContent='The city lights up when this demo timer reaches zero.';
- $('show-label').textContent='COUNTDOWN ACTIVE';
- $('hero-lead').textContent='One night. One city. A neon midnight celebration, created for the GTA VI countdown.';
- $('sky-notice').style.opacity='';
- updateCount();
+function showIntensity(){
+ return state.reduce?.22:state.intensity==='low'?.48:state.intensity==='high'?1.15:.86;
 }
-function launchMidnight(){
- if(state.launched)return;
- state.left=0;state.launched=true;state.launchAt=performance.now();
- state.nextBurst=state.launchAt+1100;
- hero.classList.add('launched');
- $('counter').hidden=true;$('timer-line').hidden=true;$('launch-message').hidden=false;
- $('panel-status').textContent='MIDNIGHT CELEBRATION · DEMO';
- $('panel-heading').innerHTML='THE CITY <em>IS YOURS</em>';
- $('panel-sub').textContent='The selected firework design lights up the skyline.';
- $('hero-lead').textContent='Midnight has arrived in this simulation. Watch the skyline come alive with your chosen neon fireworks and an original synthwave soundtrack.';
- $('show-label').textContent=DESIGN_INFO[state.fireworkStyle].status;
- // The main canvas and the miniature preview use exactly the same renderer.
- const w=state.width,h=state.height,now=performance.now();
- state.rockets.length=0;state.motifs.length=0;
- if(state.fireworkStyle==='vi'){
-  launchFirework(w*.40,h*.18,'vi',1.40,now);
- }else{
-  launchFirework(w*.28,h*.23,state.fireworkStyle,1.18,now);
-  if(!state.reduce)launchFirework(w*.65,h*.34,state.fireworkStyle,.92,now);
- }
- if(musicEnabled)startMusic();
-}
-function canvasSize(){
- const box=canvas.getBoundingClientRect();
- state.dpr=Math.min(1.5,window.devicePixelRatio||1);
- state.width=Math.max(1,box.width);state.height=Math.max(1,box.height);
- canvas.width=Math.round(state.width*state.dpr);canvas.height=Math.round(state.height*state.dpr);
- ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
-}
-function designCanvasSize(){
- const box=designCanvas.getBoundingClientRect();
- const dpr=Math.min(1.5,window.devicePixelRatio||1);
- designCanvas.width=Math.max(1,Math.round(box.width*dpr));
- designCanvas.height=Math.max(1,Math.round(box.height*dpr));
- designCtx.setTransform(dpr,0,0,dpr,0,0);
-}
-window.addEventListener('resize',()=>{canvasSize();designCanvasSize();},{passive:true});
-canvasSize();designCanvasSize();
-/* One shared, scalable design engine for the miniature preview AND the
-   full-size fireworks. No fallback to unrelated generic particle bursts. */
-const MOTIF_COLOURS=['#8affee','#fa8cbd','#ffdda1'];
-function drawFireworkMotif(g,type,x,y,size,time,alpha=1,reduced=false){
- if(size<=0||alpha<=0)return;
- g.save();
- g.translate(x,y);
- g.scale(size/100,size/100);
- g.globalAlpha*=Math.max(0,Math.min(1,alpha));
- g.lineCap='round';g.lineJoin='round';
- const twinkle=reduced?0:time;
- if(type==='palms'){
-  for(let burst=0;burst<3;burst++){
-   const cx=(burst-1)*61,cy=burst%2?14:-7;
-   const mult=burst===1?1:.73;
-   for(let i=0;i<9;i++){
-    const theta=-Math.PI+(i/8)*Math.PI;
-    const radius=(40+5*Math.sin(twinkle*2+i*.65+burst))*mult;
-    const endX=cx+Math.cos(theta)*radius*1.6;
-    const endY=cy-19+Math.sin(theta)*radius*.79;
-    const colour=MOTIF_COLOURS[(i+burst)%3];
-    g.beginPath();g.strokeStyle=colour;g.lineWidth=2.2*mult;
-    g.shadowColor=colour;g.shadowBlur=reduced?0:6;
-    g.moveTo(cx,cy+38*mult);
-    g.quadraticCurveTo(cx+Math.cos(theta)*radius*.6,cy-45*mult,endX,endY);
-    g.stroke();g.fillStyle=colour;
-    g.beginPath();g.arc(endX,endY,1.65*mult,0,Math.PI*2);g.fill();
-   }
-  }
- }else if(type==='deco'){
-  for(let cluster=0;cluster<3;cluster++){
-   const px=(cluster-1)*80,py=cluster%2?-6:6;
-   const radius=47*(cluster===1?1:.73);
-   g.save();g.translate(px,py);
-   if(!reduced)g.rotate(Math.sin(twinkle*.65+cluster)*.13);
-   for(let ring=0;ring<3;ring++){
-    const r=radius*(1-ring*.24);
-    const colour=ring===1?'#8dfff0':ring===2?'#ff8bb9':'#ffd59b';
-    g.beginPath();g.strokeStyle=colour;g.lineWidth=ring===0?2.5:1.7;
-    g.shadowColor=colour;g.shadowBlur=reduced?0:9;
-    g.moveTo(0,-r);g.lineTo(r,0);g.lineTo(0,r);g.lineTo(-r,0);
-    g.closePath();g.stroke();
-   }
-   for(let i=0;i<12;i++){
-    const angle=(i/12)*Math.PI*2;
-    g.beginPath();g.strokeStyle=i%3===0?'#8affed':i%2?'#ffd49e':'#ff98c6';
-    g.lineWidth=2;g.moveTo(Math.cos(angle)*radius*.77,Math.sin(angle)*radius*.77);
-    g.lineTo(Math.cos(angle)*radius*1.3,Math.sin(angle)*radius*1.3);
-    g.stroke();
-   }
-   g.restore();
-  }
- }else if(type==='vi'){
-  // Crisp legible monogram, not a handful of random radial particles.
-  g.textAlign='center';g.textBaseline='middle';
-  g.font='italic 1000 95px Impact, Arial Black, sans-serif';
-  g.shadowColor='#ff6db3';g.shadowBlur=reduced?0:18;
-  g.fillStyle='#ffb6d1';g.fillText('VI',0,3);
-  g.shadowBlur=0;g.lineWidth=1.8;g.strokeStyle='#91fff0';
-  g.strokeText('VI',0,3);
-  for(let i=0;i<24;i++){
-   const angle=i*Math.PI*2/24;
-   const radius=119*(1+(reduced?0:.032*Math.sin(twinkle*2+i)));
-   const px=Math.cos(angle)*radius,py=Math.sin(angle)*radius*.51;
-   g.fillStyle=i%2?'#ffb6d7':'#8effeb';
-   g.beginPath();g.arc(px,py,i%5===0?2.3:1.4,0,Math.PI*2);g.fill();
-  }
- }
- g.restore();
-}
-// Read-only runtime diagnostics allow browser QA to check that the selected
-// visual motif, rather than a generic fallback, powers the full-size sky.
-window.ViceFireworksPreview=Object.freeze({
- selectedDesign:()=>state.fireworkStyle,
- // The selected ambient motif is always painted, including between bursts.
- largeMotifTypes:()=>[state.fireworkStyle,...state.motifs.map(motif=>motif.type)],
- previewAndSkyShareRenderer:true
+let engine=new G({
+ container:stage,mode:'contained',placement:'overlay',clip:true,zIndex:3,
+ baseStyle:'spectacle',autoStart:false,duration:0,background:false,
+ renderer:{preferred:'canvas2d',fallback:'canvas2d'},
+ performance:{preset:performancePreset(),adaptive:true,pauseWhenHidden:true,
+  pauseWhenOffscreen:false,respectReducedMotion:true},
+ visuals:{opacity:1,trails:true,trailFade:.10,bloom:1.58,rocketExhaust:true,
+  explosionFlashes:true,secondaryCrackle:true,groupedSalvos:true},
+ show:{intensity:showIntensity(),openingSalvo:5,launchSpread:.80,
+  closeShellChance:.25,
+  enabledTypes:['grand_peony','imperial_chrysanthemum','weeping_willow',
+   'royal_palm','golden_brocade','glitter_nova','diamond_ring',
+   'crossette_supreme','cascading_horsetail','galactic_spiral',
+   'crown_jewel','dragon_fish'],
+  palettes:COLORS},
+ finale:{enabled:true,type:'super',trails:9,trailFlight:900,burstScale:1.15,
+  particleScale:1.0,finishDelay:1200,maxDuration:10500},
+ sound:{enabled:false,volume:.17,ambience:0,stereo:true,finaleRhythm:true}
 });
-function launchFirework(x,y,type,scale=1,at=performance.now()){
- const w=state.width;
- const base=Math.min(165,Math.max(89,w*.132));
- state.motifs.push({x,y,type,scale,size:base*scale,born:at,life:3400});
- if(state.motifs.length>8)state.motifs.splice(0,state.motifs.length-8);
+function getEngineStats(){
+ try{return engine.getStats();}catch{return {state:'unknown',particles:0,rockets:0};}
 }
-function fireRocket(now){
- if(state.reduce){
-  launchFirework(rng(state.width*.25,state.width*.75),state.height*.23,state.fireworkStyle,.75,now);
+window.ViceMidnightShow=Object.freeze({
+ engine:'Grand Fireworks JS',
+ version:G.VERSION,
+ getStats:getEngineStats,
+ getPhase:()=>state.phase,
+ isShowPlaying:()=>state.showStarted&&!state.showEnded,
+ hasStarted:()=>state.showStarted,
+ durationSeconds:state.showDuration/1000
+});
+const timerStore=[];
+function later(callback,ms){
+ const id=window.setTimeout(callback,ms);
+ state.timers.push(id);
+ return id;
+}
+function clearCues(){
+ state.timers.forEach(clearTimeout);
+ state.timers.length=0;
+}
+function setPhase(key,label,caption){
+ state.phase=key;
+ $('stage-phase').innerHTML='<i aria-hidden="true"></i> '+label;
+ $('stage-caption').textContent=caption;
+}
+function applyQuality(){
+ const preset=performancePreset();
+ engine.setOptions({performance:{preset,adaptive:true, respectReducedMotion:true},
+  show:{intensity:showIntensity(),openingSalvo:state.reduce?2:5}});
+}
+function resetDemo(seconds=8){
+ clearCues();stopMusic();
+ state.countdownDuration=seconds*1000;
+ state.countdownStart=performance.now();
+ state.showStarted=false;state.showEnded=false;state.finaled=false;
+ $('stage-intro').hidden=false;
+ $('midnight-message').hidden=true;
+ $('show-progress').style.width='0%';
+ $('demo-seconds').textContent=String(seconds).padStart(2,'0');
+ setPhase('countdown','FINAL COUNTDOWN','STAND BY FOR MIDNIGHT');
+ try{engine.stop({immediate:true,finale:false});engine.clear();}catch{}
+}
+function burstAt(fx,xFraction,yFraction,type,colors,radius){
+ const rect=stage.getBoundingClientRect();
+ const x=rect.width*xFraction,y=rect.height*yFraction;
+ fx.placeburst({x,y,type,colors,radius:Math.min(radius,rect.width*.35),density:1.08});
+}
+function launchSalvo(types){
+ if(!state.showStarted||state.showEnded)return;
+ for(const type of types)engine.launch({type});
+}
+function triggerGrandFinale(){
+ if(!state.showStarted){
+  startShow();
+  later(()=>triggerGrandFinale(),3500);
   return;
  }
- const w=state.width,h=state.height;
- const x=rng(w*.17,w*.82);
- const y=rng(h*.15,h*(w<650?.35:.42));
- state.rockets.push({x0:x+rng(-60,60),y0:h*.72,x1:x,y1:y,
-  began:now,ms:rng(650,1050),color:pick(COLORS),style:state.fireworkStyle});
- if(state.rockets.length>5)state.rockets.shift();
+ if(state.finaled)return;
+ state.finaled=true;
+ setPhase('finale','GRAND FINALE','THE SKY BELONGS TO VICE CITY');
+ applyQuality();
+ engine.setOptions({show:{intensity:state.reduce?.45:state.intensity==='high'?1.5:1.18}});
+ engine.launchFinale({stopAfter:false});
+ if(!state.reduce){
+  later(()=>burstAt(engine,.25,.28,'golden_brocade',['#FFE7A0','#FFF5CF'],155),1900);
+  later(()=>burstAt(engine,.76,.31,'glitter_nova',['#81FFEC','#FFFFFF'],150),2600);
+  later(()=>launchSalvo(['weeping_willow','crossette_supreme','grand_peony']),3700);
+ }
 }
-function renderDesign(now){
- const w=designCanvas.clientWidth,h=designCanvas.clientHeight;
- if(w<1||h<1)return;
- const t=state.reduce?0:now/1000;
- designCtx.clearRect(0,0,w,h);
- const size=Math.min(h*.78,w*.32,130);
- drawFireworkMotif(designCtx,state.fireworkStyle,w*.5,h*.52,size,t,1,state.reduce);
+function startShow(){
+ clearCues();stopMusic();
+ state.showStarted=true;state.showEnded=false;state.finaled=false;
+ state.showStartAt=performance.now();
+ $('stage-intro').hidden=true;
+ $('midnight-message').hidden=false;
+ setPhase('opening','OPENING SALVO','WELCOME TO VICE CITY');
+ $('show-progress').style.width='0%';
+ try{
+  engine.clear();
+  applyQuality();
+  engine.start();
+ }catch(e){
+  setPhase('error','RENDERER ERROR','TRY RELOADING THE PREVIEW');
+  console.error('Fireworks engine startup failed',e);
+  return;
+ }
+ if(musicEnabled)startMusic();
+ // Opening volley: real rockets climb and burst.
+ later(()=>launchSalvo(['imperial_chrysanthemum','golden_brocade']),950);
+ later(()=>launchSalvo(['royal_palm','grand_peony','glitter_nova']),3300);
+ // Interlude: alternating layered salvos and room for natural shell decay.
+ later(()=>{setPhase('show','THE MAIN SHOW','A NIGHT OF NEON AND GOLD');
+   engine.setOptions({show:{intensity:showIntensity()*1.05}});},6200);
+ later(()=>launchSalvo(['weeping_willow','galactic_spiral']),7800);
+ later(()=>launchSalvo(['diamond_ring','crossette_supreme','dragon_fish']),10800);
+ later(()=>launchSalvo(['cascading_horsetail','crown_jewel']),14300);
+ later(()=>launchSalvo(['golden_brocade','imperial_chrysanthemum','glitter_nova']),17500);
+ // A real multi-stage pyrotechnic finale, not a rendered "VI" text overlay.
+ later(()=>triggerGrandFinale(),22000);
+ later(()=>{
+  state.showEnded=true;
+  setPhase('complete','CELEBRATION COMPLETE','REPLAY THE MIDNIGHT SHOW ANY TIME');
+  engine.stop({finale:false});
+  stopMusic();
+ },state.showDuration);
 }
-function render(now){
- if(document.hidden){state.lastTick=now;requestAnimationFrame(render);return;}
- if(state.lastTick&&now-state.lastTick<32){requestAnimationFrame(render);return;}
- state.lastTick=now;
- if(!state.launched){
-  state.left=Math.max(0,state.duration-(now-state.startedAt));updateCount();
-  if(state.left===0)launchMidnight();
+function loop(now){
+ if(state.lastAnimation&&now-state.lastAnimation<80){requestAnimationFrame(loop);return;}
+ state.lastAnimation=now;
+ if(!state.showStarted){
+  const remaining=Math.max(0,state.countdownDuration-(now-state.countdownStart));
+  $('demo-seconds').textContent=String(Math.ceil(remaining/1000)).padStart(2,'0');
+  if(!remaining)startShow();
  }else{
-  const age=now-state.launchAt;
-  const pace=state.intensity==='high'?650:state.intensity==='low'?1850:1050;
-  const adjusted=state.reduce?4800:pace;
-  if(now>=state.nextBurst){
-   fireRocket(now);state.nextBurst=now+(age<30000?adjusted:adjusted*1.8);
-  }
+  const elapsed=Math.min(state.showDuration,now-state.showStartAt);
+  $('show-progress').style.width=(elapsed/state.showDuration*100).toFixed(1)+'%';
  }
- ctx.clearRect(0,0,state.width,state.height);
- ctx.save();ctx.globalCompositeOperation='lighter';
- // The full-size sky continuously displays the *same* selected design as
- // the panel preview. Bursts brighten it; neither a late selection nor a
- // slow device can leave the primary fireworks stage completely empty.
- const ambientSize=Math.min(160,Math.max(86,state.width*.13));
- const ambientX=state.fireworkStyle==='vi'?.40:.36;
- drawFireworkMotif(ctx,state.fireworkStyle,state.width*ambientX,state.height*.18,
-   ambientSize*(state.fireworkStyle==='vi'?1.28:1.02),
-   now/1000,state.launched?.27:.48,state.reduce);
- for(let i=state.rockets.length-1;i>=0;i--){
-  const r=state.rockets[i],u=Math.min(1,(now-r.began)/r.ms),ease=1-(1-u)**2;
-  const x=r.x0+(r.x1-r.x0)*ease,y=r.y0+(r.y1-r.y0)*ease;
-  ctx.save();ctx.globalAlpha=.88;
-  ctx.shadowBlur=8;ctx.shadowColor=r.color;
-  ctx.strokeStyle=r.color;ctx.lineWidth=2.2;
-  ctx.beginPath();ctx.moveTo(x,y+Math.min(48,u*55));ctx.lineTo(x,y);ctx.stroke();
-  ctx.restore();
-  if(u>=1){
-   launchFirework(r.x1,r.y1,r.style,rng(.76,1.15),now);
-   state.rockets.splice(i,1);
-  }
- }
- for(let i=state.motifs.length-1;i>=0;i--){
-  const motif=state.motifs[i];
-  const age=now-motif.born,life=motif.life;
-  if(age>life){state.motifs.splice(i,1);continue;}
-  const entrance=Math.min(1,Math.max(.03,age/480));
-  const exit=Math.min(1,Math.max(0,(life-age)/900));
-  const opacity=state.reduce?exit:entrance*exit;
-  const growing=state.reduce?1:.66+.34*entrance;
-  drawFireworkMotif(ctx,motif.type,motif.x,motif.y,
-    motif.size*growing,age/1000,opacity,state.reduce);
- }
- ctx.restore();
- renderDesign(now);
- requestAnimationFrame(render);
+ requestAnimationFrame(loop);
 }
-requestAnimationFrame(render);
+requestAnimationFrame(loop);
 
 // Original multi-instrument synthwave composition, made with Web Audio only.
 // 104 BPM; eight-bar motif repeats with synth lead, chords, bass, kick, snare, hats.
@@ -328,84 +261,83 @@ function startMusic(){
  scheduler=setInterval(pumpMusic,80);pumpMusic();
  $('audio-status').textContent='Original track playing · Ocean Drive at Midnight';
 }
+
+
 async function toggleAudio(){
  if(musicEnabled){
-  musicEnabled=false;stopMusic();
+  musicEnabled=false;
+  stopMusic();engine.disableSound();
   $('audio-toggle').setAttribute('aria-pressed','false');
-  $('audio-toggle').textContent='♫ Enable launch music';
-  $('audio-status').textContent='Music disabled';return;
+  $('audio-toggle').textContent='♫ Enable music + fireworks sound';
+  $('audio-status').textContent='Sound off';
+  return;
  }
  try{
   if(!context){
    const Ctx=window.AudioContext||window.webkitAudioContext;
    if(!Ctx)throw new Error('Web Audio unavailable');
-   context=new Ctx();master=context.createGain();master.gain.value=.0001;master.connect(context.destination);
+   context=new Ctx();
+   master=context.createGain();
+   master.gain.value=.0001;master.connect(context.destination);
   }
   await context.resume();
-  if(context.state!=='running')throw new Error('Audio still suspended');
+  if(context.state!=='running')throw new Error('Audio is suspended');
   musicEnabled=true;
+  engine.enableSound();
+  engine.setOptions({sound:{enabled:true,volume:Math.min(.35,volume*.40)}});
   $('audio-toggle').setAttribute('aria-pressed','true');
-  $('audio-toggle').textContent='♫ Disable launch music';
-  $('audio-status').textContent='Armed — music starts when the demo reaches midnight';
-  if(state.launched)startMusic();
- }catch{
+  $('audio-toggle').textContent='♫ Turn off all show audio';
+  $('audio-status').textContent='Armed — music and sound effects start at midnight';
+  if(state.showStarted&&!state.showEnded)startMusic();
+ }catch(error){
   musicEnabled=false;
-  $('audio-status').textContent='This browser blocked audio. Tap Enable again.';
+  $('audio-status').textContent='Audio blocked. Try enabling sound again.';
  }
 }
 $('audio-toggle').addEventListener('click',toggleAudio);
-$('volume').addEventListener('input',e=>{
- volume=Number(e.target.value)/100;
- $('volume-value').textContent=String(e.target.value)+'%';
- if(master&&context)master.gain.setTargetAtTime(Math.max(.0001,volume*.5),context.currentTime,.03);
+$('volume').addEventListener('input',event=>{
+ volume=Number(event.target.value)/100;
+ $('volume-value').textContent=event.target.value+'%';
+ if(master&&context)master.gain.setTargetAtTime(Math.max(.0001,volume*.5),context.currentTime,.04);
+ if(musicEnabled)engine.setOptions({sound:{volume:Math.min(.35,volume*.40)}});
 });
-$('launch-now').addEventListener('click',launchMidnight);
-$('demo-30').addEventListener('click',()=>resetDemo(30));
-$('replay').addEventListener('click',()=>{resetDemo(1);launchMidnight();});
-$('intensity').addEventListener('change',e=>{state.intensity=e.target.value;});
+$('launch-now').addEventListener('click',startShow);
+$('replay').addEventListener('click',startShow);
+$('demo-30').addEventListener('click',()=>resetDemo(8));
+$('finale').addEventListener('click',triggerGrandFinale);
+$('intensity').addEventListener('change',event=>{
+ state.intensity=event.target.value;applyQuality();
+});
 $('reduced-motion').checked=state.reduce;
-$('reduced-motion').addEventListener('change',e=>{
- state.reduce=e.target.checked;
+$('reduced-motion').addEventListener('change',event=>{
+ state.reduce=event.target.checked;
  document.body.classList.toggle('reduce-motion',state.reduce);
+ applyQuality();
 });
 document.body.classList.toggle('reduce-motion',state.reduce);
-function activateDesign(name){
- if(!Object.prototype.hasOwnProperty.call(DESIGN_INFO,name))return;
- state.fireworkStyle=name;hero.dataset.fireworksStyle=name;
- const info=DESIGN_INFO[name];
- $('firework-design-title').textContent=info.title;
- $('firework-design-description').textContent=info.description;
- $('show-label').textContent=info.status;
- for(const button of styleButtons){
-  const active=button.dataset.style===name;
-  button.classList.toggle('selected',active);
-  button.setAttribute('aria-pressed',String(active));
- }
- // All active effects switch immediately to the *same shared design*
- // as the small animated stage, even before the demo reaches midnight.
- state.motifs.length=0;state.rockets.length=0;
- const now=performance.now();
- if(name==='vi'){
-  launchFirework(state.width*.40,state.height*.18,name,1.40,now);
- }else{
-  launchFirework(state.width*.3,state.height*.23,name,1.12,now);
-  launchFirework(state.width*.66,state.height*.32,name,.85,now);
- }
- renderDesign(now);
-}
-
-for(const button of styleButtons){
- button.addEventListener('click',()=>activateDesign(button.dataset.style));
-}
-document.addEventListener('visibilitychange',()=>{
- if(document.hidden){stopMusic();state.pausedAt=performance.now();}
- else if(state.pausedAt){
-  // Freeze the preview while backgrounded. Live midnight scheduling would use Date.now.
-  state.startedAt+=performance.now()-state.pausedAt;
-  state.pausedAt=0;state.lastTick=performance.now();
-  if(state.launched&&musicEnabled&&context?.state==='running')startMusic();
+$('fullscreen').addEventListener('click',async()=>{
+ try{
+  if(document.fullscreenElement)await document.exitFullscreen();
+  else await stage.requestFullscreen();
+ }catch{
+  $('stage-caption').textContent='FULL-SCREEN MODE UNAVAILABLE IN THIS BROWSER';
  }
 });
-resetDemo(12);
-renderDesign(performance.now());
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden){stopMusic();state.hiddenAt=performance.now();}
+ else if(state.hiddenAt){
+  const away=performance.now()-state.hiddenAt;
+  if(!state.showStarted)state.countdownStart+=away;
+  if(state.showStarted&&!state.showEnded){
+   state.showStartAt+=away;
+   // Suppress outdated timed cues after returning to the tab.
+   if(musicEnabled&&context?.state==='running')startMusic();
+  }
+  state.hiddenAt=0;
+ }
+});
+window.addEventListener('beforeunload',()=>{
+ clearCues();stopMusic();engine.destroy();
+});
+resetDemo(8);
 })();
