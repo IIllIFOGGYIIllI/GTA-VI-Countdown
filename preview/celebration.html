@@ -7,8 +7,8 @@
   <meta name="description" content="An interactive, spoiler-free Vice City Countdown midnight celebration concept with animated neon fireworks and original launch music.">
   <title>Midnight Celebration · Interactive Concept Preview</title>
   <link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
-  <link rel="stylesheet" href="./celebration.css?v=1.0.0">
-  <script src="./celebration.js?v=1.0.0" defer></script>
+  <link rel="stylesheet" href="./celebration.css?v=1.1.0">
+  <script src="./celebration.js?v=1.1.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#celebration">Skip to live preview</a>
@@ -24,7 +24,7 @@
   </header>
   <main id="celebration">
     <div class="preview-note" role="note"><span class="note-live">LIVE ANIMATION</span><span>Separate concept preview · 12-second simulated countdown · no changes to the real GTA VI timer</span></div>
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" data-fireworks-style="palms" aria-labelledby="hero-title">
       <div class="backdrop" aria-hidden="true"></div>
       <div class="city-grid" aria-hidden="true"></div>
       <canvas id="fireworks" aria-hidden="true"></canvas>
@@ -65,7 +65,12 @@
               <button type="button" class="style-option" data-style="deco" aria-pressed="false">Art Deco</button>
               <button type="button" class="style-option" data-style="vi" aria-pressed="false">VI finale</button>
             </div>
-            <div class="panel-bottom"><span class="legend">✧ CUSTOM NEON PYROTECHNICS</span><span id="show-label">PREVIEW READY</span></div>
+            <div class="firework-design-window" id="firework-design-window" aria-label="Animated fireworks design sample">
+              <div class="firework-design-top"><strong id="firework-design-title">NEON PALMS</strong><span class="firework-design-live"><span aria-hidden="true">●</span> ANIMATED PREVIEW</span></div>
+              <canvas id="firework-design-canvas" aria-hidden="true"></canvas>
+              <p id="firework-design-description">Tropical palm-shaped trails with luminous turquoise and pink fronds.</p>
+            </div>
+            <div class="panel-bottom"><span class="legend">✧ CUSTOM NEON PYROTECHNICS</span><span id="show-label" role="status" aria-live="polite">NEON PALMS ACTIVE</span></div>
           </div>
         </div>
       </div>

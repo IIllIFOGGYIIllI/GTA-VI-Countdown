@@ -168,6 +168,29 @@ async function main(){
           }));
           assert.ok(scroll.documentWidth<=scroll.viewportWidth+2,
             'Celebration layout overflow '+JSON.stringify(scroll));
+          // Designs must visibly load on selection, *before* midnight,
+          // with a separate running motif canvas and a matching main sky.
+          assert.equal(await page.locator('#firework-design-canvas').isVisible(),true);
+          for(const [name,title] of [['deco','ART DECO'],['vi','VI FINALE'],['palms','NEON PALMS']]){
+            await page.locator('button[data-style="'+name+'"]').click({noWaitAfter:true});
+            assert.equal(await page.locator('#firework-design-title').textContent(),title);
+            assert.equal(await page.locator('.hero').getAttribute('data-fireworks-style'),name);
+            assert.equal(await page.locator('button[data-style="'+name+'"]').getAttribute('aria-pressed'),'true');
+            assert.equal(await page.locator('#counter').isVisible(),true,
+              'Changing design must not skip the demo timer');
+            await page.waitForTimeout(90);
+            const sample=await page.evaluate(()=>{
+              const canvas=document.querySelector('#firework-design-canvas');
+              const pixels=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+              let lit=0;
+              for(let i=3;i<pixels.length;i+=64)if(pixels[i]>12)lit++;
+              return lit;
+            });
+            assert.ok(sample>15,'Design '+name+' has no visible sample: '+sample);
+            if(vw===1440 && name!=='palms'){
+              await page.screenshot({path:path.join(SHOTS,'celebration-'+name+'-before-midnight.png')});
+            }
+          }
           // The sound button must be pressed before the demo midnight.
           await page.locator('#audio-toggle').click();
           await page.waitForTimeout(120);

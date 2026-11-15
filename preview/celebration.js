@@ -7,6 +7,12 @@
 const $=id=>document.getElementById(id);
 const hero=document.querySelector('.hero'),canvas=$('fireworks'),ctx=canvas.getContext('2d',{alpha:true});
 const styleButtons=[...document.querySelectorAll('.style-option')];
+const designCanvas=$('firework-design-canvas'),designCtx=designCanvas.getContext('2d',{alpha:true});
+const DESIGN_INFO={
+ palms:{title:'NEON PALMS',description:'Tropical palm-shaped trails with luminous turquoise and pink fronds.',status:'NEON PALMS LIVE PREVIEW'},
+ deco:{title:'ART DECO',description:'Golden geometric diamonds, precision starbursts and symmetrical retro-neon rays.',status:'ART DECO LIVE PREVIEW'},
+ vi:{title:'VI FINALE',description:'A glowing VI monogram framed by magenta and cyan particles, built for the midnight finale.',status:'VI FINALE LIVE PREVIEW'}
+};
 const preference=window.matchMedia('(prefers-reduced-motion: reduce)');
 const state={duration:12000,left:12000,startedAt:performance.now(),launched:false,launchAt:0,fireworkStyle:'palms',
 intensity:'medium',reduce:preference.matches,pausedAt:0,lastTick:0,nextBurst:0,viShown:false,
@@ -48,8 +54,9 @@ function launchMidnight(){
  $('show-label').textContent='FIREWORKS ACTIVE';
  const w=state.width,h=state.height;
  if(!state.reduce){
-  explode(w*.40,h*.24,'palms',1.3);
+  explode(w*.40,h*.24,state.fireworkStyle,1.3);
   explode(w*.73,h*.28,state.fireworkStyle,1.1);
+  if(state.fireworkStyle==='vi'){state.viShown=true;viLetters();}
   for(let i=0;i<12;i++)state.flashes.push({x:rng(0,w),y:rng(h*.35,h*.7),size:rng(2,5),life:rng(.7,1.7),age:0});
  }else explode(w*.54,h*.28,'deco',.7);
  if(musicEnabled)startMusic();
@@ -61,7 +68,15 @@ function canvasSize(){
  canvas.width=Math.round(state.width*state.dpr);canvas.height=Math.round(state.height*state.dpr);
  ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
 }
-window.addEventListener('resize',canvasSize,{passive:true});canvasSize();
+function designCanvasSize(){
+ const box=designCanvas.getBoundingClientRect();
+ const dpr=Math.min(1.5,window.devicePixelRatio||1);
+ designCanvas.width=Math.max(1,Math.round(box.width*dpr));
+ designCanvas.height=Math.max(1,Math.round(box.height*dpr));
+ designCtx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize',()=>{canvasSize();designCanvasSize();},{passive:true});
+canvasSize();designCanvasSize();
 function particle(x,y,vx,vy,color,size,life,gravity=.055){
  return{x,y,px:x,py:y,vx,vy,color,size,life,maxLife:life,gravity};
 }
@@ -115,7 +130,11 @@ function viLetters(){
  }
  const scale=Math.min(1.15,w/750);
  const offsetX=w*.51-150*scale,offsetY=h*.24-85*scale;
- for(const [x,y] of positions.slice(0,150)){
+ // Spread the dots across both letters. Taking just the first N samples
+ // only rendered the top-left of the V and made the I disappear.
+ const stride=Math.max(1,Math.ceil(positions.length/155));
+ for(let i=0;i<positions.length;i+=stride){
+  const [x,y]=positions[i];
   state.particles.push(particle(offsetX+x*scale,offsetY+y*scale,
      rng(-6,6),rng(-6,6),Math.random()>.45?'#8bfff1':'#ff99cb',2.2,rng(1.5,2.5),0));
  }
@@ -126,6 +145,84 @@ function fireRocket(now){
  state.rockets.push({x0:x+rng(-50,50),y0:state.height*.75,x1:x,y1:y,
   began:now,ms:rng(600,980),color:pick(COLORS),style:state.fireworkStyle});
 }
+
+/* Show every design *before* the midnight cue, inside its own live panel.
+   This low-cost canvas intentionally stays visible when the main sky is
+   obscured by the countdown or the hero layout. */
+function renderDesign(now){
+ const w=designCanvas.clientWidth,h=designCanvas.clientHeight;
+ if(w<1||h<1)return;
+ const t=state.reduce?0:now/1000;
+ const cx=w*.5,cy=h*.54;
+ designCtx.clearRect(0,0,w,h);
+ designCtx.save();
+ designCtx.lineCap='round';
+ designCtx.lineJoin='round';
+ const shape=state.fireworkStyle;
+ if(shape==='palms'){
+  const colours=['#8affee','#fa8cbd','#ffdda1'];
+  for(let burst=0;burst<3;burst++){
+   const x=cx+(burst-1)*Math.min(w*.23,105),y=cy+(burst%2?18:-7);
+   const mult=burst===1?1:.73;
+   for(let i=0;i<9;i++){
+    const theta=-Math.PI+(i/8)*Math.PI;
+    const radius=(44+8*Math.sin(t*2+i*.65+burst))*mult;
+    const endX=x+Math.cos(theta)*radius*1.6;
+    const endY=y-19+Math.sin(theta)*radius*.79;
+    designCtx.beginPath();designCtx.strokeStyle=colours[(i+burst)%3];designCtx.lineWidth=2.2*mult;
+    designCtx.shadowColor=designCtx.strokeStyle;designCtx.shadowBlur=state.reduce?0:7;
+    designCtx.moveTo(x,y+38*mult);
+    designCtx.quadraticCurveTo(x+Math.cos(theta)*radius*.6,y-45*mult,endX,endY);
+    designCtx.stroke();
+    designCtx.fillStyle=designCtx.strokeStyle;
+    designCtx.beginPath();designCtx.arc(endX,endY,1.65*mult,0,Math.PI*2);designCtx.fill();
+   }
+  }
+ }else if(shape==='deco'){
+  const radius=Math.min(58,h*.34,w*.21);
+  for(let cluster=0;cluster<3;cluster++){
+   const x=cx+(cluster-1)*radius*1.65,y=cy+(cluster%2?-6:6);
+   const size=radius*(cluster===1?1:.73);
+   designCtx.save();designCtx.translate(x,y);
+   const turn=state.reduce?0:Math.sin(t*.65+cluster)*.13;
+   designCtx.rotate(turn);
+   for(let ring=0;ring<3;ring++){
+    const r=size*(1-ring*.24),color=ring===1?'#8dfff0':ring===2?'#ff8bb9':'#ffd59b';
+    designCtx.beginPath();designCtx.strokeStyle=color;designCtx.lineWidth=ring===0?2.5:1.7;
+    designCtx.shadowColor=color;designCtx.shadowBlur=state.reduce?0:10;
+    designCtx.moveTo(0,-r);designCtx.lineTo(r,0);
+    designCtx.lineTo(0,r);designCtx.lineTo(-r,0);designCtx.closePath();designCtx.stroke();
+   }
+   for(let i=0;i<12;i++){
+    const a=(i/12)*Math.PI*2;
+    designCtx.beginPath();
+    designCtx.strokeStyle=i%3===0?'#8affed':i%2?'#ffd49e':'#ff98c6';
+    designCtx.lineWidth=2;
+    designCtx.moveTo(Math.cos(a)*size*.77,Math.sin(a)*size*.77);
+    designCtx.lineTo(Math.cos(a)*size*1.3,Math.sin(a)*size*1.3);designCtx.stroke();
+   }
+   designCtx.restore();
+  }
+ }else{
+  const size=Math.min(111,h*.75,w*.31);
+  designCtx.textAlign='center';designCtx.textBaseline='middle';
+  designCtx.font='italic 1000 '+Math.round(size)+'px Impact, Arial Black, sans-serif';
+  designCtx.shadowColor='#ff6db3';designCtx.shadowBlur=state.reduce?0:22;
+  designCtx.fillStyle='#ffb6d1';designCtx.fillText('VI',cx,cy+3);
+  designCtx.shadowBlur=0;
+  designCtx.strokeStyle='#91fff0';designCtx.lineWidth=2;
+  designCtx.strokeText('VI',cx,cy+3);
+  for(let i=0;i<24;i++){
+   const a=i*Math.PI*2/24;
+   const radius=Math.min(w*.41,170)*(1+.032*Math.sin(t*2+i));
+   const x=cx+Math.cos(a)*radius,y=cy+Math.sin(a)*radius*.51;
+   designCtx.fillStyle=i%2?'#ffb6d7':'#8effeb';
+   designCtx.beginPath();designCtx.arc(x,y,i%5===0?2.3:1.4,0,Math.PI*2);designCtx.fill();
+  }
+ }
+ designCtx.restore();
+}
+
 function render(now){
  if(document.hidden){state.lastTick=now;requestAnimationFrame(render);return;}
  if(state.lastTick&&now-state.lastTick<32){requestAnimationFrame(render);return;}
@@ -171,7 +268,7 @@ function render(now){
   ctx.globalAlpha=(1-flash.age/flash.life)*.65;ctx.shadowColor='#fff4d6';ctx.shadowBlur=13;
   ctx.fillStyle='#fff6d9';ctx.beginPath();ctx.arc(flash.x,flash.y,Math.max(1,flash.size*(1+flash.age*2)),0,Math.PI*2);ctx.fill();
  }
- ctx.restore();requestAnimationFrame(render);
+ ctx.restore();renderDesign(now);requestAnimationFrame(render);
 }
 requestAnimationFrame(render);
 
@@ -306,21 +403,32 @@ $('reduced-motion').addEventListener('change',e=>{
  document.body.classList.toggle('reduce-motion',state.reduce);
 });
 document.body.classList.toggle('reduce-motion',state.reduce);
-for(const b of styleButtons){
- b.addEventListener('click',()=>{
-  state.fireworkStyle=b.dataset.style;state.viShown=false;
-  for(const other of styleButtons){
-   const active=other===b;
-   other.classList.toggle('selected',active);
-   other.setAttribute('aria-pressed',String(active));
-  }
-  if(state.launched){
-   explode(state.width*.53,state.height*.28,state.fireworkStyle,1.25);
-   if(state.fireworkStyle==='vi')viLetters();
-  }
-  $('show-label').textContent=state.fireworkStyle==='vi'?'VI FINALE SELECTED':
-    state.fireworkStyle==='deco'?'ART DECO SELECTED':'NEON PALMS SELECTED';
- });
+function activateDesign(name){
+ if(!Object.prototype.hasOwnProperty.call(DESIGN_INFO,name))return;
+ state.fireworkStyle=name;state.viShown=false;
+ hero.dataset.fireworksStyle=name;
+ const info=DESIGN_INFO[name];
+ $('firework-design-title').textContent=info.title;
+ $('firework-design-description').textContent=info.description;
+ $('show-label').textContent=info.status;
+ for(const button of styleButtons){
+  const active=button.dataset.style===name;
+  button.classList.toggle('selected',active);
+  button.setAttribute('aria-pressed',String(active));
+ }
+ // Trigger the selected design straight away, even while the demo clock runs.
+ // The always-visible miniature canvas simultaneously updates the motif.
+ state.particles.length=0;state.rockets.length=0;
+ explode(state.width*.37,state.height*.26,name,1.08);
+ explode(state.width*.75,state.height*.31,name,.88);
+ if(name==='vi'){
+  state.viShown=true;
+  viLetters();
+ }
+ renderDesign(performance.now());
+}
+for(const button of styleButtons){
+ button.addEventListener('click',()=>activateDesign(button.dataset.style));
 }
 document.addEventListener('visibilitychange',()=>{
  if(document.hidden){stopMusic();state.pausedAt=performance.now();}
@@ -332,4 +440,5 @@ document.addEventListener('visibilitychange',()=>{
  }
 });
 resetDemo(12);
+renderDesign(performance.now());
 })();
