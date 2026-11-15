@@ -226,3 +226,8 @@ Automated Chromium checks verify real particles, playback and replay on 320/360/
 ### v2.7.1 fireworks polish
 
 Refined the actual launch-mode firework renderer for subtler ignition flashes, reduced white glare, clearer pastel/gold shell palettes and smaller direct bursts. Mobile welcome text is raised to keep the two replay controls below it; these layouts are asserted at phone sizes. The updated PWA cache `vice-city-countdown-v13` serves versioned v2.7.1 CSS and JavaScript to installed devices.
+
+
+### v2.7.2 replay contrast
+
+The cinematic fireworks replay action uses a high-contrast white-on-deep-teal button on desktop and mobile. Chromium QA asserts its computed text colour. The PWA core has been advanced to `vice-city-countdown-v14` to refresh the CSS on installed devices.

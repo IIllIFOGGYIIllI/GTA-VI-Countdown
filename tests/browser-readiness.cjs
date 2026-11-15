@@ -178,6 +178,9 @@ async function main(){
           assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
           assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'launched');
           assert.equal(await page.locator('#vc-cinema-replay-fireworks').isVisible(),true);
+          const replayColor=await page.locator('#vc-cinema-replay-fireworks').evaluate(el=>getComputedStyle(el).color);
+          assert.equal(replayColor,'rgb(234, 255, 248)',
+            'Replay fireworks button needs readable text, not dark-on-dark styling');
           if(width<=360){
             // Replay must not overlap the welcome/caption on narrow phones.
             const positions=await page.evaluate(()=>{
@@ -405,7 +408,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v13');
+          return keys.includes('vice-city-countdown-v14');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

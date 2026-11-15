@@ -346,3 +346,15 @@ html.vc-cinema-open,body.vc-cinema-open{overflow:hidden!important}
  #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-note{margin-top:7px}
  #vc-cinema.vc-cinema-arrived .vc-cinema-fireworks-caption{margin-top:6px}
 }
+
+
+/* v2.7.2 — explicit, accessible replay-control contrast */
+#vc-cinema #vc-cinema-replay-fireworks{
+ color:#eafff8!important;
+ background:#173347!important;
+ border-color:#92ffe9!important;
+ text-shadow:none!important;
+}
+#vc-cinema #vc-cinema-replay-fireworks:hover{
+ background:#244f62!important;
+}
