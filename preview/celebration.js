@@ -27,25 +27,28 @@ function performancePreset(){
  return state.reduce?'low':state.intensity==='low'?'low':state.intensity==='high'?'high':'medium';
 }
 function showIntensity(){
- return state.reduce?.22:state.intensity==='low'?.48:state.intensity==='high'?1.15:.86;
+ return state.reduce?.18:state.intensity==='low'?.38:state.intensity==='high'?.82:.57;
 }
 let engine=new G({
  container:stage,mode:'contained',placement:'overlay',clip:true,zIndex:3,
- baseStyle:'spectacle',autoStart:false,duration:0,background:false,
+ baseStyle:'cinematic',autoStart:false,duration:0,background:false,
  renderer:{preferred:'canvas2d',fallback:'canvas2d'},
- performance:{preset:performancePreset(),adaptive:true,pauseWhenHidden:true,
+ performance:{preset:performancePreset(),adaptive:true,secondary:.56,pauseWhenHidden:true,
   pauseWhenOffscreen:false,respectReducedMotion:true},
- visuals:{opacity:1,trails:true,trailFade:.10,bloom:1.58,rocketExhaust:true,
-  explosionFlashes:true,secondaryCrackle:true,groupedSalvos:true},
- show:{intensity:showIntensity(),openingSalvo:5,launchSpread:.80,
-  closeShellChance:.25,
+ visuals:{opacity:.92,trails:true,trailFade:.23,bloom:.42,rocketExhaust:true,
+  explosionFlashes:true,flashBangChance:0,flashScale:.65,flashAlpha:.13,
+  sparkleChance:.18,shimmerChance:.35,starChance:.015,
+  pyroBurn:false,secondaryCrackle:true,groupedSalvos:false},
+ show:{intensity:showIntensity(),openingSalvo:3,launchSpread:.70,
+  closeShellChance:0,minShellScale:.38,maxShellScale:.56,maxRockets:4,maxParticles:1900,
+  launchInterval:1200,
   enabledTypes:['grand_peony','imperial_chrysanthemum','weeping_willow',
    'royal_palm','golden_brocade','glitter_nova','diamond_ring',
    'crossette_supreme','cascading_horsetail','galactic_spiral',
    'crown_jewel','dragon_fish'],
   palettes:COLORS},
- finale:{enabled:true,type:'super',trails:9,trailFlight:900,burstScale:1.15,
-  particleScale:1.0,finishDelay:1200,maxDuration:10500},
+ finale:{enabled:true,type:'super-grand-finale',trails:6,trailFlight:1100,burstScale:.68,
+  particleScale:.60,finishDelay:1200,maxDuration:11000},
  sound:{enabled:false,volume:.17,ambience:0,stereo:true,finaleRhythm:true}
 });
 function getEngineStats(){
@@ -77,8 +80,9 @@ function setPhase(key,label,caption){
 }
 function applyQuality(){
  const preset=performancePreset();
- engine.setOptions({performance:{preset,adaptive:true, respectReducedMotion:true},
-  show:{intensity:showIntensity(),openingSalvo:state.reduce?2:5}});
+ engine.setOptions({performance:{preset,adaptive:true,secondary:.56,respectReducedMotion:true},
+  show:{intensity:showIntensity(),openingSalvo:state.reduce?1:3,
+   closeShellChance:0,minShellScale:.38,maxShellScale:.56}});
 }
 function resetDemo(seconds=8){
  clearCues();stopMusic();
@@ -111,7 +115,7 @@ function triggerGrandFinale(){
  state.finaled=true;
  setPhase('finale','GRAND FINALE','THE SKY BELONGS TO VICE CITY');
  applyQuality();
- engine.setOptions({show:{intensity:state.reduce?.45:state.intensity==='high'?1.5:1.18}});
+ engine.setOptions({show:{intensity:state.reduce?.18:state.intensity==='high'?.95:.72}});
  engine.launchFinale({stopAfter:false});
  if(!state.reduce){
   later(()=>burstAt(engine,.25,.28,'golden_brocade',['#FFE7A0','#FFF5CF'],155),1900);

@@ -168,3 +168,24 @@ body.reduce-motion .progress-track>div{transition:none}
  html{scroll-behavior:auto}
  .progress-track>div{transition:none}
 }
+
+
+/* Cinematic refinement: let the real shells own the frame instead of
+   placing oversized headings across the pyrotechnics. */
+.midnight-message{
+ bottom:92px;
+ width:min(560px,calc(100% - 55px));
+ padding:15px 18px 12px;
+ border-left:3px solid rgba(159,255,229,.74);
+ background:linear-gradient(90deg,rgba(6,13,33,.72),rgba(6,13,33,.12));
+ border-radius:3px;
+ backdrop-filter:blur(3px);
+}
+.midnight-message h2{font-size:clamp(34px,4vw,57px);line-height:.98;margin-bottom:7px;text-shadow:2px 3px #642c64}
+.midnight-message>span{font-size:9px;letter-spacing:.15em;margin-bottom:8px}
+.midnight-message>p{font-size:11px;max-width:430px;margin-top:8px}
+@media(max-width:650px){
+ .midnight-message{bottom:80px;width:calc(100% - 32px);padding:10px 12px}
+ .midnight-message h2{font-size:clamp(32px,9vw,43px)}
+ .midnight-message>p{font-size:10px}
+}
