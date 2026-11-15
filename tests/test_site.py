@@ -71,7 +71,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn("launch-week.css?v=2.5.0",worker)
         self.assertIn("launch-week-core.js?v=2.5.0",worker)
         self.assertIn("launch-week.js?v=2.8.0",worker)
-        self.assertIn("vice-city-countdown-v15",worker)
+        self.assertIn("vice-city-countdown-v16",worker)
         self.assertIn("preview/vendor/GrandFireworks.min.js?v=1.11.1",worker)
         self.assertIn("cinematic-launch.css?v=2.7.2",worker)
         self.assertIn("cinematic-launch.js?v=2.7.1",worker)
@@ -83,7 +83,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="guide-grid"',self.html)
         self.assertIn('id="guide-search"',self.html)
         self.assertIn("official-guide.css?v=2.8.0",self.html)
-        self.assertIn("official-guide.js?v=2.8.0",self.html)
+        self.assertIn("official-guide.js?v=2.9.0",self.html)
         guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
         self.assertEqual(len(guide['items']),19)
         self.assertEqual(len({x['id'] for x in guide['items']}),19)
@@ -93,9 +93,41 @@ class SiteTests(unittest.TestCase):
         news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
         self.assertEqual(len(news['articles']),11)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('official-guide.json?v=2.8.0',worker)
+        self.assertIn('official-guide.json?v=2.9.0',worker)
         self.assertIn('official-guide.css?v=2.8.0',worker)
-        self.assertIn('official-guide.js?v=2.8.0',worker)
+        self.assertIn('official-guide.js?v=2.9.0',worker)
+        self.assertIn('editorial-images.css?v=2.9.0',worker)
+        self.assertIn('app.js?v=2.9.0',worker)
+
+    def test_editorial_artwork_uses_verified_rockstar_screenshots(self):
+        images=json.loads((ROOT/'data/screenshots.json').read_text(encoding='utf-8'))
+        catalogue={x['image']:x for x in images['items']}
+        news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
+        guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
+        self.assertEqual(len(news['articles']),11)
+        self.assertEqual(len(guide['items']),19)
+        all_urls=[]
+        for item in news['articles']:
+            image=item['image'].split('?')[0]
+            self.assertIn(image,catalogue)
+            self.assertEqual(catalogue[image]['category'],'Vice City',
+                             'Public Newswire must use neutral scenic thumbnails')
+            self.assertIn('imageAlt',item)
+            all_urls.append(image)
+        for item in guide['items']:
+            image=item['image'].split('?')[0]
+            self.assertIn(image,catalogue)
+            self.assertTrue(item['imageAlt'].startswith('Official Rockstar Games'))
+            all_urls.append(image)
+        self.assertEqual(len(all_urls),len(set(all_urls)),
+                         'Prefer distinct images for distinct cards')
+        js=(ROOT/'app.js').read_text(encoding='utf-8')
+        info=(ROOT/'assets/official-guide.js').read_text(encoding='utf-8')
+        self.assertIn('syncNewsImages',js)
+        self.assertIn('newsSpoilersLocked',js)
+        self.assertIn("img.loading='lazy'",info)
+        self.assertIn('officialScreenshot',info)
+        self.assertIn('editorial-images.css?v=2.9.0',self.html)
 
     def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
         self.assertIn('id="launch-state" hidden',self.html)

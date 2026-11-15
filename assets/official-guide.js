@@ -1,4 +1,4 @@
-/* Official Rockstar information archive v2.8.0
+/* Official Rockstar information archive v2.9.0
  * No story or character data is loaded until the visitor explicitly opts in.
  * The existing Strict Spoiler Lock is an overriding permission gate.
  */
@@ -18,6 +18,17 @@ if(!toggle||!panel||!grid||!strict)return;
 let items=null,selected='all',requestId=0;
 const labels={story:'STORY',characters:'CHARACTERS',places:'LOCATIONS',world:'WORLD & FEATURES'};
 const locked=()=>strict.checked||document.documentElement.classList.contains('vc-strict-spoilers');
+const officialScreenshot=value=>{
+ try{
+  if(typeof value!=='string')return '';
+  const url=new URL(value);
+  if(url.protocol!=='https:'||url.hostname!=='www.rockstargames.com'||
+     !url.pathname.startsWith('/VI/_next/static/media/')||
+     !/\.(?:jpe?g|webp|png)$/i.test(url.pathname))return '';
+  if(!['640','800','960'].includes(url.searchParams.get('imwidth')))return '';
+  return url.href;
+ }catch{return '';}
+};
 const sourceSafe=value=>{
  try{
   const url=new URL(value);
@@ -40,6 +51,25 @@ function render(){
  relevant.forEach((item,i)=>{
   const card=make('article','vc-intel-card');
   card.dataset.category=item.category;
+  const pictureSrc=officialScreenshot(item.image);
+  if(pictureSrc){
+    const picture=make('div','vc-intel-card-picture');
+    const fallback=make('span','vc-intel-picture-backup',monogram(item.title));
+    fallback.setAttribute('aria-hidden','true');
+    const img=document.createElement('img');
+    img.loading='lazy';img.decoding='async';img.width=800;img.height=450;
+    img.referrerPolicy='strict-origin-when-cross-origin';
+    img.alt=typeof item.imageAlt==='string'&&item.imageAlt.length<160
+      ?item.imageAlt:'Official Rockstar Games GTA VI promotional screenshot';
+    img.addEventListener('load',()=>{picture.classList.add('has-artwork');card.classList.add('has-artwork');});
+    img.addEventListener('error',()=>{picture.classList.remove('has-artwork');card.classList.remove('has-artwork');img.removeAttribute('src');});
+    const badge=make('span','vc-intel-picture-badge','OFFICIAL ROCKSTAR SCREENSHOT');
+    picture.append(fallback,img,badge);
+    card.append(picture);
+    // This function is invoked only after the explicit Show Story Details
+    // action; the guide remains completely image-free while locked.
+    img.src=pictureSrc;
+  }
   const overline=make('div','vc-intel-card-index');
   const category=make('span','',labels[item.category]);
   const number=make('span','',String(i+1).padStart(2,'0')+' / '+String(relevant.length).padStart(2,'0'));
@@ -100,7 +130,7 @@ async function reveal(){
  toggle.disabled=true;toggle.textContent='Preparing official files…';
  lock.textContent='Loading only approved, Rockstar-confirmed facts…';
  try{
-  const response=await fetch('./data/official-guide.json?v=2.8.0');
+  const response=await fetch('./data/official-guide.json?v=2.9.0');
   if(!response.ok)throw Error('Official archive unavailable');
   const documentData=await response.json();
   if(attempt!==requestId||locked())return;

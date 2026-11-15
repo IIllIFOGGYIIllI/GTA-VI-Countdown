@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "reviewedAt": "2026-11-16T09:30:00+11:00",
+  "reviewedAt": "2026-11-16T10:00:00+11:00",
   "policy": "Editorial approval only. Scheduled checks create GitHub review issues and NEVER change this file.",
   "articles": [
     {
@@ -10,7 +10,10 @@
       "date": "2026-11-10",
       "title": "Pre-load Grand Theft Auto VI now",
       "summary": "Rockstar confirms eligible digital pre-orders can pre-load the game on supported consoles before launch.",
-      "url": "https://www.rockstargames.com/newswire/article/89834o94713o21/pre-load-grand-theft-auto-vi-now"
+      "url": "https://www.rockstargames.com/newswire/article/89834o94713o21/pre-load-grand-theft-auto-vi-now",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_13.0iq8ff474tsdx.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 13",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-festival-20261109",
@@ -19,7 +22,10 @@
       "date": "2026-11-09",
       "title": "Rockstar announces GTA VI: The Festival",
       "summary": "A launch-celebration concert is scheduled for 21 November at Mana Wynwood in Miami, with artists from the game's musical world.",
-      "url": "https://www.rockstargames.com/newswire/article/o39o87a435a25a/grand-theft-auto-vi-the-festival"
+      "url": "https://www.rockstargames.com/newswire/article/o39o87a435a25a/grand-theft-auto-vi-the-festival",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_20.18c75478u52nf.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 20",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-gallery-20261105",
@@ -28,7 +34,10 @@
       "date": "2026-11-05",
       "title": "New launch gallery unveiled",
       "summary": "Rockstar has added a fresh official collection of Leonida screenshots. Images remain behind our separate media reveal.",
-      "url": "https://www.rockstargames.com/newswire/article/39ak81277255o9/explore-the-grand-theft-auto-vi-launch-gallery"
+      "url": "https://www.rockstargames.com/newswire/article/39ak81277255o9/explore-the-grand-theft-auto-vi-launch-gallery",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_17.0er79m2u3nygs.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 17",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-release-times-20261103",
@@ -37,7 +46,10 @@
       "date": "2026-11-03",
       "title": "Regional release times confirmed",
       "summary": "Rockstar's published regional schedule sets the console release for 19 November 2026, at midnight local time.",
-      "url": "https://support.rockstargames.com/articles/29jV3Cv2cCgvwM1XgtMO5o/grand-theft-auto-vi-regional-pre-load-and-release-times-on-playstation-5-and-xbox-series-x-or-s"
+      "url": "https://support.rockstargames.com/articles/29jV3Cv2cCgvwM1XgtMO5o/grand-theft-auto-vi-regional-pre-load-and-release-times-on-playstation-5-and-xbox-series-x-or-s",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_14.0fu8u9jh5hkg7.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 14",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-score-20261029",
@@ -46,7 +58,10 @@
       "date": "2026-10-29",
       "title": "Justice composes GTA VI's original score",
       "summary": "Rockstar confirms the French duo Justice composed the game's adaptive score; its 30-track score album is scheduled for 11 December.",
-      "url": "https://www.rockstargames.com/newswire/article/39ak8a12395591/grand-theft-auto-vi-original-score-by-justice"
+      "url": "https://www.rockstargames.com/newswire/article/39ak8a12395591/grand-theft-auto-vi-original-score-by-justice",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_22.0--9jlb822n~g.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 22",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-launch-trailer-20261015",
@@ -55,7 +70,10 @@
       "date": "2026-10-15",
       "title": "The official GTA VI launch trailer is here",
       "summary": "Rockstar released its launch trailer ahead of November 19. It is entirely optional to watch; the video is never auto-played here.",
-      "url": "https://www.rockstargames.com/newswire/article/517572321a549a/watch-the-grand-theft-auto-vi-launch-trailer"
+      "url": "https://www.rockstargames.com/newswire/article/517572321a549a/watch-the-grand-theft-auto-vi-launch-trailer",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_25.0f72z-5qgyd~v.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 25",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-radio-20261008",
@@ -64,7 +82,10 @@
       "date": "2026-10-08",
       "title": "Radio stations and podcasts detailed",
       "summary": "Rockstar outlined six of GTA VI's in-game stations and confirmed on-demand podcasts, headphones and earbuds for listening beyond vehicles.",
-      "url": "https://www.rockstargames.com/newswire/article/o3982oa93a23k4/the-music-of-grand-theft-auto-vi-in-game-radio-stations"
+      "url": "https://www.rockstargames.com/newswire/article/o3982oa93a23k4/the-music-of-grand-theft-auto-vi-in-game-radio-stations",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_26.0.bvvu2216_mj.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 26",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-album-20260917",
@@ -73,7 +94,10 @@
       "date": "2026-09-17",
       "title": "GTA VI: The Album coming on launch day",
       "summary": "The separate official soundtrack album features 34 original tracks and is scheduled for 19 November alongside the game.",
-      "url": "https://www.rockstargames.com/newswire/article/7599a881942544/announcing-grand-theft-auto-vi-the-album-coming-november-19"
+      "url": "https://www.rockstargames.com/newswire/article/7599a881942544/announcing-grand-theft-auto-vi-the-album-coming-november-19",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_19.01ow62.xq.64i.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 19",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-extended-20260827",
@@ -82,7 +106,10 @@
       "date": "2026-08-27",
       "title": "Rockstar publishes an extended look",
       "summary": "An official, in-game PlayStation 5 presentation is available to watch by choice. We do not reveal scenes or video thumbnails automatically.",
-      "url": "https://www.rockstargames.com/newswire/article/4k138k8okkk483/grand-theft-auto-vi-an-extended-look-now-playing"
+      "url": "https://www.rockstargames.com/newswire/article/4k138k8okkk483/grand-theft-auto-vi-an-extended-look-now-playing",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_23.183sae.altxv3.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 23",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-preorders-20260624",
@@ -91,7 +118,10 @@
       "date": "2026-06-24",
       "title": "GTA VI pre-orders and editions detailed",
       "summary": "Rockstar opened pre-orders for PS5 and Xbox Series X|S and confirmed its Ultimate Edition and Vintage Vice City Pack.",
-      "url": "https://www.rockstargames.com/newswire/article/5171972o3ak5oa/pre-order-grand-theft-auto-vi-on-june-25"
+      "url": "https://www.rockstargames.com/newswire/article/5171972o3ak5oa/pre-order-grand-theft-auto-vi-on-june-25",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_21.0m5vh15h178-e.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 21",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
       "id": "gtavi-date-20251106",
@@ -100,7 +130,10 @@
       "date": "2025-11-06",
       "title": "November 19 release date announced",
       "summary": "Rockstar's official announcement establishes the November 2026 console release date.",
-      "url": "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026"
+      "url": "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_24.0r9tor5-x.p75.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 24",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     }
   ]
 }

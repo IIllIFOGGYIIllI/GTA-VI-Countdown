@@ -58,14 +58,20 @@ for(const id of [
 for(const pathName of [
  'assets/launch-week.js?v=2.8.0','assets/launch-week-core.js?v=2.5.0',
  'assets/launch-week.css?v=2.5.0',
- 'assets/official-guide.css?v=2.8.0','assets/official-guide.js?v=2.8.0',
+ 'assets/official-guide.css?v=2.8.0','assets/editorial-images.css?v=2.9.0',
+ 'assets/official-guide.js?v=2.9.0',
  'assets/cinematic-launch.css?v=2.7.2','assets/cinematic-launch.js?v=2.7.1'
 ]){
  assert.ok(site.includes(pathName),'Missing app-shell asset: '+pathName);
  assert.ok(worker.includes(pathName),'Missing offline cache asset: '+pathName);
 }
-assert.ok(worker.includes('vice-city-countdown-v15'));
-assert.ok(worker.includes('data/official-guide.json?v=2.8.0'));
+assert.ok(worker.includes('vice-city-countdown-v16'));
+assert.ok(worker.includes('data/official-guide.json?v=2.9.0'));
+assert.ok(worker.includes('data/news.json?v=2.9.0'));
+assert.ok(site.includes('assets/editorial-images.css?v=2.9.0'));
+assert.ok(site.includes('app.js?v=2.9.0'));
+assert.ok(worker.includes('app.js?v=2.9.0'));
+assert.ok(worker.includes('assets/editorial-images.css?v=2.9.0'));
 assert.ok(site.includes('id="guide-content" hidden'));
 assert.ok(site.includes('id="guide-toggle"'));
 assert.ok(worker.includes('preview/vendor/GrandFireworks.min.js?v=1.11.1'),'Offline PWA must cache the fireworks engine');

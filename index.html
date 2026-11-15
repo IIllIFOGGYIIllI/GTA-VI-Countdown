@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="2.8.0">
+  <meta name="app-version" content="2.9.0">
   <meta name="theme-color" content="#241739">
   <meta name="description" content="A spoiler-free GTA VI release countdown with regional launch times, verified Rockstar news and an installable PWA. Unofficial fan project.">
   <meta property="og:title" content="Vice City Countdown | GTA VI">
@@ -22,11 +22,12 @@
   <link rel="stylesheet" href="./assets/launch-mode.css?v=2.4.0">
   <link rel="stylesheet" href="./assets/launch-week.css?v=2.5.0">
   <link rel="stylesheet" href="./assets/official-guide.css?v=2.8.0">
+  <link rel="stylesheet" href="./assets/editorial-images.css?v=2.9.0">
   <link rel="stylesheet" href="./assets/cinematic-launch.css?v=2.7.2">
-  <script src="./app.js?v=2.8.0" defer></script>
+  <script src="./app.js?v=2.9.0" defer></script>
   <script src="./assets/launch-week-core.js?v=2.5.0" defer></script>
   <script src="./assets/launch-week.js?v=2.8.0" defer></script>
-  <script src="./assets/official-guide.js?v=2.8.0" defer></script>
+  <script src="./assets/official-guide.js?v=2.9.0" defer></script>
   <script src="./preview/vendor/GrandFireworks.min.js?v=1.11.1" defer></script>
   <script src="./assets/cinematic-launch.js?v=2.7.1" defer></script>
 </head>
@@ -220,7 +221,7 @@
     </section>
 
     <section class="section news-section" id="news" aria-labelledby="news-title"><div class="shell">
-      <div class="section-header"><div><div class="section-index">04 — LEONIDA NEWSWIRE</div><h2 id="news-title">SUNSET <em>DISPATCHES</em></h2></div><p>Official Rockstar announcements, edited for a spoiler-free read. Automated checks prepare candidates; only approved updates reach this page.</p></div>
+      <div class="section-header"><div><div class="section-index">04 — LEONIDA NEWSWIRE</div><h2 id="news-title">SUNSET <em>DISPATCHES</em></h2></div><p>Official announcements with scenic Rockstar promotional screenshots. Strict Spoiler Lock hides the images; story details remain opt-in.</p></div>
       <div class="news-tools"><div class="filters" role="group" aria-label="Filter news"><button class="filter active" type="button" data-filter="all" aria-pressed="true">All updates</button><button class="filter" type="button" data-filter="launch" aria-pressed="false">Launch</button><button class="filter" type="button" data-filter="preload" aria-pressed="false">Pre-load</button><button class="filter" type="button" data-filter="updates" aria-pressed="false">Updates</button></div><span class="news-verified" id="news-verified"><span class="verified-dot"></span> EDITOR APPROVED · 15 NOV 2026</span></div>
       <div class="news-grid" id="news-grid" aria-live="polite">
         <article class="news-card" data-category="preload"><div class="news-visual news-visual-1" aria-hidden="true"><span class="news-visual-big">READY</span><span class="news-visual-corner">01</span></div><div class="news-content"><div class="news-meta"><span>PRE-LOAD</span><time datetime="2026-11-10">10 NOV 2026</time></div><h3>Pre-load Grand Theft Auto VI now</h3><p>Rockstar confirms digital pre-loading is available for eligible pre-orders on supported consoles.</p><a href="https://www.rockstargames.com/newswire/article/89834o94713o21/pre-load-grand-theft-auto-vi-now" target="_blank" rel="noopener noreferrer" aria-label="Read official preload announcement on Rockstar Newswire (opens external site)">Read official source <span aria-hidden="true">↗</span></a></div></article>
@@ -228,7 +229,7 @@
         <article class="news-card" data-category="launch"><div class="news-visual news-visual-3" aria-hidden="true"><span class="news-visual-big">VI</span><span class="news-visual-corner">03</span></div><div class="news-content"><div class="news-meta"><span>ANNOUNCEMENT</span><time datetime="2025-11-06">06 NOV 2025</time></div><h3>November 19 release date announced</h3><p>The official date announcement confirms the worldwide console release date.</p><a href="https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026" target="_blank" rel="noopener noreferrer" aria-label="Read official GTA VI date announcement (opens external site)">Read official source <span aria-hidden="true">↗</span></a></div></article>
       </div>
       <p class="news-status-line"><span class="live-dot" aria-hidden="true"></span><span id="news-status">Showing editor-approved stories. Checking for the latest approved list…</span><a href="https://github.com/IIllIFOGGYIIllI/GTA-VI-Countdown/issues?q=is%3Aissue+label%3Anews-review" target="_blank" rel="noopener noreferrer">Review queue ↗</a></p>
-      <div class="news-foot"><span><strong>THE SPOILER SHIELD</strong> News stories use neutral summaries. Character backgrounds and story information stay locked in the optional official-information archive below. Linked Rockstar pages can reveal additional details.</span><a href="./spoilers.html">How we protect your experience ↗</a></div>
+      <div class="news-foot"><span><strong>THE SPOILER SHIELD</strong> News uses neutral summaries and scenic official screenshots, which Strict Spoiler Lock disables. Character biographies and story images stay behind the Leonida Files reveal. Linked official pages can contain additional details.</span><a href="./spoilers.html">How we protect your experience ↗</a></div>
     </div></section>
 
     
@@ -245,7 +246,7 @@
           <div class="vc-intel-gate-copy">
             <span class="vc-intel-gate-eyebrow"><span aria-hidden="true">◈</span> SPOILER SHIELD · ACTIVE</span>
             <h3>DISCOVER LEONIDA ON YOUR TERMS</h3>
-            <p>19 Rockstar-confirmed information files — character biographies, the official story premise, locations, and world features. No story details appear until you deliberately reveal them. No leaks, endings or plot speculation.</p>
+            <p>19 Rockstar-confirmed information files — character biographies, the official story premise, locations, and world features. No character images or story details appear until you deliberately reveal them. No leaks, endings or plot speculation.</p>
             <span class="vc-intel-gate-note" id="guide-lock-status" role="status">Story details hidden by default · Your launch experience stays spoiler-free</span>
           </div>
           <button id="guide-toggle" class="vc-intel-toggle" type="button" aria-controls="guide-content" aria-expanded="false">◈ Show Story Details</button>

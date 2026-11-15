@@ -1,13 +1,14 @@
-/* Vice City Countdown · PWA v2.7 · Cinematic Midnight Fireworks + offline fallback */
-const CACHE='vice-city-countdown-v15';
+/* Vice City Countdown · PWA v2.9 · Official editorial card artwork + offline fallback */
+const CACHE='vice-city-countdown-v16';
 const CORE=[
   './','./index.html',
   './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0','./assets/launch-mode.css?v=2.4.0','./assets/launch-week.css?v=2.5.0',
-  './app.js?v=2.8.0','./assets/launch-week-core.js?v=2.5.0','./assets/launch-week.js?v=2.8.0',
-  './assets/official-guide.css?v=2.8.0','./assets/official-guide.js?v=2.8.0',
+  './app.js?v=2.9.0','./assets/launch-week-core.js?v=2.5.0','./assets/launch-week.js?v=2.8.0',
+  './assets/official-guide.css?v=2.8.0','./assets/editorial-images.css?v=2.9.0',
+  './assets/official-guide.js?v=2.9.0',
   './assets/cinematic-launch.css?v=2.7.2','./assets/cinematic-launch.js?v=2.7.1',
   './preview/vendor/GrandFireworks.min.js?v=1.11.1','./assets/vice-city-skyline.svg',
-  './data/news.json?v=2.8.0','./data/official-guide.json?v=2.8.0','./manifest.webmanifest',
+  './data/news.json?v=2.9.0','./data/official-guide.json?v=2.9.0','./manifest.webmanifest',
   './assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
   './privacy.html','./terms.html','./spoilers.html'
 ];
@@ -60,7 +61,7 @@ self.addEventListener('fetch',event=>{
         event.waitUntil(caches.open(CACHE).then(c=>c.put(request,copy)));
       }
       return response;
-    }).catch(async()=>await caches.match('./data/news.json?v=2.8.0') ||
+    }).catch(async()=>await caches.match('./data/news.json?v=2.9.0') ||
       new Response('{"articles":[]}',{headers:{'Content-Type':'application/json'}})));
     return;
   }

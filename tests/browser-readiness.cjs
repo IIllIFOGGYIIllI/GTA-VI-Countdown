@@ -290,6 +290,26 @@ async function main(){
           await page.goto(BASE,{waitUntil:'load'});
           await page.waitForFunction(()=>window.ViceOfficialIntel && document.body.classList.contains('vc-launch-kit-ready'));
           await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===11);
+          assert.equal(await page.locator('#news-grid img.news-visual-image').count(),11,
+            'All approved Newswire cards should include a real Rockstar screenshot');
+          const imageSources=await page.locator('#news-grid img.news-visual-image').evaluateAll(images=>
+            images.map(image=>image.dataset.officialImage||''));
+          assert.equal(imageSources.length,11);
+          assert.ok(imageSources.every(url=>url.includes('www.rockstargames.com/VI/_next/static/media/')),
+            'Newswire thumbnails must link only to official Rockstar screenshot assets');
+          assert.equal(await page.locator('#guide-grid img').count(),0,
+            'Story images should not even exist before the reveal');
+          if(width===1366||width===375){
+            await page.locator('#news').scrollIntoViewIfNeeded();
+            await page.waitForTimeout(1550);
+            const first=page.locator('#news-grid .news-card').first();
+            await first.screenshot({path:path.join(SHOTS,width===1366
+              ?'news-official-screenshot-desktop.png'
+              :'news-official-screenshot-mobile.png')});
+            const loaded=await first.locator('img.news-visual-image').evaluate(img=>
+              !!img.complete&&img.naturalWidth>0);
+            console.log('ARTWORK '+width+'px first News screenshot loaded: '+loaded);
+          }
           assert.equal(await page.locator('#guide-content').isVisible(),false);
           assert.equal(await page.locator('#guide-toggle').getAttribute('aria-expanded'),'false');
           assert.deepEqual(await page.evaluate(()=>window.ViceOfficialIntel.getState()),
@@ -306,6 +326,10 @@ async function main(){
           await page.waitForFunction(()=>window.ViceOfficialIntel.getState().revealed);
           assert.equal(guideRequests,1,'User-selected reveal should fetch the guide exactly once');
           assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),19);
+          assert.equal(await page.locator('#guide-grid .vc-intel-card-picture img').count(),19,
+            'Each confirmed character/location must have a specific official screenshot');
+          assert.ok((await page.locator('#guide-grid .vc-intel-card-picture img').first().getAttribute('src'))
+            .includes('www.rockstargames.com/VI/_next/static/media/'));
           assert.equal(await page.locator('#guide-toggle').getAttribute('aria-expanded'),'true');
           if(width===1366)await page.locator('#intel').screenshot({path:path.join(SHOTS,'official-intel-revealed-desktop.png')});
           await page.locator('#guide-filters [data-guide-filter="characters"]').click();
@@ -315,12 +339,16 @@ async function main(){
           assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),1);
           if(width===375)await page.locator('#intel').screenshot({path:path.join(SHOTS,'official-intel-revealed-mobile.png')});
           await page.locator('#guide-hide').click();
+          assert.equal(await page.locator('#guide-grid img').count(),0,
+            'Closing the guide must remove spoiler images from the DOM');
           assert.equal(await page.locator('#guide-content').isVisible(),false);
           assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),0,
             'Hiding must clear story details from the DOM');
           await page.locator('#guide-toggle').click();
           await page.waitForFunction(()=>window.ViceOfficialIntel.getState().revealed);
           await page.locator('#kit-strict').check();
+          assert.equal(await page.locator('#news-grid img.news-visual-image[src]').count(),0,
+            'Strict Spoiler Lock must stop public News thumbnail requests');
           assert.equal(await page.locator('#guide-content').isVisible(),false,
             'Strict spoiler lock must immediately close revealed story content');
           assert.equal(await page.locator('#guide-toggle').isDisabled(),true);
@@ -334,6 +362,7 @@ async function main(){
           assert.equal(await page.locator('#guide-content').isVisible(),false);
           await page.locator('#kit-strict').uncheck();
           assert.equal(await page.locator('#guide-toggle').isEnabled(),true);
+          assert.equal(await page.locator('#news-grid img.news-visual-image').count(),11);
           assert.equal(await page.locator('#guide-content').isVisible(),false);
           assert.deepEqual(errors,[],'Story guide runtime errors: '+errors.join(' | '));
         }finally{await context.close();}
@@ -473,7 +502,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v15');
+          return keys.includes('vice-city-countdown-v16');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

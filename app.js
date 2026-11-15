@@ -183,11 +183,42 @@
 
   // News is an approval-only file. GitHub Actions may create review issues,
   // but only a maintainer can publish an article through the controlled workflow.
+  // Newswire uses scenic Rockstar promotional stills only, distinct from the
+  // character/story images which remain locked in the optional Leonida guide.
+  // Strict Spoiler Lock prevents image requests, not just their visibility.
+  function officialScreenshotURL(url){
+    if(typeof url!=='string')return '';
+    try{
+      const x=new URL(url);
+      if(x.protocol!=='https:'||x.hostname!=='www.rockstargames.com'||
+         !x.pathname.startsWith('/VI/_next/static/media/')||
+         !/\.(?:jpe?g|webp|png)$/i.test(x.pathname))return '';
+      if(!['640','800','960'].includes(x.searchParams.get('imwidth')))return '';
+      return x.href;
+    }catch{return '';}
+  }
+  const newsSpoilersLocked=()=>document.documentElement.classList.contains('vc-strict-spoilers')||
+    !!$('kit-strict')?.checked;
+  function syncNewsImages(){
+    const blocked=newsSpoilersLocked();
+    for(const image of document.querySelectorAll('#news-grid img.news-visual-image')){
+      const parent=image.closest('.news-visual');
+      if(blocked){
+        image.removeAttribute('src');
+        parent?.classList.remove('has-artwork');
+      }else if(!image.getAttribute('src')&&image.dataset.officialImage&&!image.dataset.failed){
+        image.src=image.dataset.officialImage;
+      }
+    }
+  }
+  $('kit-strict')?.addEventListener('change',syncNewsImages);
+  $('kit-reset-settings')?.addEventListener('click',syncNewsImages);
+  window.addEventListener('pageshow',syncNewsImages);
   async function refreshApprovedNews(){
     const grid=$('news-grid'),status=$('news-status'),verified=$('news-verified');
     if(!grid||!status)return;
     try{
-      const response=await fetch('./data/news.json?v=2.8.0',{cache:'no-store'});
+      const response=await fetch('./data/news.json?v=2.9.0',{cache:'no-store'});
       if(!response.ok)throw Error('Approved news is unavailable');
       const feed=await response.json();
       if(!Array.isArray(feed.articles))throw Error('Invalid approved-news format');
@@ -205,6 +236,24 @@
         const card=document.createElement('article');card.className='news-card';card.dataset.category=item.category;
         const visual=document.createElement('div');visual.className='news-visual news-visual-'+(i%3+1);visual.setAttribute('aria-hidden','true');
         const heading=document.createElement('span');heading.className='news-visual-big';heading.textContent=item.category==='preload'?'READY':i%3===1?'19 / 11':'VI';
+        const picture=officialScreenshotURL(item.image);
+        if(picture){
+          const img=document.createElement('img');
+          img.className='news-visual-image';
+          img.alt=typeof item.imageAlt==='string'&&item.imageAlt.length<150
+            ?item.imageAlt:'Official Rockstar Games GTA VI promotional screenshot';
+          img.loading='lazy';img.decoding='async';img.width=960;img.height=540;
+          img.referrerPolicy='strict-origin-when-cross-origin';
+          img.dataset.officialImage=picture;
+          img.addEventListener('load',()=>{
+            if(!newsSpoilersLocked()&&img.getAttribute('src'))visual.classList.add('has-artwork');
+          });
+          img.addEventListener('error',()=>{
+            visual.classList.remove('has-artwork');img.dataset.failed='true';
+            img.removeAttribute('src'); // Keep the existing attractive gradient fallback
+          });
+          visual.append(img);
+        }
         const number=document.createElement('span');number.className='news-visual-corner';number.textContent=String(i+1).padStart(2,'0');visual.append(heading,number);
         const content=document.createElement('div');content.className='news-content';
         const metadata=document.createElement('div');metadata.className='news-meta';
@@ -217,6 +266,7 @@
         content.append(metadata,title,summary,link);card.append(visual,content);fragment.append(card);
       });
       grid.replaceChildren(fragment);
+      syncNewsImages();
       const pressed=document.querySelector('.filter.active');
       const category=pressed?.dataset.filter||'all';
       for(const article of grid.querySelectorAll('.news-card'))article.hidden=category!=='all'&&article.dataset.category!==category;
