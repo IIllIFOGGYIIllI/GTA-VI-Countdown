@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "reviewedAt": "2026-11-15T00:00:00+11:00",
+  "reviewedAt": "2026-11-16T09:30:00+11:00",
   "policy": "Editorial approval only. Scheduled checks create GitHub review issues and NEVER change this file.",
   "articles": [
     {
@@ -13,6 +13,24 @@
       "url": "https://www.rockstargames.com/newswire/article/89834o94713o21/pre-load-grand-theft-auto-vi-now"
     },
     {
+      "id": "gtavi-festival-20261109",
+      "category": "updates",
+      "tag": "LIVE EVENT",
+      "date": "2026-11-09",
+      "title": "Rockstar announces GTA VI: The Festival",
+      "summary": "A launch-celebration concert is scheduled for 21 November at Mana Wynwood in Miami, with artists from the game's musical world.",
+      "url": "https://www.rockstargames.com/newswire/article/o39o87a435a25a/grand-theft-auto-vi-the-festival"
+    },
+    {
+      "id": "gtavi-gallery-20261105",
+      "category": "updates",
+      "tag": "OFFICIAL GALLERY",
+      "date": "2026-11-05",
+      "title": "New launch gallery unveiled",
+      "summary": "Rockstar has added a fresh official collection of Leonida screenshots. Images remain behind our separate media reveal.",
+      "url": "https://www.rockstargames.com/newswire/article/39ak81277255o9/explore-the-grand-theft-auto-vi-launch-gallery"
+    },
+    {
       "id": "gtavi-release-times-20261103",
       "category": "launch",
       "tag": "RELEASE TIMES",
@@ -20,6 +38,60 @@
       "title": "Regional release times confirmed",
       "summary": "Rockstar's published regional schedule sets the console release for 19 November 2026, at midnight local time.",
       "url": "https://support.rockstargames.com/articles/29jV3Cv2cCgvwM1XgtMO5o/grand-theft-auto-vi-regional-pre-load-and-release-times-on-playstation-5-and-xbox-series-x-or-s"
+    },
+    {
+      "id": "gtavi-score-20261029",
+      "category": "updates",
+      "tag": "ORIGINAL SCORE",
+      "date": "2026-10-29",
+      "title": "Justice composes GTA VI's original score",
+      "summary": "Rockstar confirms the French duo Justice composed the game's adaptive score; its 30-track score album is scheduled for 11 December.",
+      "url": "https://www.rockstargames.com/newswire/article/39ak8a12395591/grand-theft-auto-vi-original-score-by-justice"
+    },
+    {
+      "id": "gtavi-launch-trailer-20261015",
+      "category": "updates",
+      "tag": "OFFICIAL VIDEO",
+      "date": "2026-10-15",
+      "title": "The official GTA VI launch trailer is here",
+      "summary": "Rockstar released its launch trailer ahead of November 19. It is entirely optional to watch; the video is never auto-played here.",
+      "url": "https://www.rockstargames.com/newswire/article/517572321a549a/watch-the-grand-theft-auto-vi-launch-trailer"
+    },
+    {
+      "id": "gtavi-radio-20261008",
+      "category": "updates",
+      "tag": "IN-GAME AUDIO",
+      "date": "2026-10-08",
+      "title": "Radio stations and podcasts detailed",
+      "summary": "Rockstar outlined six of GTA VI's in-game stations and confirmed on-demand podcasts, headphones and earbuds for listening beyond vehicles.",
+      "url": "https://www.rockstargames.com/newswire/article/o3982oa93a23k4/the-music-of-grand-theft-auto-vi-in-game-radio-stations"
+    },
+    {
+      "id": "gtavi-album-20260917",
+      "category": "updates",
+      "tag": "SOUNDTRACK",
+      "date": "2026-09-17",
+      "title": "GTA VI: The Album coming on launch day",
+      "summary": "The separate official soundtrack album features 34 original tracks and is scheduled for 19 November alongside the game.",
+      "url": "https://www.rockstargames.com/newswire/article/7599a881942544/announcing-grand-theft-auto-vi-the-album-coming-november-19"
+    },
+    {
+      "id": "gtavi-extended-20260827",
+      "category": "updates",
+      "tag": "OFFICIAL VIDEO",
+      "date": "2026-08-27",
+      "title": "Rockstar publishes an extended look",
+      "summary": "An official, in-game PlayStation 5 presentation is available to watch by choice. We do not reveal scenes or video thumbnails automatically.",
+      "url": "https://www.rockstargames.com/newswire/article/4k138k8okkk483/grand-theft-auto-vi-an-extended-look-now-playing"
+    },
+    {
+      "id": "gtavi-preorders-20260624",
+      "category": "launch",
+      "tag": "PRE-ORDERS",
+      "date": "2026-06-24",
+      "title": "GTA VI pre-orders and editions detailed",
+      "summary": "Rockstar opened pre-orders for PS5 and Xbox Series X|S and confirmed its Ultimate Edition and Vintage Vice City Pack.",
+      "url": "https://www.rockstargames.com/newswire/article/5171972o3ak5oa/pre-order-grand-theft-auto-vi-on-june-25"
     },
     {
       "id": "gtavi-date-20251106",

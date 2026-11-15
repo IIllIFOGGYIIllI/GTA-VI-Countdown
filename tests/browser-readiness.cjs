@@ -275,6 +275,71 @@ async function main(){
       }finally{await context.close();}
     });
 
+    // 2026-11-16 approved Newswire expansion and opt-in-only Rockstar guide.
+    for(const [width,height] of [[320,720],[375,812],[1366,850]]){
+      await runCase('approved news and strict opt-in story guide '+width+'px',async()=>{
+        const context=await browser.newContext({
+          viewport:{width,height},timezoneId:'Australia/Sydney',
+          serviceWorkers:'block',reducedMotion:'reduce'
+        });
+        try{
+          const page=await context.newPage();
+          const errors=[];let guideRequests=0;
+          page.on('pageerror',e=>errors.push(e.message));
+          page.on('request',r=>{if(r.url().includes('/data/official-guide.json'))guideRequests++;});
+          await page.goto(BASE,{waitUntil:'load'});
+          await page.waitForFunction(()=>window.ViceOfficialIntel && document.body.classList.contains('vc-launch-kit-ready'));
+          await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===11);
+          assert.equal(await page.locator('#guide-content').isVisible(),false);
+          assert.equal(await page.locator('#guide-toggle').getAttribute('aria-expanded'),'false');
+          assert.deepEqual(await page.evaluate(()=>window.ViceOfficialIntel.getState()),
+            {revealed:false,locked:false,loaded:false,count:0});
+          assert.equal(guideRequests,0,'Story data must not be fetched before reveal');
+          const widths=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
+          assert.ok(widths.scroll<=widths.viewport+2,'Guide section overflow '+JSON.stringify(widths));
+          // The original neutral Newswire still honours categories.
+          await page.locator('.news-tools .filter[data-filter="updates"]').click();
+          const shownNews=await page.locator('#news-grid .news-card:visible').count();
+          assert.equal(shownNews,7,'Expected seven neutral updated articles');
+          await page.locator('.news-tools .filter[data-filter="all"]').click();
+          await page.locator('#guide-toggle').click();
+          await page.waitForFunction(()=>window.ViceOfficialIntel.getState().revealed);
+          assert.equal(guideRequests,1,'User-selected reveal should fetch the guide exactly once');
+          assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),19);
+          assert.equal(await page.locator('#guide-toggle').getAttribute('aria-expanded'),'true');
+          if(width===1366)await page.locator('#intel').screenshot({path:path.join(SHOTS,'official-intel-revealed-desktop.png')});
+          await page.locator('#guide-filters [data-guide-filter="characters"]').click();
+          assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),8);
+          await page.locator('#guide-filters [data-guide-filter="all"]').click();
+          await page.locator('#guide-search').fill('Lucia Caminos');
+          assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),1);
+          if(width===375)await page.locator('#intel').screenshot({path:path.join(SHOTS,'official-intel-revealed-mobile.png')});
+          await page.locator('#guide-hide').click();
+          assert.equal(await page.locator('#guide-content').isVisible(),false);
+          assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),0,
+            'Hiding must clear story details from the DOM');
+          await page.locator('#guide-toggle').click();
+          await page.waitForFunction(()=>window.ViceOfficialIntel.getState().revealed);
+          await page.locator('#kit-strict').check();
+          assert.equal(await page.locator('#guide-content').isVisible(),false,
+            'Strict spoiler lock must immediately close revealed story content');
+          assert.equal(await page.locator('#guide-toggle').isDisabled(),true);
+          assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),0);
+          assert.equal(await page.locator('#media-toggle').isDisabled(),true,
+            'Strict lock must protect both story details and screenshots');
+          await page.reload({waitUntil:'load'});
+          await page.waitForFunction(()=>window.ViceOfficialIntel&&document.body.classList.contains('vc-launch-kit-ready'));
+          assert.equal(await page.locator('#guide-toggle').isDisabled(),true,
+            'Saved strict spoiler preference must persist across reloads');
+          assert.equal(await page.locator('#guide-content').isVisible(),false);
+          await page.locator('#kit-strict').uncheck();
+          assert.equal(await page.locator('#guide-toggle').isEnabled(),true);
+          assert.equal(await page.locator('#guide-content').isVisible(),false);
+          assert.deepEqual(errors,[],'Story guide runtime errors: '+errors.join(' | '));
+        }finally{await context.close();}
+      });
+    }
+
     await runCase('Sydney midnight transition and region reversal',async()=>{
       const context=await browser.newContext({
         viewport:{width:375,height:812},
@@ -408,7 +473,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v14');
+          return keys.includes('vice-city-countdown-v15');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

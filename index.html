@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="2.7.2">
+  <meta name="app-version" content="2.8.0">
   <meta name="theme-color" content="#241739">
   <meta name="description" content="A spoiler-free GTA VI release countdown with regional launch times, verified Rockstar news and an installable PWA. Unofficial fan project.">
   <meta property="og:title" content="Vice City Countdown | GTA VI">
@@ -21,10 +21,12 @@
   <link rel="stylesheet" href="./assets/mobile-experience.css?v=2.3.0">
   <link rel="stylesheet" href="./assets/launch-mode.css?v=2.4.0">
   <link rel="stylesheet" href="./assets/launch-week.css?v=2.5.0">
+  <link rel="stylesheet" href="./assets/official-guide.css?v=2.8.0">
   <link rel="stylesheet" href="./assets/cinematic-launch.css?v=2.7.2">
-  <script src="./app.js?v=2.5.0" defer></script>
+  <script src="./app.js?v=2.8.0" defer></script>
   <script src="./assets/launch-week-core.js?v=2.5.0" defer></script>
-  <script src="./assets/launch-week.js?v=2.5.0" defer></script>
+  <script src="./assets/launch-week.js?v=2.8.0" defer></script>
+  <script src="./assets/official-guide.js?v=2.8.0" defer></script>
   <script src="./preview/vendor/GrandFireworks.min.js?v=1.11.1" defer></script>
   <script src="./assets/cinematic-launch.js?v=2.7.1" defer></script>
 </head>
@@ -210,7 +212,7 @@
           </select></div>
           <label class="kit-setting-row" for="kit-motion"><span><strong>Reduce motion</strong><small>Disable neon pulses and transition effects</small></span><input type="checkbox" id="kit-motion"></label>
           <label class="kit-setting-row" for="kit-sounds"><span><strong>Launch sounds</strong><small>Optional soft countdown cues, off by default</small></span><input type="checkbox" id="kit-sounds"></label>
-          <label class="kit-setting-row" for="kit-strict"><span><strong>Strict spoiler lock</strong><small>Prevent opening the optional screenshot and video section</small></span><input type="checkbox" id="kit-strict"></label>
+          <label class="kit-setting-row" for="kit-strict"><span><strong>Strict spoiler lock</strong><small>Block story details, screenshot and video reveals</small></span><input type="checkbox" id="kit-strict"></label>
           <div class="kit-settings-foot"><span>Launch timezone: <a href="#countdown-panel">change at the countdown ↗</a></span><button type="button" class="kit-text-button" id="kit-reset-settings">Reset settings</button></div>
           <p class="kit-feedback" id="kit-settings-status" role="status" aria-live="polite">Settings saved locally. Nothing is uploaded.</p>
         </article>
@@ -226,10 +228,52 @@
         <article class="news-card" data-category="launch"><div class="news-visual news-visual-3" aria-hidden="true"><span class="news-visual-big">VI</span><span class="news-visual-corner">03</span></div><div class="news-content"><div class="news-meta"><span>ANNOUNCEMENT</span><time datetime="2025-11-06">06 NOV 2025</time></div><h3>November 19 release date announced</h3><p>The official date announcement confirms the worldwide console release date.</p><a href="https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026" target="_blank" rel="noopener noreferrer" aria-label="Read official GTA VI date announcement (opens external site)">Read official source <span aria-hidden="true">↗</span></a></div></article>
       </div>
       <p class="news-status-line"><span class="live-dot" aria-hidden="true"></span><span id="news-status">Showing editor-approved stories. Checking for the latest approved list…</span><a href="https://github.com/IIllIFOGGYIIllI/GTA-VI-Countdown/issues?q=is%3Aissue+label%3Anews-review" target="_blank" rel="noopener noreferrer">Review queue ↗</a></p>
-      <div class="news-foot"><span><strong>THE SPOILER SHIELD</strong> Automatic discoveries stay in a review queue. Only approved summaries appear here; linked external pages are outside our control and may show additional content.</span><a href="./spoilers.html">How we protect your experience ↗</a></div>
+      <div class="news-foot"><span><strong>THE SPOILER SHIELD</strong> News stories use neutral summaries. Character backgrounds and story information stay locked in the optional official-information archive below. Linked Rockstar pages can reveal additional details.</span><a href="./spoilers.html">How we protect your experience ↗</a></div>
     </div></section>
 
     
+    <section class="section vc-intel" id="intel" aria-labelledby="intel-title">
+      <div class="shell">
+        <div class="section-header vc-intel-header">
+          <div><div class="section-index">04A — YOUR CHOICE · OFFICIAL INTEL</div>
+            <h2 id="intel-title">THE <em>LEONIDA FILES</em></h2>
+          </div>
+          <p>Want more than headlines? Explore Rockstar's confirmed characters, world and story information — only when you choose to see it.</p>
+        </div>
+        <div class="vc-intel-gate">
+          <div class="vc-intel-seal" aria-hidden="true"><span>VI</span><small>INTEL</small></div>
+          <div class="vc-intel-gate-copy">
+            <span class="vc-intel-gate-eyebrow"><span aria-hidden="true">◈</span> SPOILER SHIELD · ACTIVE</span>
+            <h3>DISCOVER LEONIDA ON YOUR TERMS</h3>
+            <p>19 Rockstar-confirmed information files — character biographies, the official story premise, locations, and world features. No story details appear until you deliberately reveal them. No leaks, endings or plot speculation.</p>
+            <span class="vc-intel-gate-note" id="guide-lock-status" role="status">Story details hidden by default · Your launch experience stays spoiler-free</span>
+          </div>
+          <button id="guide-toggle" class="vc-intel-toggle" type="button" aria-controls="guide-content" aria-expanded="false">◈ Show Story Details</button>
+        </div>
+        <div class="vc-intel-reveal" id="guide-content" hidden>
+          <div class="vc-intel-topline">
+            <div><span class="section-index">ROCKSTAR GAMES · CONFIRMED DETAILS</span>
+              <h3>INSIDE THE <em>STATE OF LEONIDA</em></h3>
+            </div>
+            <button type="button" id="guide-hide" class="vc-intel-hide">✕ Hide Story Details</button>
+          </div>
+          <p class="vc-intel-disclaimer">These are official pre-release promotional facts, not leaked missions or later story developments. Linked Rockstar pages may display screenshots and videos.</p>
+          <div class="vc-intel-toolbar">
+            <div class="vc-intel-filters" id="guide-filters" role="group" aria-label="Official information categories">
+              <button type="button" class="vc-intel-filter is-active" data-guide-filter="all" aria-pressed="true">All files</button>
+              <button type="button" class="vc-intel-filter" data-guide-filter="story" aria-pressed="false">Story</button>
+              <button type="button" class="vc-intel-filter" data-guide-filter="characters" aria-pressed="false">Characters</button>
+              <button type="button" class="vc-intel-filter" data-guide-filter="places" aria-pressed="false">Places</button>
+              <button type="button" class="vc-intel-filter" data-guide-filter="world" aria-pressed="false">World &amp; features</button>
+            </div>
+            <label class="vc-intel-search-label" for="guide-search"><span class="sr-only">Search confirmed information</span><input id="guide-search" type="search" autocomplete="off" placeholder="Search official files…" aria-controls="guide-grid"></label>
+          </div>
+          <div class="vc-intel-grid" id="guide-grid" aria-live="polite"></div>
+          <div class="vc-intel-bottomline"><span id="guide-count" role="status">Choose a category to explore</span><a href="https://www.rockstargames.com/VI/only-in-leonida" target="_blank" rel="noopener noreferrer">Full official Rockstar guide ↗</a></div>
+        </div>
+      </div>
+    </section>
+
     <section class="section shell official-media" id="media" aria-labelledby="media-title">
       <div class="section-header"><div><div class="section-index">05 — THE VICE CITY VIDEO LOUNGE</div><h2 id="media-title">YOUR ALL-ACCESS <em>PASS</em></h2></div><p>All five official videos and the complete screenshot collection, without surprise previews.</p></div>
       <div class="media-lock" id="media-lock"><div class="media-lock-art" aria-hidden="true">◈</div><div><span class="media-lock-label">SPOILER SHIELD · ACTIVE</span><h3>YOUR FIRST LOOK / YOUR CHOICE</h3><p>Videos and images stay hidden until you choose to reveal this section. Rockstar's official promotional material may show gameplay, characters or other details.</p></div><button class="btn btn-primary" id="media-toggle" type="button" aria-controls="media-content" aria-expanded="false">Reveal official media ↗</button></div>

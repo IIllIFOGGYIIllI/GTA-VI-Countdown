@@ -56,14 +56,18 @@ for(const id of [
  assert.ok(site.includes('id="'+id+'"'),'Missing v2.5 element: '+id);
 }
 for(const pathName of [
- 'assets/launch-week.js?v=2.5.0','assets/launch-week-core.js?v=2.5.0',
+ 'assets/launch-week.js?v=2.8.0','assets/launch-week-core.js?v=2.5.0',
  'assets/launch-week.css?v=2.5.0',
+ 'assets/official-guide.css?v=2.8.0','assets/official-guide.js?v=2.8.0',
  'assets/cinematic-launch.css?v=2.7.2','assets/cinematic-launch.js?v=2.7.1'
 ]){
  assert.ok(site.includes(pathName),'Missing app-shell asset: '+pathName);
  assert.ok(worker.includes(pathName),'Missing offline cache asset: '+pathName);
 }
-assert.ok(worker.includes('vice-city-countdown-v14'));
+assert.ok(worker.includes('vice-city-countdown-v15'));
+assert.ok(worker.includes('data/official-guide.json?v=2.8.0'));
+assert.ok(site.includes('id="guide-content" hidden'));
+assert.ok(site.includes('id="guide-toggle"'));
 assert.ok(worker.includes('preview/vendor/GrandFireworks.min.js?v=1.11.1'),'Offline PWA must cache the fireworks engine');
 assert.ok(site.includes('id="vc-cinema-replay-fireworks"'),'Celebration needs a replay control');
 assert.ok(code.includes("media-toggle"),'Strict spoiler mode must control optional media access');

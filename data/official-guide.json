@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "reviewedAt": "2026-11-16",
+  "policy": "Rockstar-published pre-release promotional information only. Never include leaks, unreleased plot revelations, alleged endings or speculation.",
+  "items": [
+    {
+      "id": "premise",
+      "category": "story",
+      "title": "The central story",
+      "kicker": "OFFICIAL STORY PREMISE",
+      "summary": "Jason and Lucia become caught up in a criminal conspiracy spreading across Leonida after a seemingly straightforward job goes wrong. Rockstar presents their partnership and dependence on one another as the heart of the story.",
+      "source": "https://www.rockstargames.com/VI"
+    },
+    {
+      "id": "jason",
+      "category": "characters",
+      "title": "Jason Duval",
+      "kicker": "PROTAGONIST",
+      "summary": "Jason grew up among hustlers and criminals. He joined the Army hoping to leave his troubled teenage years behind, then ended up working with drug runners in the Leonida Keys. Meeting Lucia may change the direction of his life.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "lucia",
+      "category": "characters",
+      "title": "Lucia Caminos",
+      "kicker": "PROTAGONIST",
+      "summary": "Lucia learned to fight from her father at an early age. Protecting her family led to imprisonment at Leonida Penitentiary. Now released, she wants the better life her mother imagined back when they lived in Liberty City.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "cal",
+      "category": "characters",
+      "title": "Cal Hampton",
+      "kicker": "JASON'S CIRCLE",
+      "summary": "Cal is Jason's friend and one of Brian Heder's associates. He prefers monitoring Coast Guard communications and internet conspiracies from the safety of home.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "boobie",
+      "category": "characters",
+      "title": "Boobie Ike",
+      "kicker": "VICE CITY BUSINESS",
+      "summary": "A figure in Vice City's street and business worlds, Boobie has interests in property, a strip club and a recording studio. He is working with Dre'Quan Priest to build the Only Raw Records label.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "dre",
+      "category": "characters",
+      "title": "Dre'Quan Priest",
+      "kicker": "MUSIC INDUSTRY",
+      "summary": "Dre'Quan wants success in music rather than a permanent life on the streets. He's involved with Only Raw Records and has brought the rap duo Real Dimez onto the label.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "real-dimez",
+      "category": "characters",
+      "title": "Real Dimez",
+      "kicker": "RAP DUO",
+      "summary": "Longtime friends Bae-Luxe and Roxy use rap, social media and an established local following to push their careers. They are now signed to Only Raw Records.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "raul",
+      "category": "characters",
+      "title": "Raul Bautista",
+      "kicker": "BANK ROBBER",
+      "summary": "Raul is an experienced bank robber who seeks talented partners for high-stakes scores. His willingness to take risks creates pressure for the crews he recruits.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "brian",
+      "category": "characters",
+      "title": "Brian Heder",
+      "kicker": "THE LEONIDA KEYS",
+      "summary": "Brian is a veteran drug runner operating out of his Keys boat yard. He lets Jason stay at one of his properties in exchange for helping with local jobs and favours.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "vice",
+      "category": "places",
+      "title": "Vice City",
+      "kicker": "CITY",
+      "summary": "Leonida's neon-lit metropolitan centre is a major backdrop to the game. Rockstar has published dedicated city imagery and video material.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "keys",
+      "category": "places",
+      "title": "Leonida Keys",
+      "kicker": "ISLANDS",
+      "summary": "A chain of islands within Leonida. Rockstar has established the Keys as the base of Jason's recent work and several contacts.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "grassrivers",
+      "category": "places",
+      "title": "Grassrivers",
+      "kicker": "WETLANDS",
+      "summary": "One of the six prominently featured areas of Leonida in Rockstar's official People & Places material.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "gellhorn",
+      "category": "places",
+      "title": "Port Gellhorn",
+      "kicker": "COASTAL REGION",
+      "summary": "Another officially introduced region of Leonida, featured separately within Rockstar's locations showcase.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "ambrosia",
+      "category": "places",
+      "title": "Ambrosia",
+      "kicker": "LEONIDA REGION",
+      "summary": "A named region revealed through Rockstar's official Leonida location material.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "kalaga",
+      "category": "places",
+      "title": "Mount Kalaga",
+      "kicker": "LEONIDA REGION",
+      "summary": "Rockstar's official material introduces Mount Kalaga as one of the state's explorable destinations.",
+      "source": "https://www.rockstargames.com/VI/only-in-leonida"
+    },
+    {
+      "id": "audio",
+      "category": "world",
+      "title": "Radio and podcasts",
+      "kicker": "IN-GAME AUDIO",
+      "summary": "Rockstar has confirmed more in-game radio, six previewed stations and on-demand podcasts. Compatible in-game headphones and earbuds allow listening beyond vehicles.",
+      "source": "https://www.rockstargames.com/newswire/article/o3982oa93a23k4/the-music-of-grand-theft-auto-vi-in-game-radio-stations"
+    },
+    {
+      "id": "score",
+      "category": "world",
+      "title": "Original score by Justice",
+      "kicker": "MUSIC",
+      "summary": "Justice composed the adaptive original score. Rockstar says the album contains 30 tracks and is scheduled for 11 December 2026.",
+      "source": "https://www.rockstargames.com/newswire/article/39ak8a12395591/grand-theft-auto-vi-original-score-by-justice"
+    },
+    {
+      "id": "visuals",
+      "category": "world",
+      "title": "Console presentation",
+      "kicker": "TECHNICAL",
+      "summary": "Rockstar says the game targets 30 frames per second on supported current-generation consoles, while PlayStation 5 Pro adds PSSR enhancements and ray-traced shadows.",
+      "source": "https://www.rockstargames.com/newswire/article/89834o94713o21/pre-load-grand-theft-auto-vi-now"
+    },
+    {
+      "id": "editions",
+      "category": "world",
+      "title": "Editions and bonuses",
+      "kicker": "RELEASE",
+      "summary": "Rockstar has detailed a standard pre-order, an Ultimate Edition and a Vintage Vice City Pack for eligible early purchasers. For full inclusions, consult the official editions page.",
+      "source": "https://www.rockstargames.com/newswire/article/5171972o3ak5oa/pre-order-grand-theft-auto-vi-on-june-25"
+    }
+  ]
+}

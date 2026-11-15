@@ -1,4 +1,4 @@
-/* Vice City Countdown — Launch Week v2.5
+/* Vice City Countdown — Launch Week v2.8
    Local-first: no account, analytics, external assets or automatically opened media.
 */
 (()=>{

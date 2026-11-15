@@ -231,3 +231,14 @@ Refined the actual launch-mode firework renderer for subtler ignition flashes, r
 ### v2.7.2 replay contrast
 
 The cinematic fireworks replay action uses a high-contrast white-on-deep-teal button on desktop and mobile. Chromium QA asserts its computed text colour. The PWA core has been advanced to `vice-city-countdown-v14` to refresh the CSS on installed devices.
+
+
+## v2.8.0 — Editorial Newswire and opt-in Rockstar information guide
+
+As of 16 November 2026, the editor-approved neutral Newswire contains **11** verified Rockstar news stories (formerly three), covering launch times, pre-loading, pre-orders, the launch trailer, the extended presentation, launch gallery, soundtrack, original score by Justice, in-game radio and podcasts, and the 21 November festival. Editorial review is manual: automated checks never publish.
+
+The new **Leonida Files** section between News and Media contains **19 source-backed official records**: the confirmed story premise, Jason Duval, Lucia Caminos, six other featured character profiles, six announced locations and four world/technical topics. Records are in `data/official-guide.json` and never displayed until the visitor selects **Show Story Details**. The guide has category filters, search, Rockstar source links and a **Hide Story Details** action. Hiding clears all cards from the DOM, and reveals reset when the page reloads.
+
+The pre-existing **Strict Spoiler Lock** overrides the guide and media gallery: it disables reveals and immediately hides any open promotional details. The PWA may cache the static guide JSON for offline access, but never reveals it without a tap. No new visitor tracking, automatic screenshots or commercial music are added. The spoiler and privacy policies explain this behaviour.
+
+Versioned v2.8.0 assets: `assets/official-guide.css`, `assets/official-guide.js`, `data/official-guide.json` and the editor-approved `data/news.json`. The offline cache namespace is `vice-city-countdown-v15`. Chromium QA tests 11 Newswire cards, 19 official detail records, lazy reveal, filters, search, strict locking, mobile layout and offline PWA reload. No leaks, rumours or unreleased plot events are included.
