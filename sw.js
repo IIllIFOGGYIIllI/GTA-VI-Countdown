@@ -1,5 +1,5 @@
 /* Vice City Countdown · PWA v2.9 · Official editorial card artwork + offline fallback */
-const CACHE='vice-city-countdown-v16';
+const CACHE='vice-city-countdown-v17';
 const CORE=[
   './','./index.html',
   './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0','./assets/launch-mode.css?v=2.4.0','./assets/launch-week.css?v=2.5.0',
@@ -8,7 +8,8 @@ const CORE=[
   './assets/official-guide.js?v=2.9.0',
   './assets/cinematic-launch.css?v=2.7.2','./assets/cinematic-launch.js?v=2.7.1',
   './preview/vendor/GrandFireworks.min.js?v=1.11.1','./assets/vice-city-skyline.svg',
-  './data/news.json?v=2.9.0','./data/official-guide.json?v=2.9.0','./manifest.webmanifest',
+  // Keep optional story facts out of install-time downloads. The guide is fetched and cached only when explicitly revealed.
+  './data/news.json?v=2.9.0','./manifest.webmanifest',
   './assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
   './privacy.html','./terms.html','./spoilers.html'
 ];
