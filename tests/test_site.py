@@ -71,7 +71,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn("launch-week.css?v=2.5.0",worker)
         self.assertIn("launch-week-core.js?v=2.5.0",worker)
         self.assertIn("launch-week.js?v=2.8.0",worker)
-        self.assertIn("vice-city-countdown-v16",worker)
+        self.assertIn("vice-city-countdown-v17",worker)
         self.assertIn("preview/vendor/GrandFireworks.min.js?v=1.11.1",worker)
         self.assertIn("cinematic-launch.css?v=2.7.2",worker)
         self.assertIn("cinematic-launch.js?v=2.7.1",worker)
