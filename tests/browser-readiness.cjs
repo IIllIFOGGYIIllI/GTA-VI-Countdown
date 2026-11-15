@@ -170,6 +170,9 @@ async function main(){
             await page.screenshot({path:path.join(SHOTS,'cinematic-fullscreen-60-seconds.png')});
           }
           await page.locator('#vc-cinema-skip').click();
+          // The phase changes on an animation frame; wait instead of asserting
+          // before the scheduled frame can execute on slower CI devices.
+          await page.waitForFunction(()=>window.ViceCinematicLaunch.getState().phase==='final-ten');
           assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'final-ten');
           await page.clock.runFor(3300);
           const num=Number(await page.locator('#vc-cinema-number').textContent());
@@ -565,8 +568,14 @@ async function main(){
         await page.locator('#guide-filters [data-guide-filter="world"]').click();
         assert.equal(new URL(page.url()).searchParams.get('category'),'world');
         assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),4);
+        // Settings live on their own page, as visitors now see them.
+        await page.goto(BASE+'launch-kit.html',{waitUntil:'domcontentloaded'});
+        await page.waitForFunction(()=>document.body.classList.contains('vc-launch-kit-ready'));
         await page.locator('#kit-strict').check();
-        assert.equal(await page.locator('#guide-content').isVisible(),false,'Spoiler lock did not close guide');
+        await page.goto(BASE+'leonida-files.html?category=world',{waitUntil:'domcontentloaded'});
+        await page.waitForFunction(()=>window.ViceOfficialIntel?.getState().locked);
+        assert.equal(await page.locator('#guide-content').isVisible(),false,'Spoiler lock did not protect the guide');
+        assert.equal(await page.locator('#guide-toggle').isDisabled(),true,'Saved strict lock did not persist across pages');
       }finally{await context.close();}
     });
 
