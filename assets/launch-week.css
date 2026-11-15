@@ -1,0 +1,254 @@
+/* Vice City Countdown — Launch Week overhaul v2.5 */
+/* Extends the established Ocean Drive design, no third-party UI assets. */
+
+#launch-eve-banner[hidden]{display:none!important}
+.launch-eve-banner{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:16px 0 20px;
+  padding:13px 15px;
+  color:#fff4e7;
+  background:linear-gradient(105deg,rgba(106,46,103,.82),rgba(28,67,79,.83));
+  border:1px solid rgba(255,202,166,.69);
+  border-left:4px solid #91fff0;
+  border-radius:5px;
+  box-shadow:0 7px 22px rgba(8,6,28,.27);
+}
+.eve-symbol{
+  flex:none;
+  display:grid;place-items:center;
+  width:39px;height:39px;
+  border:1px solid rgba(255,234,204,.8);
+  border-radius:50%;
+  color:#422145;
+  background:linear-gradient(140deg,#ffedb8,#ff86af);
+  font-size:23px;
+}
+.launch-eve-banner>div{min-width:0;display:flex;flex-direction:column}
+.launch-eve-banner strong{
+  font:italic 950 clamp(16px,2vw,23px)/1.13 Impact,'Arial Black',sans-serif;
+  letter-spacing:.055em;
+}
+.launch-eve-banner div>span{font-size:11px;color:#f6d7dc;line-height:1.5}
+.hero-kit-link{
+  display:inline-flex;
+  align-items:center;
+  width:fit-content;
+  gap:9px;
+  margin-top:20px;
+  padding:8px 0;
+  border-bottom:1px solid rgba(134,249,226,.65);
+  color:#a9fff1;
+  text-shadow:0 3px 10px rgba(12,7,28,.65);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.045em;
+}
+.hero-kit-link:hover{color:#fff2d5;border-color:#fff2d5}
+body[data-launch-phase="last-day"] .hero-visual{
+  filter:saturate(1.18) brightness(1.04);
+}
+body[data-launch-phase="final-six"] .hero-visual{
+  filter:saturate(1.24) brightness(1.07);
+}
+body[data-launch-phase="final-hour"] .hero-visual,
+body[data-launch-phase="final-ten"] .hero-visual,
+body[data-launch-phase="final-minute"] .hero-visual{
+  filter:saturate(1.3) brightness(1.1);
+}
+body[data-launch-phase="final-hour"] .countdown-card,
+body[data-launch-phase="final-ten"] .countdown-card,
+body[data-launch-phase="final-minute"] .countdown-card{
+  border-color:#a4ffef;
+  box-shadow:0 0 0 5px rgba(37,27,64,.75),0 0 0 6px rgba(123,253,231,.64),0 0 48px rgba(238,91,177,.18),0 25px 76px rgba(6,6,27,.64);
+}
+body[data-launch-phase="final-minute"] .countdown-card{
+  animation:vc-final-minute-glow 2.4s ease-in-out infinite alternate;
+}
+body[data-launch-phase="final-minute"] #seconds{
+  color:#8cfff1;
+  text-shadow:0 0 22px rgba(127,255,233,.56);
+}
+@keyframes vc-final-minute-glow{
+  from{box-shadow:0 0 0 5px rgba(39,28,64,.75),0 0 0 6px rgba(120,248,229,.55),0 13px 42px rgba(15,7,34,.62)}
+  to{box-shadow:0 0 0 5px rgba(39,28,64,.75),0 0 0 6px rgba(255,179,197,.74),0 0 42px rgba(255,133,181,.34),0 18px 60px rgba(15,7,34,.62)}
+}
+
+.launch-kit{padding-bottom:88px;scroll-margin-top:88px}
+.launch-kit-heading>p{max-width:390px}
+.launch-kit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.kit-panel{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  padding:24px 22px 22px;
+  background:linear-gradient(155deg,#382442,#1b1d3a 73%,#152742);
+  border:1px solid rgba(255,197,170,.62);
+  border-radius:8px;
+  box-shadow:5px 6px 0 rgba(21,17,47,.76);
+  position:relative;
+  overflow:hidden;
+}
+.kit-panel:before{
+  content:"";position:absolute;inset:0 0 auto;height:4px;
+  background:linear-gradient(90deg,#ff8fba,#ffce9f,#82f9e7);
+}
+.kit-share{background:linear-gradient(165deg,#53264e,#2a1e47 53%,#1b3b54)}
+.kit-settings{background:linear-gradient(155deg,#282a47,#1d2140 66%,#1a4149)}
+.kit-panel-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:2px 0 15px}
+.kit-panel-number{font-size:9px;font-weight:950;letter-spacing:.14em;color:#8dfff0;line-height:1.3}
+.kit-icon{color:#ffe7ba;font-size:22px;line-height:1}
+.kit-panel h3{
+  font:italic 950 clamp(25px,2.4vw,32px)/1.03 Impact,'Arial Black',sans-serif;
+  letter-spacing:.01em;color:#fff5e6;margin:0 0 11px;
+  text-shadow:2px 3px #75326e;
+}
+.kit-panel-intro{color:#e5d2e2;font-size:12px;line-height:1.7;margin:0 0 19px}
+.kit-check-status{margin:0 0 16px}
+.kit-check-status strong{display:block;color:#acfff2;font-size:11px;letter-spacing:.11em;margin-bottom:7px}
+.kit-check-track{height:6px;border-radius:99px;overflow:hidden;background:#62516d}
+.kit-check-track span{
+  display:block;height:100%;width:0;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#75f3e5,#ffbdb0);
+  transition:width .25s ease;
+}
+.kit-check-items{display:grid;gap:8px}
+.kit-check-item{
+  cursor:pointer;
+  display:flex;align-items:center;gap:12px;
+  min-height:48px;
+  padding:9px 10px;
+  background:rgba(15,19,43,.54);
+  border:1px solid rgba(247,186,190,.3);
+  border-radius:5px;
+  color:#f5e2ea;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.45;
+}
+.kit-check-item:hover{border-color:rgba(117,245,227,.8)}
+.kit-check-item input{
+  flex:none;width:20px;height:20px;accent-color:#82f5e6;cursor:pointer;
+}
+.kit-check-item:has(input:checked){
+  background:rgba(22,76,77,.32);
+  border-color:rgba(126,253,228,.57);
+}
+.kit-check-item input:checked+span{color:#bdfcef}
+.kit-panel-end{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:19px}
+.kit-panel-end span{font-size:9px;color:#d1b5c8;max-width:170px;line-height:1.55;text-align:right}
+.kit-text-button{
+  padding:7px 0;min-height:38px;
+  background:transparent;border:0;border-bottom:1px solid rgba(127,244,228,.6);
+  color:#a9fff0;font-size:11px;line-height:1.35;font-weight:900;
+  text-align:left;
+}
+.kit-text-button:hover{color:#fff1da}
+.kit-postcard-preview{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+  min-height:265px;
+  padding:21px 22px;
+  border-radius:6px;
+  border:1px solid rgba(255,226,187,.69);
+  background-image:linear-gradient(180deg,rgba(23,12,48,.43),rgba(17,17,45,.16) 44%,rgba(13,14,36,.83) 82%),url('./vice-city-skyline.svg');
+  background-size:cover;background-position:center;
+  box-shadow:inset 0 0 0 4px rgba(21,13,40,.14),0 8px 19px rgba(7,8,26,.4);
+}
+.kit-postcard-preview:after{
+  content:"";position:absolute;inset:9px;z-index:-1;pointer-events:none;
+  border:1px solid rgba(255,233,207,.5);border-radius:3px;
+}
+.kit-preview-overline{
+  font:italic bold 18px Georgia,serif;line-height:1.2;
+  text-shadow:0 2px 6px #281037;margin-bottom:7px;
+}
+.kit-postcard-preview strong{
+  font:italic 950 clamp(40px,4vw,55px)/.9 Impact,'Arial Black',sans-serif;
+  letter-spacing:-.06em;
+  color:#fff5dd;
+  filter:drop-shadow(3px 4px 0 rgba(80,31,87,.75));
+}
+.kit-postcard-preview strong em{
+  display:inline;color:#ffafbf;font:italic 900 .83em Georgia,serif;
+  letter-spacing:-.09em;
+}
+.kit-preview-divider{height:1px;background:#ffdab4;width:75%;margin:auto 0 13px}
+.kit-preview-count{
+  display:block;font:950 clamp(20px,2.45vw,29px)/1.2 'Arial Black',system-ui,sans-serif;
+  color:#b4ffed;letter-spacing:-.04em;text-shadow:0 3px 9px #211039;
+}
+.kit-preview-foot{font-size:8px;letter-spacing:.13em;color:#ffe0c3;margin-top:10px;font-weight:900}
+.kit-share-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+.kit-action{
+  min-height:44px;
+  border:1px solid rgba(125,245,228,.65);border-radius:5px;
+  background:rgba(21,35,60,.83);color:#b5fff0;
+  padding:10px 13px;font-size:11px;font-weight:850;line-height:1.35;text-align:center;
+}
+.kit-action.primary{background:linear-gradient(100deg,#ffd5aa,#ff88ac);color:#241931;border-color:#ffe5ca;grid-column:1/-1}
+.kit-action:hover{filter:brightness(1.12)}
+.kit-action:disabled{opacity:.6;cursor:progress}
+.kit-feedback{min-height:34px;margin:14px 0 0;font-size:10px;line-height:1.6;color:#e4cbdc}
+.kit-select-label{color:#ffe0b3;font-size:9px;letter-spacing:.14em;font-weight:950;margin:3px 0 6px}
+.kit-select-wrap select{
+  display:block;width:100%;height:45px;
+  font:700 13px/1.5 ui-sans-serif,system-ui,sans-serif;
+  border:1px solid rgba(124,255,231,.67);border-radius:5px;
+  background:#1d233f;color:#fff2ea;padding:0 13px;margin-bottom:16px;
+}
+.kit-setting-row{
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;gap:13px;
+  padding:15px 0;
+  border-top:1px solid rgba(244,177,190,.27);
+}
+.kit-setting-row>span{display:grid;gap:3px}
+.kit-setting-row strong{font-size:12px;color:#fff2ea;line-height:1.35}
+.kit-setting-row small{font-size:10px;color:#d9c3d9;line-height:1.5}
+.kit-setting-row input{flex:none;width:23px;height:23px;accent-color:#8cffec;cursor:pointer}
+.kit-settings-foot{
+  display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:space-between;
+  margin-top:auto;padding-top:12px;border-top:1px solid rgba(244,177,190,.27);
+}
+.kit-settings-foot span{font-size:10px;line-height:1.5;color:#e4cfdb}
+.kit-settings-foot a{color:#9cffed;text-decoration:underline;text-underline-offset:3px}
+.vc-strict-spoilers #media-toggle{
+  opacity:.55;cursor:not-allowed;
+  filter:grayscale(.4);
+}
+.vc-low-motion *, .vc-low-motion *::before, .vc-low-motion *::after{
+  animation:none!important;transition:none!important;scroll-behavior:auto!important;
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-launch-phase="final-minute"] .countdown-card{animation:none}
+  .kit-check-track span{transition:none}
+}
+@media(max-width:1120px){
+  .launch-kit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kit-settings{grid-column:1/-1}
+  .kit-postcard-preview{min-height:290px}
+}
+@media(max-width:900px){
+  .launch-kit{padding-bottom:56px;scroll-margin-top:80px}
+  .hero-kit-link{display:inline-flex}
+  .kit-panel{padding:21px}
+}
+@media(max-width:630px){
+  .launch-kit-grid{grid-template-columns:1fr;gap:14px}
+  .kit-settings{grid-column:auto}
+  .launch-kit{padding-bottom:43px}
+  .launch-kit-heading>p{max-width:none}
+  .kit-panel{box-shadow:3px 4px rgba(21,17,47,.64);padding:22px 17px}
+  .kit-postcard-preview{min-height:270px}
+  .kit-postcard-preview strong{font-size:clamp(43px,11vw,60px)}
+  .kit-preview-count{font-size:clamp(22px,5.5vw,29px)}
+  .launch-eve-banner{padding:11px 12px;margin:12px 0 16px;gap:9px}
+  .launch-eve-banner strong{font-size:18px}
+  .launch-eve-banner div>span{font-size:10px}
+  .eve-symbol{width:34px;height:34px;font-size:20px}
+  .hero-kit-link{font-size:11px;margin-top:17px;min-height:38px}
+  .kit-setting-row{min-height:62px}
+}

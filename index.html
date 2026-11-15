@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="2.4.0">
+  <meta name="app-version" content="2.5.0">
   <meta name="theme-color" content="#241739">
   <meta name="description" content="A spoiler-free GTA VI release countdown with regional launch times, verified Rockstar news and an installable PWA. Unofficial fan project.">
   <meta property="og:title" content="Vice City Countdown | GTA VI">
@@ -20,7 +20,10 @@
   <link rel="stylesheet" href="./assets/vice-city-theme.css?v=2.2.0">
   <link rel="stylesheet" href="./assets/mobile-experience.css?v=2.3.0">
   <link rel="stylesheet" href="./assets/launch-mode.css?v=2.4.0">
-  <script src="./app.js?v=2.4.0" defer></script>
+  <link rel="stylesheet" href="./assets/launch-week.css?v=2.5.0">
+  <script src="./app.js?v=2.5.0" defer></script>
+  <script src="./assets/launch-week-core.js?v=2.5.0" defer></script>
+  <script src="./assets/launch-week.js?v=2.5.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -33,7 +36,7 @@
         <span class="brand-words">VICE CITY<br><strong>COUNTDOWN</strong></span>
       </a>
       <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="#countdown">Countdown</a><a href="#milestones">Launch info</a><a href="#news">News</a><a href="#media">Media</a><a href="#app">The app</a>
+        <a href="#countdown">Countdown</a><a href="#milestones">Launch info</a><a href="#launch-kit">Launch kit</a><a href="#news">News</a><a href="#media">Media</a><a href="#app">The app</a>
       </nav>
       <a class="nav-cta" href="#countdown"><span class="live-dot" aria-hidden="true"></span><span id="header-state-label">LIVE COUNTDOWN</span></a>
     </div>
@@ -60,6 +63,7 @@
           <div class="city-stamp"><strong>✦</strong> Ocean Drive atmosphere <strong>✦</strong> No story spoilers</div>
           <div class="hero-tags" aria-label="Launch facts"><span>19 NOV 2026</span><span>PS5 · XBOX SERIES X|S</span><span>100% SPOILER-CONSCIOUS</span></div>
           <div class="hero-actions"><a class="btn btn-primary" id="hero-primary-action" href="#countdown-panel"><span id="hero-primary-label">See the countdown</span><span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="#news">Latest updates <span aria-hidden="true">↓</span></a></div>
+          <a class="hero-kit-link" href="#launch-kit">✦ Open your launch preparation kit ↗</a>
           </div>
         </div>
         <div class="countdown-card" id="countdown-panel">
@@ -68,6 +72,7 @@
             <p class="small-label">GRAND THEFT AUTO VI · RELEASE BOARD</p>
             <h2 class="countdown-heading" id="countdown-heading">MIDNIGHT CALLING</h2>
             <p class="count-subtext" id="countdown-intro">Until midnight, 19 November 2026</p>
+            <div class="launch-eve-banner" id="launch-eve-banner" role="status" hidden><span class="eve-symbol" aria-hidden="true">✦</span><div><strong id="launch-eve-title">FINAL 24 HOURS</strong><span id="launch-eve-detail">The night is almost here</span></div></div>
             <div class="count-grid" id="count-grid" role="timer" aria-live="off" aria-label="Time until release">
               <div class="count-item"><span id="days" class="count-value">--</span><span class="count-label">DAYS</span></div>
               <div class="count-item"><span id="hours" class="count-value">--</span><span class="count-label">HOURS</span></div>
@@ -151,8 +156,65 @@
       </div>
     </section>
 
+    <section class="section shell launch-kit" id="launch-kit" aria-labelledby="launch-kit-title">
+      <div class="section-header launch-kit-heading">
+        <div><div class="section-index">03 — YOUR VICE CITY LAUNCH KIT</div><h2 id="launch-kit-title">READY FOR <em>MIDNIGHT</em></h2></div>
+        <p>Your launch preparation, personal settings and shareable countdown. Everything stays on your device — no account needed.</p>
+      </div>
+      <div class="launch-kit-grid">
+        <article class="kit-panel kit-checklist" aria-labelledby="kit-checklist-title">
+          <div class="kit-panel-top"><span class="kit-panel-number">01 / FINAL PREPARATIONS</span><span class="kit-icon" aria-hidden="true">✓</span></div>
+          <h3 id="kit-checklist-title">THE LAUNCH CHECKLIST</h3>
+          <p class="kit-panel-intro">Get everything ready before the scheduled midnight release.</p>
+          <div class="kit-check-status"><strong id="kit-check-count" aria-live="polite">0 OF 6 READY</strong><div class="kit-check-track" aria-hidden="true"><span id="kit-check-progress"></span></div></div>
+          <div class="kit-check-items" id="kit-check-items">
+            <label class="kit-check-item"><input type="checkbox" data-task="preload"><span>Pre-load or install the game</span></label>
+            <label class="kit-check-item"><input type="checkbox" data-task="storage"><span>Check available console storage</span></label>
+            <label class="kit-check-item"><input type="checkbox" data-task="updates"><span>Install console and game updates</span></label>
+            <label class="kit-check-item"><input type="checkbox" data-task="controller"><span>Charge your controller and headset</span></label>
+            <label class="kit-check-item"><input type="checkbox" data-task="capture"><span>Prepare recording or streaming gear</span></label>
+            <label class="kit-check-item"><input type="checkbox" data-task="plans"><span>Plan your first night in Leonida</span></label>
+          </div>
+          <div class="kit-panel-end"><button type="button" class="kit-text-button" id="kit-clear-checklist">Reset checklist</button><span id="kit-check-message">Progress saved on this device</span></div>
+        </article>
+        <article class="kit-panel kit-share" aria-labelledby="kit-share-title">
+          <div class="kit-panel-top"><span class="kit-panel-number">02 / POSTCARD FROM VICE CITY</span><span class="kit-icon" aria-hidden="true">✧</span></div>
+          <h3 id="kit-share-title">SHARE THE MOMENT</h3>
+          <p class="kit-panel-intro">Create an original sunset countdown card for Discord or social media, without game imagery.</p>
+          <div class="kit-postcard-preview" aria-hidden="true">
+            <div class="kit-preview-sun"></div><span class="kit-preview-overline">GREETINGS FROM</span>
+            <strong>VICE <em>CITY</em></strong><span class="kit-preview-divider"></span>
+            <span class="kit-preview-count" id="kit-preview-count">00D 00H 00M</span>
+            <span class="kit-preview-foot">19 NOVEMBER 2026 · SPOILER-FREE</span>
+          </div>
+          <div class="kit-share-actions">
+            <button type="button" class="kit-action primary" id="kit-download-card">Save countdown PNG ↗</button>
+            <button type="button" class="kit-action" id="kit-copy-share">Copy share text</button>
+            <button type="button" class="kit-action" id="kit-calendar">Add launch reminder (.ics)</button>
+          </div>
+          <p class="kit-feedback" id="kit-share-status" role="status" aria-live="polite">Uses your selected timezone. Your card is generated on your device.</p>
+        </article>
+        <article class="kit-panel kit-settings" aria-labelledby="kit-settings-title">
+          <div class="kit-panel-top"><span class="kit-panel-number">03 / PERSONAL CONTROL</span><span class="kit-icon" aria-hidden="true">⚙</span></div>
+          <h3 id="kit-settings-title">YOUR EXPERIENCE</h3>
+          <p class="kit-panel-intro">Choose how the countdown looks, sounds and protects you from spoilers.</p>
+          <label class="kit-select-label" for="kit-platform">YOUR PLATFORM</label>
+          <div class="kit-select-wrap"><select id="kit-platform">
+            <option value="none">Not selected</option>
+            <option value="PS5">PlayStation 5</option>
+            <option value="Xbox Series X|S">Xbox Series X|S</option>
+          </select></div>
+          <label class="kit-setting-row" for="kit-motion"><span><strong>Reduce motion</strong><small>Disable neon pulses and transition effects</small></span><input type="checkbox" id="kit-motion"></label>
+          <label class="kit-setting-row" for="kit-sounds"><span><strong>Launch sounds</strong><small>Optional soft countdown cues, off by default</small></span><input type="checkbox" id="kit-sounds"></label>
+          <label class="kit-setting-row" for="kit-strict"><span><strong>Strict spoiler lock</strong><small>Prevent opening the optional screenshot and video section</small></span><input type="checkbox" id="kit-strict"></label>
+          <div class="kit-settings-foot"><span>Launch timezone: <a href="#countdown-panel">change at the countdown ↗</a></span><button type="button" class="kit-text-button" id="kit-reset-settings">Reset settings</button></div>
+          <p class="kit-feedback" id="kit-settings-status" role="status" aria-live="polite">Settings saved locally. Nothing is uploaded.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="section news-section" id="news" aria-labelledby="news-title"><div class="shell">
-      <div class="section-header"><div><div class="section-index">03 — LEONIDA NEWSWIRE</div><h2 id="news-title">SUNSET <em>DISPATCHES</em></h2></div><p>Official Rockstar announcements, edited for a spoiler-free read. Automated checks prepare candidates; only approved updates reach this page.</p></div>
+      <div class="section-header"><div><div class="section-index">04 — LEONIDA NEWSWIRE</div><h2 id="news-title">SUNSET <em>DISPATCHES</em></h2></div><p>Official Rockstar announcements, edited for a spoiler-free read. Automated checks prepare candidates; only approved updates reach this page.</p></div>
       <div class="news-tools"><div class="filters" role="group" aria-label="Filter news"><button class="filter active" type="button" data-filter="all" aria-pressed="true">All updates</button><button class="filter" type="button" data-filter="launch" aria-pressed="false">Launch</button><button class="filter" type="button" data-filter="preload" aria-pressed="false">Pre-load</button><button class="filter" type="button" data-filter="updates" aria-pressed="false">Updates</button></div><span class="news-verified" id="news-verified"><span class="verified-dot"></span> EDITOR APPROVED · 15 NOV 2026</span></div>
       <div class="news-grid" id="news-grid" aria-live="polite">
         <article class="news-card" data-category="preload"><div class="news-visual news-visual-1" aria-hidden="true"><span class="news-visual-big">READY</span><span class="news-visual-corner">01</span></div><div class="news-content"><div class="news-meta"><span>PRE-LOAD</span><time datetime="2026-11-10">10 NOV 2026</time></div><h3>Pre-load Grand Theft Auto VI now</h3><p>Rockstar confirms digital pre-loading is available for eligible pre-orders on supported consoles.</p><a href="https://www.rockstargames.com/newswire/article/89834o94713o21/pre-load-grand-theft-auto-vi-now" target="_blank" rel="noopener noreferrer" aria-label="Read official preload announcement on Rockstar Newswire (opens external site)">Read official source <span aria-hidden="true">↗</span></a></div></article>
@@ -165,7 +227,7 @@
 
     
     <section class="section shell official-media" id="media" aria-labelledby="media-title">
-      <div class="section-header"><div><div class="section-index">04 — THE VICE CITY VIDEO LOUNGE</div><h2 id="media-title">YOUR ALL-ACCESS <em>PASS</em></h2></div><p>All five official videos and the complete screenshot collection, without surprise previews.</p></div>
+      <div class="section-header"><div><div class="section-index">05 — THE VICE CITY VIDEO LOUNGE</div><h2 id="media-title">YOUR ALL-ACCESS <em>PASS</em></h2></div><p>All five official videos and the complete screenshot collection, without surprise previews.</p></div>
       <div class="media-lock" id="media-lock"><div class="media-lock-art" aria-hidden="true">◈</div><div><span class="media-lock-label">SPOILER SHIELD · ACTIVE</span><h3>YOUR FIRST LOOK / YOUR CHOICE</h3><p>Videos and images stay hidden until you choose to reveal this section. Rockstar's official promotional material may show gameplay, characters or other details.</p></div><button class="btn btn-primary" id="media-toggle" type="button" aria-controls="media-content" aria-expanded="false">Reveal official media ↗</button></div>
       <div class="media-reveal" id="media-content" hidden>
         <div class="media-subhead"><div><span class="section-index">ALL FIVE · ROCKSTAR GAMES</span><h3>OFFICIAL VIDEOS</h3></div><span>OPENS ON YOUTUBE</span></div>
@@ -217,11 +279,11 @@
     </section>
 
     <section class="section shell" id="app" aria-labelledby="app-title"><div class="app-panel">
-      <div class="app-copy"><div class="section-index">05 — OCEAN DRIVE, EVERYWHERE</div><h2 id="app-title">A LITTLE <em>VICE</em><br>EVERYWHERE</h2><p>Install the countdown as a lightweight web app. No account, no clutter, and the countdown keeps working offline.</p><div class="app-points"><span>✓ Android & desktop</span><span>✓ iPhone & iPad</span><span>✓ Offline countdown</span><span>✓ Saved timezone</span></div><button id="install-btn" class="btn btn-primary" type="button">Install the app <span aria-hidden="true">↗</span></button><div class="app-update-tools"><button id="check-updates" type="button" class="update-check">↻ Refresh to latest version</button><span class="app-version">APP v2.2</span></div><p class="install-hint" id="install-hint">On iPhone, tap Share → Add to Home Screen. On desktop or Android, use your browser's Install option.</p></div>
+      <div class="app-copy"><div class="section-index">06 — OCEAN DRIVE, EVERYWHERE</div><h2 id="app-title">A LITTLE <em>VICE</em><br>EVERYWHERE</h2><p>Install the countdown as a lightweight web app. No account, no clutter, and the countdown keeps working offline.</p><div class="app-points"><span>✓ Android & desktop</span><span>✓ iPhone & iPad</span><span>✓ Offline countdown</span><span>✓ Saved timezone</span></div><button id="install-btn" class="btn btn-primary" type="button">Install the app <span aria-hidden="true">↗</span></button><div class="app-update-tools"><button id="check-updates" type="button" class="update-check">↻ Refresh to latest version</button><span class="app-version">APP v2.5</span></div><p class="install-hint" id="install-hint">On iPhone, tap Share → Add to Home Screen. On desktop or Android, use your browser's Install option.</p></div>
       <div class="phone-wrap" aria-hidden="true"><div class="phone"><div class="phone-pill"></div><div class="phone-content"><span class="phone-brand">VICE CITY COUNTDOWN</span><span class="phone-art">VI</span><span class="phone-title">ALMOST<br>THERE</span><span class="phone-count">00 : 00 : 00 : 00</span><span class="phone-small">19 NOVEMBER 2026</span></div></div><span class="phone-orbit"></span></div>
     </div></section>
 
-    <section class="section shell faq" id="faq"><div class="section-header"><div><div class="section-index">06 — YOUR PASSPORT TO LEONIDA</div><h2>THE <em>LOWDOWN</em></h2></div></div><div class="faq-list">
+    <section class="section shell faq" id="faq"><div class="section-header"><div><div class="section-index">07 — YOUR PASSPORT TO LEONIDA</div><h2>THE <em>LOWDOWN</em></h2></div></div><div class="faq-list">
       <details><summary>Does the countdown automatically detect my timezone?</summary><p>Yes. The browser's timezone is selected by default, and you can change it to another region. Your selection is saved on this device only.</p></details>
       <details><summary>Does the countdown use my exact console unlock time?</summary><p>It uses Rockstar's published midnight-local release schedule. Your PlayStation or Xbox account region may differ from your current location, so choose the corresponding region and verify with your console store.</p></details>
       <details><summary>Will this site show GTA VI story spoilers or leaks?</summary><p>We do not publish leaks, plot details, story reveals, datamined content or unreviewed auto-imported articles. External official links may contain media or additional information, so open them at your discretion.</p></details>

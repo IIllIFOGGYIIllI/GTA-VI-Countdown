@@ -149,7 +149,24 @@
         (elapsedDays>0?elapsedDays+'D ':'')+pad(elapsedHours)+'H '+pad(elapsedMinutes)+'M';
     }
     document.title=launched?'GTA VI Launch Milestone | Vice City Countdown':(days+'d '+pad(hours)+'h '+pad(minutes)+'m | GTA VI Countdown');
+    // No event in the Node test harness; browser listeners update stage and card.
+    if(typeof CustomEvent==='function' && typeof window.dispatchEvent==='function'){
+      window.dispatchEvent(new CustomEvent('vice:tick',{detail:{
+        now, release, selectedZone, remainingMs:Math.max(0,release-now), launched
+      }}));
+    }
   }
+  // Public read-only state for Launch Week. Keeps timezone calculations
+  // authoritative in this one place and avoids a second competing timer.
+  window.ViceCountdown=Object.freeze({
+    getState:()=>({
+      now:Date.now(),
+      release,
+      remainingMs:Math.max(0,release-Date.now()),
+      selectedZone,
+      launched:Date.now()>=release
+    })
+  });
   fillZones();
   selectZone(zoneSelect.value);
   zoneSelect.addEventListener('change',()=>selectZone(zoneSelect.value));
@@ -382,7 +399,7 @@
 
   // Update-aware PWA: request fresh service-worker code and reload once when
   // a new worker takes control, while keeping offline fallback functional.
-  const APP_VERSION='2.4.0';
+  const APP_VERSION='2.5.0';
   const refreshButton=$('check-updates');
   if(refreshButton){
     refreshButton.addEventListener('click',async()=>{

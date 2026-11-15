@@ -147,3 +147,27 @@ Official source: https://support.rockstargames.com/articles/29jV3Cv2cCgvwM1XgtMO
 ### Editorial review closure
 
 The November 2026 pre-load review issue #1 was closed as a duplicate: the manually approved news feed already covers the pre-load announcement. This does **not** change automatic review behaviour for future unique announcements.
+
+## v2.5 — Launch Week overhaul
+
+### Five integrated upgrades
+
+1. **Launch Eve effects:** The original countdown enters region-aware phases at 24 hours, 6 hours, 1 hour, 10 minutes and 60 seconds before the selected midnight. Stages change the status banner and deepen sunset/neon accents; motion respects the system reduced-motion preference or the user's chosen setting. After midnight, the already implemented launch-day view remains authoritative.
+2. **Shareable cards:** Generate an original, spoiler-free 1080 × 1350 PNG sunset postcard locally via Canvas. No Rockstar screenshots, third-party media, CDN dependencies or backend uploads. A separate copy-text action includes the selected timezone and optional platform.
+3. **Personal settings:** Choose PS5, Xbox Series X|S or no platform; reduce effects; opt in to soft UI tones (off by default); and enable Strict spoiler lock. The strict option disables the media reveal control until unlocked. The original opt-in media gate still applies when strict lock is off.
+4. **Launch checklist and calendar:** Six tasks can be ticked and saved locally, independently of the chosen timezone. An .ics download targets the selected region's actual scheduled midnight instant in UTC, with a 30-minute reminder to import into a calendar app. A generated calendar file does not automatically configure the user's calendar.
+5. **Launch readiness checks:** GitHub Actions runs offline launch phase boundary tests, Sydney timezone rollover and regional reversal, calendar format and safety checks, static mobile/PWA asset integrity, approved-news checks, screenshot catalogue checks, and JavaScript/JSON syntax validation.
+
+### Operational and privacy notes
+
+- Static site and installed PWA version **2.5.0**; offline cache **vice-city-countdown-v9**. Files: assets/launch-week-core.js, assets/launch-week.js, assets/launch-week.css.
+- All checklist and preferences data is stored with localStorage on this browser only. Clearing site data resets these items. The saved timezone uses its existing storage key.
+- New audio never starts automatically: sounds are off by default and require an explicit user gesture to enable. Unsupported audio silently stays off.
+- The app automatically recalculates phase based on the **selected region**, not just device-local time, so travellers and fans choosing a different launch region see the correct phase.
+- Spoiler safety is preserved across the launch transition. Official news still requires editorial review; new gameplay media remains hidden unless explicitly revealed, or entirely blocked when Strict spoiler lock is enabled.
+- Official launch availability continues to depend on account region, store and eligibility. This independent website is not an account entitlement checker.
+- Launch night guidance remains available after the clock reaches zero. The share card becomes an original launch-time card, not a vanished countdown.
+
+### Testing
+
+Run locally: python3 -m unittest discover -s tests -p 'test_*.py' -v; node tests/test_launch.cjs; node tests/test_launch_week.cjs; node --check app.js; node --check sw.js; node --check assets/launch-week-core.js; node --check assets/launch-week.js.

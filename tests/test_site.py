@@ -68,7 +68,10 @@ class SiteTests(unittest.TestCase):
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn("mobile-experience.css?v=2.3.0",worker)
         self.assertIn("launch-mode.css?v=2.4.0",worker)
-        self.assertIn("vice-city-countdown-v8",worker)
+        self.assertIn("launch-week.css?v=2.5.0",worker)
+        self.assertIn("launch-week-core.js?v=2.5.0",worker)
+        self.assertIn("launch-week.js?v=2.5.0",worker)
+        self.assertIn("vice-city-countdown-v9",worker)
 
     def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
         self.assertIn('id="launch-state" hidden',self.html)
@@ -82,6 +85,26 @@ class SiteTests(unittest.TestCase):
         self.assertIn('updateLaunchMode(launched)',app)
         self.assertIn("currentLaunchMode=null",app)
         self.assertIn("now>=release",app)
+
+
+    def test_launch_kit_controls_and_privacy(self):
+        for id_ in (
+            "launch-kit", "launch-eve-banner", "launch-eve-title", "launch-eve-detail",
+            "kit-check-items", "kit-check-count", "kit-check-progress",
+            "kit-clear-checklist", "kit-download-card", "kit-copy-share",
+            "kit-calendar", "kit-platform", "kit-motion", "kit-sounds",
+            "kit-strict", "kit-reset-settings", "kit-settings-status"
+        ):
+            self.assertIn(id_,self.parser.ids)
+        assert "Launch kit" in self.html
+        js=(ROOT/'assets/launch-week.js').read_text(encoding='utf-8')
+        self.assertIn("sounds:false",js)
+        self.assertIn("strict:false",js)
+        self.assertIn("window.ViceCountdown", (ROOT/'app.js').read_text(encoding='utf-8'))
+        self.assertIn("settings.strict",js)
+        self.assertIn("media-toggle",js)
+        privacy=(ROOT/'privacy.html').read_text(encoding='utf-8')
+        self.assertIn("launch checklist",privacy.lower())
 
 
 if __name__=='__main__':
