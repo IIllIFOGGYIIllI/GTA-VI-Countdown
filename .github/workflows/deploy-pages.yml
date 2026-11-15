@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
@@ -34,9 +34,12 @@ jobs:
           node --check assets/cinematic-launch.js
           node --check preview/celebration.js
           node --check sw.js
+          node --check assets/official-guide.js
+          node --check assets/site-pages.js
           node --check assets/launch-week-core.js
           node --check assets/launch-week.js
           python3 -m json.tool data/news.json > /dev/null
+          python3 -m json.tool data/official-guide.json > /dev/null
           python3 -m json.tool data/screenshots.json > /dev/null
           python3 -m json.tool manifest.webmanifest > /dev/null
       - name: Prepare minimal static site
@@ -51,6 +54,16 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
+      - name: Allow artifact metadata to become available
+        run: sleep 10
       - name: Publish the site
         id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Wait before retrying Pages publication
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+      - name: Retry Pages publication without re-uploading
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
