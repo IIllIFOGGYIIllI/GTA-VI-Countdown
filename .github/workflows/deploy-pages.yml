@@ -42,7 +42,7 @@ jobs:
       - name: Prepare minimal static site
         run: |
           mkdir -p dist
-          cp index.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
+          cp index.html launch-info.html launch-kit.html news.html leonida-files.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
           cp -R assets data preview dist/
           touch dist/.nojekyll
       - name: Configure GitHub Pages

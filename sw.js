@@ -1,9 +1,10 @@
 /* Vice City Countdown · PWA v2.9 · Official editorial card artwork + offline fallback */
-const CACHE='vice-city-countdown-v18';
+const CACHE='vice-city-countdown-v19';
 const CORE=[
-  './','./index.html',
+  './','./index.html','./launch-info.html','./launch-kit.html','./news.html','./leonida-files.html','./media.html','./app.html',
   './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0','./assets/launch-mode.css?v=2.4.0','./assets/launch-week.css?v=2.5.0',
   './app.js?v=2.9.1','./assets/launch-week-core.js?v=2.5.0','./assets/launch-week.js?v=2.8.0',
+  './assets/site-pages.css?v=3.0.0','./assets/site-pages.js?v=3.0.0',
   './assets/official-guide.css?v=2.8.0','./assets/editorial-images.css?v=2.9.1',
   './assets/official-guide.js?v=2.9.1',
   './assets/cinematic-launch.css?v=2.7.2','./assets/cinematic-launch.js?v=2.7.1',
