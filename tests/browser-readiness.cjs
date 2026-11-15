@@ -147,6 +147,65 @@ async function main(){
       }finally{await context.close();}
     });
 
+    // Preview remains isolated from production; verify its actual animation,
+    // responsive layout, sound opt-in and controls before deploying.
+    for(const [vw,vh] of [[360,780],[768,920],[1440,900]]){
+      await runCase('interactive celebration preview '+vw+'px',async()=>{
+        const context=await browser.newContext({
+          viewport:{width:vw,height:vh},deviceScaleFactor:1,
+          serviceWorkers:'block',reducedMotion:'no-preference'
+        });
+        try{
+          const page=await context.newPage();
+          const errors=[];
+          page.on('pageerror',e=>errors.push(e.message));
+          const response=await page.goto(BASE+'preview/celebration.html',{waitUntil:'load'});
+          assert.equal(response.status(),200);
+          assert.equal(await page.locator('#launch-message').isVisible(),false);
+          const scroll=await page.evaluate(()=>({
+            documentWidth:document.documentElement.scrollWidth,
+            viewportWidth:window.innerWidth
+          }));
+          assert.ok(scroll.documentWidth<=scroll.viewportWidth+2,
+            'Celebration layout overflow '+JSON.stringify(scroll));
+          // The sound button must be pressed before the demo midnight.
+          await page.locator('#audio-toggle').click();
+          await page.waitForTimeout(120);
+          const audioStatus=await page.locator('#audio-status').textContent();
+          assert.ok(audioStatus.includes('Armed')||audioStatus.includes('blocked'),
+            'Sound should be opt-in: '+audioStatus);
+          await page.locator('#launch-now').click();
+          assert.equal(await page.locator('#launch-message').isVisible(),true);
+          assert.equal(await page.locator('#counter').isVisible(),false);
+          await page.waitForTimeout(380);
+          // A real canvas rendering pass should have put some live pixels on screen.
+          const ink=await page.evaluate(()=>{
+            const c=document.querySelector('#fireworks');
+            const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+            let hits=0;
+            for(let i=3;i<d.length;i+=48)if(d[i]>10)hits++;
+            return hits;
+          });
+          assert.ok(ink>4,'Fireworks canvas did not render visible particles');
+          await page.locator('button[data-style="deco"]').click();
+          assert.equal(await page.locator('button[data-style="deco"]').getAttribute('aria-pressed'),'true');
+          await page.locator('button[data-style="vi"]').click();
+          assert.equal(await page.locator('button[data-style="vi"]').getAttribute('aria-pressed'),'true');
+          await page.locator('#replay').click();
+          assert.equal(await page.locator('#launch-message').isVisible(),true);
+          await page.locator('#reduced-motion').check();
+          assert.equal(await page.locator('body').evaluate(el=>el.classList.contains('reduce-motion')),true);
+          assert.deepEqual(errors,[],'Celebration JS errors '+errors.join(' | '));
+          if(vw===360){
+            await page.screenshot({path:path.join(SHOTS,'celebration-live-mobile.png'),fullPage:true});
+          }
+          if(vw===1440){
+            await page.screenshot({path:path.join(SHOTS,'celebration-live-desktop.png'),fullPage:false});
+          }
+        }finally{await context.close();}
+      });
+    }
+
     await runCase('PWA offline restart with preserved local data',async()=>{
       const context=await browser.newContext({timezoneId:'Australia/Sydney',serviceWorkers:'allow'});
       try{

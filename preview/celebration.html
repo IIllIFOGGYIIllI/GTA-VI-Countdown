@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#170d2c">
+  <meta name="description" content="An interactive, spoiler-free Vice City Countdown midnight celebration concept with animated neon fireworks and original launch music.">
+  <title>Midnight Celebration · Interactive Concept Preview</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
+  <link rel="stylesheet" href="./celebration.css?v=1.0.0">
+  <script src="./celebration.js?v=1.0.0" defer></script>
+</head>
+<body>
+  <a class="skip" href="#celebration">Skip to live preview</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="../" aria-label="Return to Vice City Countdown">
+        <span class="brand-mark">VI</span>
+        <span class="brand-copy">VICE CITY <strong>COUNTDOWN</strong></span>
+      </a>
+      <span class="top-label"><span class="pulse-dot"></span> INTERACTIVE CONCEPT PREVIEW</span>
+      <a href="../" class="back-link">Return to website <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main id="celebration">
+    <div class="preview-note" role="note"><span class="note-live">LIVE ANIMATION</span><span>Separate concept preview · 12-second simulated countdown · no changes to the real GTA VI timer</span></div>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="backdrop" aria-hidden="true"></div>
+      <div class="city-grid" aria-hidden="true"></div>
+      <canvas id="fireworks" aria-hidden="true"></canvas>
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="tiny-rule"></span> LIVE FROM LEONIDA · MIDNIGHT SHOWCASE <span class="twinkle">✦</span></p>
+          <p class="kicker">Greetings from</p>
+          <h1 id="hero-title">VICE <span>CITY</span></h1>
+          <div class="hero-underline" aria-hidden="true"></div>
+          <p class="hero-lead" id="hero-lead">One night. One city. A neon midnight celebration, created for the GTA VI countdown.</p>
+          <div class="hero-chips"><span>✦ ORIGINAL FIREWORKS</span><span>✦ SPOILER-FREE</span><span>✦ ORIGINAL SYNTHWAVE</span></div>
+          <div class="hero-actions"><button id="launch-now" type="button" class="btn btn-primary">Experience midnight <span aria-hidden="true">↗</span></button><button id="demo-30" type="button" class="btn btn-secondary">Start 30-sec countdown</button></div>
+          <p class="hero-small">The show is simulated. The real website still uses your selected region's scheduled launch time.</p>
+        </div>
+        <div class="launch-panel" id="launch-panel">
+          <div class="panel-header"><span class="panel-live"><span class="live-orb"></span><span id="panel-status">COUNTING DOWN · DEMO</span></span><span class="panel-serial">VC—006 / 2026</span></div>
+          <div class="panel-body">
+            <p class="panel-overline">GRAND THEFT AUTO VI · LAUNCH EXPERIENCE</p>
+            <h2 id="panel-heading">MIDNIGHT <em>CALLING</em></h2>
+            <p class="panel-sub" id="panel-sub">The city lights up when this demo timer reaches zero.</p>
+            <div class="counter" id="counter" role="timer" aria-label="Simulation time remaining">
+              <div><strong id="d-days">00</strong><span>DAYS</span></div>
+              <div><strong id="d-hours">00</strong><span>HOURS</span></div>
+              <div><strong id="d-mins">00</strong><span>MINS</span></div>
+              <div><strong id="d-secs">12</strong><span>SECS</span></div>
+            </div>
+            <div class="timer-line" id="timer-line"><div id="timer-fill"></div></div>
+            <div class="launch-message" id="launch-message" hidden>
+              <p class="launch-welcome">✦ THE WAIT IS OVER ✦</p>
+              <h3>WELCOME TO <span>VICE CITY</span></h3>
+              <p>The sky is yours tonight. Celebrate the moment with original neon fireworks and a midnight soundtrack.</p>
+              <span class="launch-pill">SIMULATED MIDNIGHT · CONCEPT ONLY</span>
+            </div>
+            <div class="panel-divider"></div>
+            <p class="label">FIREWORKS DESIGN</p>
+            <div class="style-controls" role="group" aria-label="Fireworks design">
+              <button type="button" class="style-option selected" data-style="palms" aria-pressed="true">Neon palms</button>
+              <button type="button" class="style-option" data-style="deco" aria-pressed="false">Art Deco</button>
+              <button type="button" class="style-option" data-style="vi" aria-pressed="false">VI finale</button>
+            </div>
+            <div class="panel-bottom"><span class="legend">✧ CUSTOM NEON PYROTECHNICS</span><span id="show-label">PREVIEW READY</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sky-notice" aria-hidden="true" id="sky-notice"><span>WELCOME TO VICE CITY</span><strong>VI</strong></div>
+    </section>
+    <section class="controls" aria-labelledby="controls-title">
+      <div class="controls-heading"><div><p class="eyebrow">01 / LIVE CONTROL DESK</p><h2 id="controls-title">MAKE IT <em>YOUR</em> MIDNIGHT</h2></div><p>Test the effects before deciding whether they belong on the actual countdown. Nothing here affects the main website.</p></div>
+      <div class="control-grid">
+        <div class="control-card"><div class="control-number">01 / SHOW</div><h3>REPLAY THE MOMENT</h3><p>Trigger the full midnight fireworks sequence whenever you want.</p><button id="replay" class="control-button" type="button">↻ Replay celebration</button></div>
+        <div class="control-card"><div class="control-number">02 / SOUNDTRACK</div><h3>OCEAN DRIVE AT MIDNIGHT</h3><p>Original synthwave track made for this preview. Enable sound once; music starts on the midnight cue.</p><button id="audio-toggle" class="control-button" type="button" aria-pressed="false">♫ Enable launch music</button><label class="volume-label" for="volume">Music volume <output id="volume-value">45%</output></label><input type="range" id="volume" min="0" max="100" value="45" step="5" aria-label="Music volume"><span class="control-hint" id="audio-status" role="status">Sound off until you tap Enable.</span></div>
+        <div class="control-card"><div class="control-number">03 / EFFECTS</div><h3>FIREWORKS INTENSITY</h3><p>Choose the density and switch on a simplified show for smaller devices.</p><label class="select-label" for="intensity">Fireworks intensity</label><select id="intensity"><option value="low">Low · gentle</option><option value="medium" selected>Medium · balanced</option><option value="high">High · festival</option></select><label class="switch-line"><input type="checkbox" id="reduced-motion"><span>Reduce motion</span></label></div>
+      </div>
+      <div class="fine-print"><span>✦ SPOILER-FREE BY DESIGN</span><span>Original synthesized music · Canvas-rendered fireworks · No third-party media</span><span>Browser audio requires your interaction and an active tab</span></div>
+    </section>
+  </main>
+  <footer class="footer"><span>VICE CITY COUNTDOWN · CONCEPT PREVIEW</span><a href="../">Back to the actual website ↗</a></footer>
+</body>
+</html>

@@ -171,3 +171,19 @@ The November 2026 pre-load review issue #1 was closed as a duplicate: the manual
 ### Testing
 
 Run locally: python3 -m unittest discover -s tests -p 'test_*.py' -v; node tests/test_launch.cjs; node tests/test_launch_week.cjs; node --check app.js; node --check sw.js; node --check assets/launch-week-core.js; node --check assets/launch-week.js.
+
+## Isolated live concept — Midnight Celebration
+
+The separate interactive browser preview is served at **/preview/celebration.html**.
+It is intentionally not connected to the production countdown, release state,
+timezone selection, or existing PWA preferences.
+
+- Real 12-second demo timer automatically rolls into a fireworks celebration.
+- Three custom Canvas fireworks patterns: Neon palms, Art Deco, and VI finale.
+- Firework intensity, reduced-motion control, 30-second simulation, skip to midnight, and replay.
+- Original synthesized instrumental Ocean Drive at Midnight with melody, chords, bass, drums, and a looping arrangement. It is generated using local Web Audio; it contains no copyrighted recording.
+- Audio is disabled until the visitor explicitly selects Enable launch music. A tap is necessary to unlock browser sound. Music begins on the simulated midnight event, or immediately if enabled after the demo has launched.
+- It has no spoilers, automatically loaded game media, external audio files or service dependencies.
+- This is an opt-in design demo. The real website and PWA have not enabled the celebration feature.
+
+The Pages deployment workflow copies preview/ to the site, and Chromium QA verifies mobile/desktop layout, live rendered particles, replay, firework styles and sound opt-in.

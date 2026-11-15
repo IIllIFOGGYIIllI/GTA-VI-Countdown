@@ -31,6 +31,7 @@ jobs:
           node tests/test_launch.cjs
           node tests/test_launch_week.cjs
           node --check app.js
+          node --check preview/celebration.js
           node --check sw.js
           node --check assets/launch-week-core.js
           node --check assets/launch-week.js
@@ -41,7 +42,7 @@ jobs:
         run: |
           mkdir -p dist
           cp index.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
-          cp -R assets data dist/
+          cp -R assets data preview dist/
           touch dist/.nojekyll
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
