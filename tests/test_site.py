@@ -44,12 +44,40 @@ class SiteTests(unittest.TestCase):
             self.assertIn(id_,self.parser.ids)
         self.assertEqual(len(self.parser.ids),len(set(self.parser.ids)),'Duplicate HTML IDs found')
     def test_mobile_tab_links_are_valid(self):
-        expected={'countdown','news','media','app'}
+        expected={'countdown':'./index.html#countdown',
+                  'news':'./news.html#news',
+                  'media':'./media.html#media',
+                  'app':'./app.html#app'}
         self.assertEqual(len(self.parser.mobile_tabs),4)
         for href,section in self.parser.mobile_tabs:
             self.assertIn(section,expected)
-            self.assertEqual(href,'#'+section)
+            self.assertEqual(href,expected[section])
             self.assertIn(section,self.parser.ids)
+    def test_dedicated_pages_and_navigation(self):
+        page_map={
+            'launch-info.html':'launch-info',
+            'launch-kit.html':'launch-kit',
+            'news.html':'news',
+            'leonida-files.html':'leonida-files',
+            'media.html':'media',
+            'app.html':'app',
+        }
+        for filename,route in page_map.items():
+            page=(ROOT/filename).read_text(encoding='utf-8')
+            self.assertIn('data-page="'+route+'"',page,filename)
+            self.assertIn('site-pages.css?v=3.0.0',page,filename)
+            self.assertIn('site-pages.js?v=3.0.0',page,filename)
+            self.assertIn('<div class="page-lead shell">',page,filename)
+            self.assertIn('href="./news.html"',page,filename)
+            self.assertIn('href="./media.html"',page,filename)
+            self.assertIn('href="./leonida-files.html"',page,filename)
+        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
+        for filename in page_map:
+            self.assertIn("'./"+filename+"'",worker,filename)
+        deploy=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
+        for filename in page_map:
+            self.assertIn(filename,deploy)
+
     def test_no_decorative_heading_periods(self):
         for heading in self.parser.headings:
             self.assertFalse(heading.strip().endswith('.'),heading)
@@ -130,6 +158,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('officialScreenshot',info)
         self.assertIn('editorial-images.css?v=2.9.1',self.html)
         self.assertIn('site-pages.css?v=3.0.0',self.html)
+        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('site-pages.js?v=3.0.0',worker)
 
     def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
@@ -155,7 +184,7 @@ class SiteTests(unittest.TestCase):
             "kit-strict", "kit-reset-settings", "kit-settings-status"
         ):
             self.assertIn(id_,self.parser.ids)
-        assert "Launch kit" in self.html
+        assert "Launch Kit" in self.html
         js=(ROOT/'assets/launch-week.js').read_text(encoding='utf-8')
         self.assertIn("sounds:false",js)
         self.assertIn("strict:false",js)
