@@ -35,6 +35,14 @@ const sourceSafe=value=>{
   return url.protocol==='https:'&&['www.rockstargames.com','rockstargames.com','support.rockstargames.com'].includes(url.hostname);
  }catch{return false;}
 };
+const editorialTitleCase=value=>String(value).replace(/\b[A-Za-z][A-Za-z0-9]*(?:['’][A-Za-z]+)*/g,word=>{
+ const match=word.match(/^(.+)(['’]s)$/i),base=match?match[1]:word,suffix=match?match[2].toLowerCase():'';
+ if(/^(GTA|VI|PS5|PWA|PNG|API|HTML|CSS|PC|USB|DJ|AM|PM|TV|URL|IANA|NSW)$/i.test(base))return base.toUpperCase()+suffix;
+ if(/[a-z][A-Z]|['’][A-Z]/.test(word))return word;
+ if(/^xbox$/i.test(base))return 'Xbox'+suffix;
+ if(/^youtube$/i.test(base))return 'YouTube'+suffix;
+ return base[0].toUpperCase()+base.slice(1).toLowerCase()+suffix;
+});
 const make=(tag,cls,value)=>{
  const element=document.createElement(tag);
  if(cls)element.className=cls;
@@ -76,11 +84,11 @@ function render(){
   overline.append(category,number);
   const mark=make('div','vc-intel-card-monogram',monogram(item.title));
   mark.setAttribute('aria-hidden','true');
-  const heading=make('h4','',item.title);
-  const subtitle=make('div','vc-intel-card-index',item.kicker);
+  const heading=make('h4','',editorialTitleCase(item.title));
+  const subtitle=make('div','vc-intel-card-index',editorialTitleCase(item.kicker));
   const summary=make('p','',item.summary);
   card.append(overline,mark,heading,subtitle,summary);
-  const link=make('a','', 'Read Rockstar’s official information ↗');
+  const link=make('a','', 'Read Rockstar’s Official Information ↗');
   link.href=item.source;
   link.target='_blank';link.rel='noopener noreferrer';
   link.setAttribute('aria-label','Read Rockstar official source for '+item.title+' (opens in a new tab)');
@@ -130,7 +138,7 @@ async function reveal(){
  toggle.disabled=true;toggle.textContent='Preparing official files…';
  lock.textContent='Loading only approved, Rockstar-confirmed facts…';
  try{
-  const response=await fetch('./data/official-guide.json?v=2.9.1');
+  const response=await fetch('./data/official-guide.json?v=3.0.1');
   if(!response.ok)throw Error('Official archive unavailable');
   const documentData=await response.json();
   if(attempt!==requestId||locked())return;

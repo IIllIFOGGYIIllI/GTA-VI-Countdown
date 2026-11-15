@@ -3,6 +3,14 @@
   const RELEASE = {year:2026, month:11, day:19};
   const PREF = 'vc-countdown-timezone-v1';
   const $ = id => document.getElementById(id);
+  const editorialTitleCase=value=>String(value).replace(/\b[A-Za-z][A-Za-z0-9]*(?:['’][A-Za-z]+)*/g,word=>{
+ const match=word.match(/^(.+)(['’]s)$/i),base=match?match[1]:word,suffix=match?match[2].toLowerCase():'';
+ if(/^(GTA|VI|PS5|PWA|PNG|API|HTML|CSS|PC|USB|DJ|AM|PM|TV|URL|IANA|NSW)$/i.test(base))return base.toUpperCase()+suffix;
+ if(/[a-z][A-Z]|['’][A-Z]/.test(word))return word;
+ if(/^xbox$/i.test(base))return 'Xbox'+suffix;
+ if(/^youtube$/i.test(base))return 'YouTube'+suffix;
+ return base[0].toUpperCase()+base.slice(1).toLowerCase()+suffix;
+});
   const zoneSelect = $('timezone');
   if (!zoneSelect) return;
   const favoriteZones = [
@@ -218,7 +226,7 @@
     const grid=$('news-grid'),status=$('news-status'),verified=$('news-verified');
     if(!grid||!status)return;
     try{
-      const response=await fetch('./data/news.json?v=2.9.1',{cache:'no-store'});
+      const response=await fetch('./data/news.json?v=3.0.1',{cache:'no-store'});
       if(!response.ok)throw Error('Approved news is unavailable');
       const feed=await response.json();
       if(!Array.isArray(feed.articles))throw Error('Invalid approved-news format');
@@ -257,10 +265,10 @@
         const number=document.createElement('span');number.className='news-visual-corner';number.textContent=String(i+1).padStart(2,'0');visual.append(heading,number);
         const content=document.createElement('div');content.className='news-content';
         const metadata=document.createElement('div');metadata.className='news-meta';
-        const label=document.createElement('span');label.textContent=String(item.tag||item.category).slice(0,28).toLowerCase().replace(/(^|[\s-])([a-z])/g,(_,a,b)=>a+b.toUpperCase());
+        const label=document.createElement('span');label.textContent=editorialTitleCase(String(item.tag||item.category).slice(0,28));
         const published=document.createElement('time');published.dateTime=item.date;published.textContent=new Date(item.date+'T12:00:00Z').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'});
         metadata.append(label,published);
-        const title=document.createElement('h3');title.textContent=item.title.replace(/\.+$/,'').replace(/\b[a-z]/g,c=>c.toUpperCase());
+        const title=document.createElement('h3');title.textContent=editorialTitleCase(item.title.replace(/\.+$/,''));
         const summary=document.createElement('p');summary.textContent=item.summary;
         const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Open official source for '+item.title);link.textContent='Open Official Source ↗';
         content.append(metadata,title,summary,link);card.append(visual,content);fragment.append(card);
@@ -399,7 +407,7 @@
       const open=mediaContent.hidden;
       mediaContent.hidden=!open;
       mediaToggle.setAttribute('aria-expanded',String(open));
-      mediaToggle.textContent=open?'Hide official media ↑':'Reveal official media ↗';
+      mediaToggle.textContent=open?'Hide Official Media ↑':'Reveal Official Media ↗';
       if(open){loadScreenshots();mediaContent.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});}else if(galleryModal.open)closeScreenshot();
     });
   }
@@ -438,7 +446,7 @@
 
   let deferredInstall;
   const installBtn=$('install-btn');
-  window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;installBtn.textContent='Install the PWA ↗';});
+  window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;installBtn.textContent='Install the App ↗';});
   installBtn.addEventListener('click',async()=>{
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {toast('The app is already installed.');return;}
     if(deferredInstall){const prompt=deferredInstall;deferredInstall=null;prompt.prompt();try{await prompt.userChoice;}catch{} return;}
@@ -449,7 +457,7 @@
 
   // Update-aware PWA: request fresh service-worker code and reload once when
   // a new worker takes control, while keeping offline fallback functional.
-  const APP_VERSION='3.0.0';
+  const APP_VERSION='3.0.1';
   const refreshButton=$('check-updates');
   if(refreshButton){
     refreshButton.addEventListener('click',async()=>{

@@ -39,9 +39,9 @@
       toggle.disabled=settings.strict;
       toggle.setAttribute('aria-disabled',String(settings.strict));
       if(settings.strict){
-        toggle.textContent='Media locked — change your launch settings';
+        toggle.textContent='Media Locked — Change Your Launch Settings';
       } else {
-        toggle.textContent=content.hidden?'Reveal official media ↗':'Hide official media ↑';
+        toggle.textContent=content.hidden?'Reveal Official Media ↗':'Hide Official Media ↑';
       }
     }
     $('kit-platform').value=settings.platform;
@@ -322,13 +322,13 @@
       if(!canvas.toBlob)throw new Error('No canvas exporter');
       canvas.toBlob(blob=>{
         button.disabled=false;
-        button.textContent='Save countdown PNG ↗';
+        button.textContent='Save Countdown PNG ↗';
         if(!blob){showShareStatus('Your browser could not save the image.');return;}
         downloadBlob(blob,'Vice-City-Countdown-'+String(state.selectedZone).replace(/[^a-z0-9]/gi,'-').slice(0,40)+'.png');
         showShareStatus('PNG postcard created. Save or share it from your downloads.');
       },'image/png');
     }catch{
-      button.disabled=false;button.textContent='Save countdown PNG ↗';
+      button.disabled=false;button.textContent='Save Countdown PNG ↗';
       showShareStatus('Image export is unavailable in this browser.');
     }
   });
