@@ -99,7 +99,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn("launch-week.css?v=2.5.0",worker)
         self.assertIn("launch-week-core.js?v=2.5.0",worker)
         self.assertIn("launch-week.js?v=2.8.0",worker)
-        self.assertIn("vice-city-countdown-v19",worker)
+        self.assertIn("vice-city-countdown-v20",worker)
         self.assertIn("preview/vendor/GrandFireworks.min.js?v=1.11.1",worker)
         self.assertIn("cinematic-launch.css?v=2.7.2",worker)
         self.assertIn("cinematic-launch.js?v=2.7.1",worker)
@@ -111,7 +111,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="guide-grid"',self.html)
         self.assertIn('id="guide-search"',self.html)
         self.assertIn("official-guide.css?v=2.8.0",self.html)
-        self.assertIn("official-guide.js?v=2.9.1",self.html)
+        self.assertIn("official-guide.js?v=3.0.1",self.html)
         guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
         self.assertEqual(len(guide['items']),19)
         self.assertEqual(len({x['id'] for x in guide['items']}),19)
@@ -121,12 +121,12 @@ class SiteTests(unittest.TestCase):
         news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
         self.assertEqual(len(news['articles']),11)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertNotIn("'./data/official-guide.json?v=2.9.1'",worker.split('];',1)[0],
+        self.assertNotIn("'./data/official-guide.json?v=3.0.1'",worker.split('];',1)[0],
                          'Spoiler archive must not pre-cache before the visitor reveals it')
         self.assertIn('official-guide.css?v=2.8.0',worker)
-        self.assertIn('official-guide.js?v=2.9.1',worker)
+        self.assertIn('official-guide.js?v=3.0.1',worker)
         self.assertIn('editorial-images.css?v=2.9.1',worker)
-        self.assertIn('app.js?v=2.9.1',worker)
+        self.assertIn('app.js?v=3.0.1',worker)
 
     def test_editorial_artwork_uses_verified_rockstar_screenshots(self):
         images=json.loads((ROOT/'data/screenshots.json').read_text(encoding='utf-8'))
@@ -160,6 +160,23 @@ class SiteTests(unittest.TestCase):
         self.assertIn('site-pages.css?v=3.0.0',self.html)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('site-pages.js?v=3.0.0',worker)
+
+    def test_editorial_titles_use_title_case(self):
+        guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
+        news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
+        self.assertEqual(guide['items'][0]['title'],'The Central Story')
+        self.assertEqual(guide['items'][0]['kicker'],'Official Story Premise')
+        self.assertEqual(guide['items'][3]['kicker'],"Jason's Circle")
+        self.assertEqual(news['articles'][0]['tag'],'Pre-Load')
+        renderer=(ROOT/'assets/official-guide.js').read_text(encoding='utf-8')
+        self.assertIn('editorialTitleCase(item.title)',renderer)
+        self.assertIn('editorialTitleCase(item.kicker)',renderer)
+        self.assertIn('Read Rockstar’s Official Information',renderer)
+        for name in ('index.html','launch-info.html','launch-kit.html','news.html','leonida-files.html','media.html','app.html'):
+            html=(ROOT/name).read_text(encoding='utf-8')
+            self.assertIn('All Files',html)
+            self.assertIn('Read Official Source',html)
+            self.assertIn('Reveal Official Media',html)
 
     def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
         self.assertIn('id="launch-state" hidden',self.html)

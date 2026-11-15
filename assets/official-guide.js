@@ -38,7 +38,7 @@ const sourceSafe=value=>{
 const editorialTitleCase=value=>String(value).replace(/\b[A-Za-z][A-Za-z0-9]*(?:['’][A-Za-z]+)*/g,word=>{
  const match=word.match(/^(.+)(['’]s)$/i),base=match?match[1]:word,suffix=match?match[2].toLowerCase():'';
  if(/^(GTA|VI|PS5|PWA|PNG|API|HTML|CSS|PC|USB|DJ|AM|PM|TV|URL|IANA|NSW)$/i.test(base))return base.toUpperCase()+suffix;
- if(/[a-z][A-Z]|['’][A-Z]/.test(word))return word;
+ if(/[a-z][A-Z]|['’][A-Z][a-z]/.test(word))return word;
  if(/^xbox$/i.test(base))return 'Xbox'+suffix;
  if(/^youtube$/i.test(base))return 'YouTube'+suffix;
  return base[0].toUpperCase()+base.slice(1).toLowerCase()+suffix;

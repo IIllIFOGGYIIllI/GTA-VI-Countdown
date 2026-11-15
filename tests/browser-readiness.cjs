@@ -340,6 +340,11 @@ async function main(){
           await page.waitForFunction(()=>window.ViceOfficialIntel.getState().revealed);
           assert.equal(guideRequests,1,'User-selected reveal should fetch the guide exactly once');
           assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),19);
+          assert.equal(await page.locator('#guide-grid .vc-intel-card h4').first().textContent(),'The Central Story');
+          assert.equal(await page.locator('#guide-grid .vc-intel-card').first()
+            .locator('.vc-intel-card-index').last().textContent(),'Official Story Premise');
+          assert.ok((await page.locator('#guide-grid .vc-intel-card').first().locator('a').textContent())
+            .includes('Read Rockstar’s Official Information'));
           assert.equal(await page.locator('#guide-grid .vc-intel-card-picture img').count(),19,
             'Each confirmed character/location must have a specific official screenshot');
           assert.ok((await page.locator('#guide-grid .vc-intel-card-picture img').first().getAttribute('src'))
@@ -588,7 +593,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v19');
+          return keys.includes('vice-city-countdown-v20');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});
