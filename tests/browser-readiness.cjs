@@ -187,6 +187,25 @@ async function main(){
               return lit;
             });
             assert.ok(sample>15,'Design '+name+' has no visible sample: '+sample);
+            const sky=await page.evaluate(()=>{
+              const renderer=window.ViceFireworksPreview;
+              const main=document.querySelector('#fireworks');
+              const pixels=main.getContext('2d').getImageData(0,0,main.width,main.height).data;
+              let lit=0;
+              for(let i=3;i<pixels.length;i+=64)if(pixels[i]>12)lit++;
+              return {
+                selected:renderer.selectedDesign(),
+                largeMotifs:renderer.largeMotifTypes(),
+                shared:renderer.previewAndSkyShareRenderer,
+                pixels:lit
+              };
+            });
+            assert.equal(sky.selected,name,'Selected large design mismatch');
+            assert.equal(sky.shared,true,'The preview and sky must use one shared renderer');
+            assert.ok(sky.largeMotifs.length>0 && sky.largeMotifs.every(type=>type===name),
+              'Main fireworks are not showing the selected motif: '+JSON.stringify(sky));
+            assert.ok(sky.pixels>20,
+              'Full-sized '+name+' fireworks did not visibly render: '+sky.pixels);
             if(vw===1440 && name!=='palms'){
               await page.screenshot({path:path.join(SHOTS,'celebration-'+name+'-before-midnight.png')});
             }
@@ -210,10 +229,17 @@ async function main(){
             return hits;
           });
           assert.ok(ink>4,'Fireworks canvas did not render visible particles');
-          await page.locator('button[data-style="deco"]').click({noWaitAfter:true,timeout:12000});
-          assert.equal(await page.locator('button[data-style="deco"]').getAttribute('aria-pressed'),'true');
-          await page.locator('button[data-style="vi"]').click({noWaitAfter:true,timeout:12000});
-          assert.equal(await page.locator('button[data-style="vi"]').getAttribute('aria-pressed'),'true');
+          for(const design of ['deco','vi','palms']){
+            await page.locator('button[data-style="'+design+'"]').click({noWaitAfter:true,timeout:12000});
+            assert.equal(await page.locator('button[data-style="'+design+'"]').getAttribute('aria-pressed'),'true');
+            await page.waitForTimeout(115);
+            const active=await page.evaluate(()=>window.ViceFireworksPreview.largeMotifTypes());
+            assert.ok(active.length>0 && active.every(type=>type===design),
+              'Midnight full-size fireworks must match selected '+design+' design: '+JSON.stringify(active));
+            if(vw===1440){
+              await page.screenshot({path:path.join(SHOTS,'celebration-'+design+'-midnight.png')});
+            }
+          }
           await page.locator('#replay').click();
           assert.equal(await page.locator('#launch-message').isVisible(),true);
           await page.locator('#reduced-motion').check();

@@ -8,7 +8,7 @@
   <title>Midnight Celebration · Interactive Concept Preview</title>
   <link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
   <link rel="stylesheet" href="./celebration.css?v=1.1.0">
-  <script src="./celebration.js?v=1.1.0" defer></script>
+  <script src="./celebration.js?v=1.2.0" defer></script>
 </head>
 <body>
   <a class="skip" href="#celebration">Skip to live preview</a>
@@ -66,7 +66,7 @@
               <button type="button" class="style-option" data-style="vi" aria-pressed="false">VI finale</button>
             </div>
             <div class="firework-design-window" id="firework-design-window" aria-label="Animated fireworks design sample">
-              <div class="firework-design-top"><strong id="firework-design-title">NEON PALMS</strong><span class="firework-design-live"><span aria-hidden="true">●</span> ANIMATED PREVIEW</span></div>
+              <div class="firework-design-top"><strong id="firework-design-title">NEON PALMS</strong><span class="firework-design-live"><span aria-hidden="true">●</span> MATCHES LIVE SKY</span></div>
               <canvas id="firework-design-canvas" aria-hidden="true"></canvas>
               <p id="firework-design-description">Tropical palm-shaped trails with luminous turquoise and pink fronds.</p>
             </div>
@@ -81,7 +81,7 @@
       <div class="control-grid">
         <div class="control-card"><div class="control-number">01 / SHOW</div><h3>REPLAY THE MOMENT</h3><p>Trigger the full midnight fireworks sequence whenever you want.</p><button id="replay" class="control-button" type="button">↻ Replay celebration</button></div>
         <div class="control-card"><div class="control-number">02 / SOUNDTRACK</div><h3>OCEAN DRIVE AT MIDNIGHT</h3><p>Original synthwave track made for this preview. Enable sound once; music starts on the midnight cue.</p><button id="audio-toggle" class="control-button" type="button" aria-pressed="false">♫ Enable launch music</button><label class="volume-label" for="volume">Music volume <output id="volume-value">45%</output></label><input type="range" id="volume" min="0" max="100" value="45" step="5" aria-label="Music volume"><span class="control-hint" id="audio-status" role="status">Sound off until you tap Enable.</span></div>
-        <div class="control-card"><div class="control-number">03 / EFFECTS</div><h3>FIREWORKS INTENSITY</h3><p>Choose the density and switch on a simplified show for smaller devices.</p><label class="select-label" for="intensity">Fireworks intensity</label><select id="intensity"><option value="low">Low · gentle</option><option value="medium" selected>Medium · balanced</option><option value="high">High · festival</option></select><label class="switch-line"><input type="checkbox" id="reduced-motion"><span>Reduce motion</span></label></div>
+        <div class="control-card"><div class="control-number">03 / EFFECTS</div><h3>FIREWORKS INTENSITY</h3><p>Choose the density and switch on a simplified show for smaller devices. The designs shown above match the full-size fireworks.</p><label class="select-label" for="intensity">Fireworks intensity</label><select id="intensity"><option value="low">Low · gentle</option><option value="medium" selected>Medium · balanced</option><option value="high">High · festival</option></select><label class="switch-line"><input type="checkbox" id="reduced-motion"><span>Reduce motion</span></label></div>
       </div>
       <div class="fine-print"><span>✦ SPOILER-FREE BY DESIGN</span><span>Original synthesized music · Canvas-rendered fireworks · No third-party media</span><span>Browser audio requires your interaction and an active tab</span></div>
     </section>
