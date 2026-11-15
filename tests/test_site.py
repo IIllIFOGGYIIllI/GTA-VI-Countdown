@@ -93,7 +93,8 @@ class SiteTests(unittest.TestCase):
         news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
         self.assertEqual(len(news['articles']),11)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('official-guide.json?v=2.9.0',worker)
+        self.assertNotIn("'./data/official-guide.json?v=2.9.0'",worker.split('];',1)[0],
+                         'Spoiler archive must not pre-cache before the visitor reveals it')
         self.assertIn('official-guide.css?v=2.8.0',worker)
         self.assertIn('official-guide.js?v=2.9.0',worker)
         self.assertIn('editorial-images.css?v=2.9.0',worker)
