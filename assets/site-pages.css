@@ -1,0 +1,91 @@
+/* Multi-page navigation and editorial typography — November 2026 */
+.desktop-nav {gap:clamp(11px,1.25vw,22px)}
+.desktop-nav a {text-transform:none!important;letter-spacing:.015em!important;font-size:12px!important;white-space:nowrap}
+.desktop-nav a[aria-current="page"] {color:#9ffff0}
+.desktop-nav a[aria-current="page"]::after {right:0;background:#9ffff0}
+.section h2,.section h2 em,.hero-kicker,.hero h1 em,.hero-actions .btn,
+.filter,.viewer-filter,.city-stamp,#vc-cinema .vc-cinema-eyebrow,
+#vc-cinema .vc-cinema-label,#vc-cinema .vc-cinema-region {
+  text-transform:none!important
+}
+.section h2 {line-height:1.07;letter-spacing:.005em}
+.section h2 em {letter-spacing:-.025em}
+.section-index {letter-spacing:.1em!important;font-size:11px}
+.hero-actions .btn,.filter,.viewer-filter {letter-spacing:.025em}
+.vc-intel-card h4,.news-content h3 {line-height:1.14}
+.site-pages-menu {display:none;position:relative}
+.site-pages-menu summary {
+ display:flex;align-items:center;gap:8px;padding:9px 14px;
+ border:1px solid #9ddfd8a1;border-radius:7px;color:#e4fffa;
+ background:#24233d;cursor:pointer;font-weight:800;font-size:12px;list-style:none
+}
+.site-pages-menu summary::-webkit-details-marker {display:none}
+.site-pages-menu summary::after {content:"▾";font-size:13px}
+.site-pages-menu[open] summary::after {content:"▴"}
+.site-pages-menu nav {
+ position:absolute;top:calc(100% + 11px);right:0;min-width:220px;
+ max-width:min(320px,90vw);display:grid;gap:3px;padding:10px;
+ border:1px solid #82d7cf88;border-radius:10px;
+ background:#1b1935;box-shadow:0 22px 55px #040714b8;z-index:60
+}
+.site-pages-menu nav a {display:block;padding:11px 12px;border-radius:5px;color:#f5e9f2;font-size:13px;font-weight:700}
+.site-pages-menu nav a:hover,.site-pages-menu nav a[aria-current="page"] {color:#12312f;background:#9dffec}
+.page-lead {margin:0 auto 34px;padding:35px 0 0}
+.page-lead-inner {position:relative;padding:clamp(25px,4vw,47px);overflow:hidden;
+ background:radial-gradient(ellipse at 83% 15%,#e967a02a,transparent 52%),
+ linear-gradient(115deg,#29203f,#1a2a40 84%);
+ border:1px solid #b78baf72;border-radius:13px;box-shadow:0 17px 49px #060b1a5a}
+.page-lead-inner::after {content:"VI";position:absolute;right:28px;top:-27px;
+ font:italic 1000 clamp(140px,24vw,270px)/1 Impact,"Arial Black",sans-serif;
+ color:#ffb7c20a;pointer-events:none}
+.page-lead-kicker {display:flex;align-items:center;gap:10px;position:relative;
+ color:#9dffee;text-transform:none;font-size:11px;letter-spacing:.11em;font-weight:900}
+.page-lead-kicker a {color:inherit}
+.page-lead-kicker a:hover {text-decoration:underline}
+.page-lead h1 {position:relative;margin:13px 0 12px;max-width:760px;
+ font:italic 950 clamp(35px,5vw,67px)/1.04 Impact,"Arial Black",sans-serif;
+ letter-spacing:.007em;color:#fff2e3;text-shadow:2px 3px #342541}
+.page-lead p {position:relative;max-width:700px;margin:0;line-height:1.65;
+ color:#e8d4e6;font-size:clamp(13px,1.25vw,16px)}
+.page-directory {padding:14px 0 33px}
+.page-directory h2 {font-size:24px;margin:0 0 19px;font-weight:900;letter-spacing:-.02em}
+.page-directory-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.page-directory a {min-width:0;display:flex;flex-direction:column;gap:6px;padding:23px;
+ border:1px solid #9c8cab80;border-radius:10px;background:linear-gradient(145deg,#25223d,#172639);
+ transition:transform .15s,border-color .15s,box-shadow .15s}
+.page-directory a:hover {transform:translateY(-3px);border-color:#9cfff1;box-shadow:0 10px 25px #0005}
+.page-directory a strong {font-size:16px;color:#fff2e4}
+.page-directory a small {color:#decbdc;font-size:12px;line-height:1.5}
+.page-directory a span {color:#9bfff0;font-size:11px;font-weight:900}
+body[data-page]:not([data-page="home"]) main > section {display:none!important}
+body[data-page="launch-info"] main > #milestones,
+body[data-page="launch-info"] main > #launch-hub:not([hidden]),
+body[data-page="launch-kit"] main > #launch-kit,
+body[data-page="news"] main > #news,
+body[data-page="leonida-files"] main > #intel,
+body[data-page="media"] main > #media,
+body[data-page="app"] main > #app,
+body[data-page="app"] main > #faq {display:block!important}
+body[data-page]:not([data-page="home"]) .page-directory {display:none!important}
+body[data-page]:not([data-page="home"]) main > section:not(#launch-hub) {scroll-margin-top:100px}
+body[data-page="news"] #news,body[data-page="media"] #media,body[data-page="leonida-files"] #intel {padding-top:42px}
+body[data-page="app"] #app,body[data-page="launch-info"] #milestones,body[data-page="launch-kit"] #launch-kit {padding-top:30px}
+body[data-page="leonida-files"] .vc-intel {border-radius:13px}
+.mobile-tab-link[aria-current="page"] {color:#b8fff0}
+@media(max-width:1130px){
+ .desktop-nav {display:none!important}
+ .site-pages-menu {display:block}
+}
+@media(max-width:650px){
+ .nav-wrap {gap:10px}
+ .site-pages-menu summary {padding:9px 11px}
+ .nav-cta {font-size:10px;padding:8px}
+ .page-lead {padding-top:14px;margin-bottom:18px}
+ .page-lead-inner {padding:24px 19px}
+ .page-lead h1 {font-size:clamp(34px,9vw,49px)}
+ .page-directory-grid {grid-template-columns:1fr}
+ .page-directory a {padding:18px}
+ body[data-page="news"] #news,body[data-page="media"] #media,body[data-page="leonida-files"] #intel {padding-top:18px}
+}
+@media(min-width:651px) and (max-width:950px) {.page-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.page-directory a{transition:none}.page-directory a:hover{transform:none}}
