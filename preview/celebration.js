@@ -56,7 +56,7 @@ function launchMidnight(){
  const w=state.width,h=state.height,now=performance.now();
  state.rockets.length=0;state.motifs.length=0;
  if(state.fireworkStyle==='vi'){
-  launchFirework(w*.51,h*.25,'vi',1.65,now);
+  launchFirework(w*.40,h*.18,'vi',1.40,now);
  }else{
   launchFirework(w*.28,h*.23,state.fireworkStyle,1.18,now);
   if(!state.reduce)launchFirework(w*.65,h*.34,state.fireworkStyle,.92,now);
@@ -377,7 +377,7 @@ function activateDesign(name){
  state.motifs.length=0;state.rockets.length=0;
  const now=performance.now();
  if(name==='vi'){
-  launchFirework(state.width*.51,state.height*.25,name,1.65,now);
+  launchFirework(state.width*.40,state.height*.18,name,1.40,now);
  }else{
   launchFirework(state.width*.3,state.height*.23,name,1.12,now);
   launchFirework(state.width*.66,state.height*.32,name,.85,now);
