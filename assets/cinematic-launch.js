@@ -42,10 +42,10 @@ let interval=null;
 let fireworks=null,fireworksPlaying=false,fireworksTimers=[],fireworksRun=0;
 const FIREWORK_DURATION=38000;
 const FIREWORK_PALETTES=[
- ['#FFDCA0','#FFFFFF','#FFACD0'],
- ['#88FFEE','#ECFFFC','#FFE2B0'],
- ['#F3C5FF','#FF91CD','#FFFFFF'],
- ['#FFE5A5','#FFB58F','#FFFEF2']
+ ['#FFDCA0','#F9B77A','#FF91C5'],
+ ['#88FFEE','#61DCE6','#FFE2B0'],
+ ['#C9B6FF','#FF91CD','#FFC6E0'],
+ ['#FFE5A5','#FFB58F','#FFD3B5']
 ];
 function afterFireworks(ms,fn,run){
  const id=window.setTimeout(()=>{if(run===fireworksRun&&fireworksPlaying&&mode)fn();},ms);
@@ -81,11 +81,12 @@ function launchCelebration(){
    container:fireworksStage,mode:'contained',placement:'overlay',clip:true,zIndex:1,
    baseStyle:'cinematic',autoStart:false,duration:0,background:false,
    renderer:{preferred:'canvas2d',fallback:'canvas2d'},
-   performance:{preset:reduced?'low':'medium',adaptive:true,secondary:reduced?.4:.67,
+   performance:{preset:reduced?'low':'medium',adaptive:true,secondary:reduced?.35:.49,
     pauseWhenHidden:true,pauseWhenOffscreen:false,respectReducedMotion:true},
-   visuals:{opacity:.96,trails:true,trailFade:.20,bloom:.71,rocketExhaust:true,
-    explosionFlashes:true,flashBangChance:0,flashScale:.75,flashAlpha:.19,
-    sparkleChance:.35,shimmerChance:.40,starChance:.015,secondaryCrackle:true,
+   visuals:{opacity:.93,trails:true,trailFade:.23,bloom:.34,rocketExhaust:true,
+    explosionFlashes:!reduced,flashBangChance:0,flashScale:.50,flashAlpha:.06,
+    flashColor:'#FFCA98',flashLife:105,
+    sparkleChance:.27,shimmerChance:.35,starChance:.013,secondaryCrackle:true,
     groupedSalvos:false},
    show:{intensity:reduced?.23:.72,openingSalvo:reduced?2:5,
     maxRockets:reduced?3:6,maxParticles:reduced?1100:3700,
@@ -103,13 +104,13 @@ function launchCelebration(){
   fireworks.start();
   fireworksPlaying=true;
   overlay.classList.add('vc-cinema-celebrating');
-  fireworksStatus.textContent='MIDNIGHT FIREWORKS · LIVE CELEBRATION';
+  fireworksStatus.textContent='FIREWORKS SHOW IN PROGRESS';
   // A paced, 38-second show: salute, colour waves, gold willows, grand finale.
   afterFireworks(1400,()=>{
    const rect=fireworksStage.getBoundingClientRect();
-   fireworks.placeburst({x:rect.width*.22,y:rect.height*.26,
-     radius:Math.min(170,rect.width*.21),type:'grand_peony',
-     colors:['#FFE9AF','#FFFFFF','#FFADD0']});
+   fireworks.placeburst({x:rect.width*.28,y:rect.height*.23,
+     radius:Math.min(115,rect.width*.13),type:'golden_brocade',
+     density:.66,colors:['#FFE0A0','#FFBA7F','#FFAFBF']});
   },run);
   afterFireworks(2700,()=>fireworks.launch({type:'golden_brocade'}),run);
   afterFireworks(5200,()=>fireworks.launch({type:'royal_palm'}),run);

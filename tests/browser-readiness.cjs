@@ -178,6 +178,16 @@ async function main(){
           assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
           assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'launched');
           assert.equal(await page.locator('#vc-cinema-replay-fireworks').isVisible(),true);
+          if(width<=360){
+            // Replay must not overlap the welcome/caption on narrow phones.
+            const positions=await page.evaluate(()=>{
+              const hero=document.querySelector('.vc-cinema-hero').getBoundingClientRect();
+              const replay=document.querySelector('#vc-cinema-replay-fireworks').getBoundingClientRect();
+              return {heroBottom:hero.bottom,replayTop:replay.top};
+            });
+            assert.ok(positions.replayTop>=positions.heroBottom-6,
+              'Firework replay must sit below the mobile welcome panel: '+JSON.stringify(positions));
+          }
           assert.equal(await page.locator('#vc-cinema-fireworks-stage .grand-fireworks-root').count(),1,
             'The fireworks engine must mount inside the launch overlay');
           assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).fireworksPlaying,true);
@@ -395,7 +405,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v12');
+          return keys.includes('vice-city-countdown-v13');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

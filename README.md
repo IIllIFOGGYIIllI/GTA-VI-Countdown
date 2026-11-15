@@ -221,3 +221,8 @@ The cinematic launch mode now plays the **real Grand Fireworks JS** particle sho
 The commercial recording/music concept remains **out of the main website**. Fireworks are silent, audio is never requested or unlocked and no copyrighted song is included. Reduced-motion users get lower-density effects. Closing or restarting the cinematic experience destroys the fireworks renderer and cancels pending cues; replay replaces the renderer rather than piling up canvases. The already vendored MIT Grand Fireworks JS v1.11.1 is cached in the PWA core at `preview/vendor/GrandFireworks.min.js?v=1.11.1` (cache namespace `vice-city-countdown-v12`). Existing spoiler safeguards, user's selected release region, and no auto-launch-after-dismiss behaviour are preserved.
 
 Automated Chromium checks verify real particles, playback and replay on 320/360/1440-pixel viewports and automatic Sydney-midnight fireworks with no regression to timezone and offline-PWA tests.
+
+
+### v2.7.1 fireworks polish
+
+Refined the actual launch-mode firework renderer for subtler ignition flashes, reduced white glare, clearer pastel/gold shell palettes and smaller direct bursts. Mobile welcome text is raised to keep the two replay controls below it; these layouts are asserted at phone sizes. The updated PWA cache `vice-city-countdown-v13` serves versioned v2.7.1 CSS and JavaScript to installed devices.

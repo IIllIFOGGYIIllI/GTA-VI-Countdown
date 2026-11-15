@@ -314,3 +314,35 @@ html.vc-cinema-open,body.vc-cinema-open{overflow:hidden!important}
  #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(42px,12vh,89px)}
  #vc-cinema .vc-cinema-welcome-copy{font-size:11px}
 }
+
+
+/* v2.7.1 final mobile celebration layout: the controls must never sit
+   over the hero lettering or its status line. */
+#vc-cinema .vc-cinema-replay-fireworks{
+ background:linear-gradient(105deg,#ffe3b7,#f7a0c3);
+ color:#301d38;
+ text-shadow:none;
+ font-weight:950;
+}
+@media(max-width:620px){
+ #vc-cinema.vc-cinema-arrived .vc-cinema-hero{
+  inset:11% 10px 29%;
+ }
+ #vc-cinema.vc-cinema-arrived .vc-cinema-standalone-actions{
+  left:15px;right:15px;bottom:clamp(71px,10.6vh,108px);
+  display:flex;justify-content:center;align-items:stretch;gap:8px;
+ }
+ #vc-cinema.vc-cinema-arrived .vc-cinema-standalone-actions>.vc-cinema-button{
+  flex:1;min-width:0;min-height:44px;max-width:50%;
+  font-size:9px;line-height:1.25;
+  padding:9px 9px;text-align:center;
+ }
+}
+@media(max-height:690px) and (max-width:620px){
+ #vc-cinema.vc-cinema-arrived .vc-cinema-hero{inset:9% 10px 32%}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-mark{margin-bottom:6px}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(41px,10vw,67px)}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-copy{margin-top:8px}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-note{margin-top:7px}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-fireworks-caption{margin-top:6px}
+}
