@@ -94,6 +94,24 @@ async function main(){
             await page.locator('#kit-strict').uncheck();
             assert.equal(await page.locator('#media-toggle').isEnabled(),true);
             assert.equal(await page.locator('#media-content').isVisible(),false);
+
+            // Exercise both actual download controls, not just their markup.
+            const calendarEvent=page.waitForEvent('download');
+            await page.locator('#kit-calendar').click();
+            const calendar=await calendarEvent;
+            assert.ok(calendar.suggestedFilename().endsWith('.ics'));
+            const calendarText=fs.readFileSync(await calendar.path(),'utf8');
+            assert.ok(calendarText.includes('DTSTART:20261118T130000Z'),'Sydney release must use AEDT midnight');
+            assert.ok(calendarText.includes('TRIGGER:-PT30M'),'Calendar reminder must contain a 30-minute alarm');
+
+            const postcardEvent=page.waitForEvent('download');
+            await page.locator('#kit-download-card').click();
+            const postcard=await postcardEvent;
+            assert.ok(postcard.suggestedFilename().endsWith('.png'));
+            const png=fs.readFileSync(await postcard.path());
+            assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a',
+              'Postcard must be a valid PNG file');
+            assert.ok(png.length>10000,'Postcard export is unexpectedly small');
           }
         }finally{await context.close();}
       });
