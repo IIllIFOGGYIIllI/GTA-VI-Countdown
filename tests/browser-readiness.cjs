@@ -504,6 +504,72 @@ async function main(){
       });
     }
 
+    // Dedicated routes must be actual navigable pages on narrow touch screens.
+    for(const [route,section] of [
+      ['launch-info.html','milestones'],['launch-kit.html','launch-kit'],
+      ['news.html','news'],['leonida-files.html','intel'],
+      ['media.html','media'],['app.html','app']
+    ]){
+      await runCase('dedicated route '+route,async()=>{
+        const context=await browser.newContext({
+          viewport:{width:375,height:812},serviceWorkers:'block',
+          timezoneId:'Australia/Sydney',reducedMotion:'reduce'
+        });
+        try{
+          const page=await context.newPage();
+          const response=await page.goto(BASE+route,{waitUntil:'domcontentloaded'});
+          assert.equal(response.status(),200,'Missing route '+route);
+          await page.waitForFunction(()=>window.VicePageRouter && document.body.classList.contains('vc-launch-kit-ready'));
+          assert.equal(await page.locator('main > #'+section).isVisible(),true,'Active section not visible: '+route);
+          assert.equal(await page.locator('main > #countdown').isVisible(),false,'Landing-page hero should be hidden on '+route);
+          assert.equal(await page.locator('.page-lead h1').isVisible(),true);
+          const metrics=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:window.innerWidth}));
+          assert.ok(metrics.width<=metrics.viewport+2,route+' horizontal overflow: '+JSON.stringify(metrics));
+          await page.locator('.site-pages-menu summary').click();
+          assert.equal(await page.locator('.site-pages-menu nav').isVisible(),true,'Mobile pages menu inaccessible');
+          await page.locator('.site-pages-menu nav a[href="./news.html"]').click();
+          await page.waitForURL('**/news.html');
+          assert.equal(await page.locator('main > #news').isVisible(),true,'Menu navigation did not open dedicated News');
+        }finally{await context.close();}
+      });
+    }
+    await runCase('shareable category URLs and spoiler-gated category views',async()=>{
+      const context=await browser.newContext({
+        viewport:{width:375,height:812},serviceWorkers:'block',
+        timezoneId:'Australia/Sydney',reducedMotion:'reduce'
+      });
+      try{
+        const page=await context.newPage();
+        await page.goto(BASE+'news.html?category=preload',{waitUntil:'domcontentloaded'});
+        await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===11);
+        assert.equal(await page.locator('#news-grid .news-card:visible').count(),1);
+        await page.locator('.news-tools .filter[data-filter="updates"]').click();
+        assert.equal(new URL(page.url()).searchParams.get('category'),'updates');
+        assert.equal(await page.locator('#news-grid .news-card:visible').count(),7);
+
+        await page.goto(BASE+'media.html?category=Characters',{waitUntil:'domcontentloaded'});
+        await page.waitForFunction(()=>document.body.classList.contains('vc-launch-kit-ready'));
+        await page.locator('#media-toggle').click();
+        await page.waitForFunction(()=>document.querySelectorAll('#gallery-grid .viewer-tile').length>0);
+        assert.equal(await page.locator('#gallery-filters [data-category="Characters"]').getAttribute('aria-pressed'),'true');
+
+        let guideFetches=0;
+        page.on('request',r=>{if(r.url().includes('data/official-guide.json'))guideFetches++;});
+        await page.goto(BASE+'leonida-files.html?category=places',{waitUntil:'domcontentloaded'});
+        assert.equal(guideFetches,0,'Story information loaded before opt-in');
+        assert.equal(await page.locator('#guide-content').isVisible(),false);
+        await page.locator('#guide-toggle').click();
+        await page.waitForFunction(()=>window.ViceOfficialIntel?.getState().revealed);
+        assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),6,'Places filter did not persist from link');
+        assert.equal(await page.locator('#guide-filters [data-guide-filter="places"]').getAttribute('aria-pressed'),'true');
+        await page.locator('#guide-filters [data-guide-filter="world"]').click();
+        assert.equal(new URL(page.url()).searchParams.get('category'),'world');
+        assert.equal(await page.locator('#guide-grid .vc-intel-card').count(),4);
+        await page.locator('#kit-strict').check();
+        assert.equal(await page.locator('#guide-content').isVisible(),false,'Spoiler lock did not close guide');
+      }finally{await context.close();}
+    });
+
     await runCase('PWA offline restart with preserved local data',async()=>{
       const context=await browser.newContext({timezoneId:'Australia/Sydney',serviceWorkers:'allow'});
       try{
@@ -513,7 +579,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v18');
+          return keys.includes('vice-city-countdown-v19');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});
