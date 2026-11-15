@@ -136,7 +136,7 @@ async function main(){
 
     // Cinematic mode must not alter the live countdown or the spoiler shield.
     // Preview should remain independently controllable on a normal day.
-    for(const [width,height] of [[360,780],[1440,900]]){
+    for(const [width,height] of [[320,720],[360,780],[1440,900]]){
       await runCase('cinematic preview and zero transition '+width+'px',async()=>{
         const context=await browser.newContext({
           viewport:{width,height},
@@ -180,7 +180,15 @@ async function main(){
           assert.equal(await page.locator('#launch-hub').isVisible(),false,
             'Preview must not falsely launch the actual countdown');
           assert.equal(await page.evaluate(()=>window.ViceCountdown.getState().release),originalRelease);
-          if(width===1440)await page.screenshot({path:path.join(SHOTS,'cinematic-welcome-desktop.png')});
+          if(width===1440){
+            // The welcome screen deliberately fades in; capture its finished
+            // presentation rather than the nearly-transparent first frame.
+            await page.locator('#vc-cinema-welcome').evaluate(el=>
+              el.getAnimations().forEach(animation=>animation.finish()));
+            await page.screenshot({path:path.join(SHOTS,'cinematic-welcome-desktop.png')});
+          }
+          assert.equal(await page.locator('#vc-cinema-sim-controls').isVisible(),false,
+            'The jump-to-ten action must disappear after the welcome transition');
           await page.locator('#vc-cinema-restart').click();
           assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),false);
           assert.equal(await page.locator('#vc-cinema-number').textContent(),'60');
@@ -364,7 +372,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v10');
+          return keys.includes('vice-city-countdown-v11');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

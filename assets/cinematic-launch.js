@@ -54,14 +54,16 @@ function setState(name){
  overlay.classList.toggle('vc-cinema-arrived',name==='launched');
  $('vc-cinema-stars').setAttribute('aria-hidden','true');
  if(name==='launched'){
+  $('vc-cinema-sim-controls').hidden=true;
   phase.textContent='19 NOVEMBER 2026 · MIDNIGHT';
   label.textContent='THE WAIT IS OVER';
   liveFlag.textContent=mode==='preview'?'SIMULATED MIDNIGHT':'SCHEDULED MIDNIGHT';
   countdownArea.hidden=true;
   welcome.hidden=false;
   restartButton.hidden=mode!=='preview';
-  fireworksLink.hidden=false;
+  fireworksLink.hidden=mode!=='preview';
  }else{
+  $('vc-cinema-sim-controls').hidden=mode!=='preview'||atTen;
   phase.textContent=atTen?'THE FINAL TEN SECONDS':'THE FINAL 60 SECONDS';
   label.textContent=atTen?'THIS IS THE MOMENT':'VICE CITY IS CALLING';
   liveFlag.textContent=mode==='preview'?'SIMULATION · NO REAL-TIME CHANGES':'LIVE REGION COUNTDOWN';

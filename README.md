@@ -207,3 +207,8 @@ The main countdown now provides **Preview the cinematic 60-second countdown** in
 When the selected region's real release clock enters the final 60 seconds, the fullscreen-styled cinematic overlay appears automatically (once per region/session). Visitors can exit, which prevents reopening against their wishes; **Return to Launch Mode** remains available during the remaining minute. The source of truth is the existing window.ViceCountdown.getState() release and selectedZone. The actual milestone shows no unsupported claim of game access; that still depends on the console account and storefront.
 
 No third-party imagery, autoplay audio, commercial music or story spoilers are introduced. Animations respect both system reduced-motion settings and the existing launch-kit preference. ESC/close and keyboard focus management make the overlay dismissible. The real selected timezone continues to drive the background page exactly as before. This new mode is pre-cached by **vice-city-countdown-v10** for offline PWA use. Browser QA covers 60-second preview, final-ten transitions, real T−60 activation, user dismissal, real region launch, mobile layouts and privacy.
+
+
+### v2.6.1 visual polish
+
+The simulated final-ten button now disappears as soon as the countdown reaches its final-ten sequence and stays hidden after the welcome transition. The separate fireworks concept link is accessible only in the explicit preview, not forced upon visitors at real midnight. Browser QA captures the completed welcome fade-in and includes an additional 320px narrow-mobile test. Static PWA cache namespace is `vice-city-countdown-v11`; existing region clock and spoiler controls remain unchanged.

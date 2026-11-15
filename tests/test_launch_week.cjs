@@ -58,12 +58,12 @@ for(const id of [
 for(const pathName of [
  'assets/launch-week.js?v=2.5.0','assets/launch-week-core.js?v=2.5.0',
  'assets/launch-week.css?v=2.5.0',
- 'assets/cinematic-launch.css?v=2.6.0','assets/cinematic-launch.js?v=2.6.0'
+ 'assets/cinematic-launch.css?v=2.6.0','assets/cinematic-launch.js?v=2.6.1'
 ]){
  assert.ok(site.includes(pathName),'Missing app-shell asset: '+pathName);
  assert.ok(worker.includes(pathName),'Missing offline cache asset: '+pathName);
 }
-assert.ok(worker.includes('vice-city-countdown-v10'));
+assert.ok(worker.includes('vice-city-countdown-v11'));
 assert.ok(code.includes("media-toggle"),'Strict spoiler mode must control optional media access');
 assert.ok(code.includes("toBlob"),'Countdown card must export as a real image');
 assert.ok(code.includes("new Blob([file]"),'Calendar must download as an .ics file');

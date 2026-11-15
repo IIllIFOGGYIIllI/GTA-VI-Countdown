@@ -71,9 +71,9 @@ class SiteTests(unittest.TestCase):
         self.assertIn("launch-week.css?v=2.5.0",worker)
         self.assertIn("launch-week-core.js?v=2.5.0",worker)
         self.assertIn("launch-week.js?v=2.5.0",worker)
-        self.assertIn("vice-city-countdown-v10",worker)
+        self.assertIn("vice-city-countdown-v11",worker)
         self.assertIn("cinematic-launch.css?v=2.6.0",worker)
-        self.assertIn("cinematic-launch.js?v=2.6.0",worker)
+        self.assertIn("cinematic-launch.js?v=2.6.1",worker)
 
     def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
         self.assertIn('id="launch-state" hidden',self.html)
