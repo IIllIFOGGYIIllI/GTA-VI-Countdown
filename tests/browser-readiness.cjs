@@ -187,9 +187,9 @@ async function main(){
             return hits;
           });
           assert.ok(ink>4,'Fireworks canvas did not render visible particles');
-          await page.locator('button[data-style="deco"]').click();
+          await page.locator('button[data-style="deco"]').click({noWaitAfter:true,timeout:12000});
           assert.equal(await page.locator('button[data-style="deco"]').getAttribute('aria-pressed'),'true');
-          await page.locator('button[data-style="vi"]').click();
+          await page.locator('button[data-style="vi"]').click({noWaitAfter:true,timeout:12000});
           assert.equal(await page.locator('button[data-style="vi"]').getAttribute('aria-pressed'),'true');
           await page.locator('#replay').click();
           assert.equal(await page.locator('#launch-message').isVisible(),true);
