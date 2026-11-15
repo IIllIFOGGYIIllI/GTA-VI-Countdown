@@ -198,3 +198,12 @@ The previous three hand-drawn motifs were not convincing fireworks. The preview 
 - The pyrotechnics sequence is now choreographed as **Act I — Skyline Salute** (gold shell opening), **Act II — Neon Rush** (alternating colourful salvos), and **Act III — Grand Finale** (layered carrier rockets, crackles and gold waterfall), approximately 42 seconds in total.
 - Browser QA verifies local WAV decoding, cue start at ten seconds, local-only audio, offset selection, fade-out at midnight, fireworks particles, mobile and desktop layouts, replay and existing PWA integrity.
 - Public hosting or automatic playback of Tom Petty's commercial recording would require the appropriate music licence; this personal file selection is a preview-only alternative.
+
+
+## Cinematic Launch Mode v2.6 (main website and PWA)
+
+The main countdown now provides **Preview the cinematic 60-second countdown** inside the existing countdown card. Preview is a simulated 60-second journey and never changes the production countdown, regional launch state, spoilers or PWA settings. A **Jump to final 10 seconds** option allows fast testing. At zero it transitions to **WELCOME TO VICE CITY**, with a replay button and an optional link to the separate fireworks concept.
+
+When the selected region's real release clock enters the final 60 seconds, the fullscreen-styled cinematic overlay appears automatically (once per region/session). Visitors can exit, which prevents reopening against their wishes; **Return to Launch Mode** remains available during the remaining minute. The source of truth is the existing window.ViceCountdown.getState() release and selectedZone. The actual milestone shows no unsupported claim of game access; that still depends on the console account and storefront.
+
+No third-party imagery, autoplay audio, commercial music or story spoilers are introduced. Animations respect both system reduced-motion settings and the existing launch-kit preference. ESC/close and keyboard focus management make the overlay dismissible. The real selected timezone continues to drive the background page exactly as before. This new mode is pre-cached by **vice-city-countdown-v10** for offline PWA use. Browser QA covers 60-second preview, final-ten transitions, real T−60 activation, user dismissal, real region launch, mobile layouts and privacy.

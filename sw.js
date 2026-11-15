@@ -1,9 +1,10 @@
-/* Vice City Countdown · PWA v2.5 · Fresh-online + offline fallback */
-const CACHE='vice-city-countdown-v9';
+/* Vice City Countdown · PWA v2.6 · Cinematic Midnight Mode + offline fallback */
+const CACHE='vice-city-countdown-v10';
 const CORE=[
   './','./index.html',
   './styles.css?v=2.2.0','./assets/vice-city-theme.css?v=2.2.0','./assets/mobile-experience.css?v=2.3.0','./assets/launch-mode.css?v=2.4.0','./assets/launch-week.css?v=2.5.0',
-  './app.js?v=2.5.0','./assets/launch-week-core.js?v=2.5.0','./assets/launch-week.js?v=2.5.0','./assets/vice-city-skyline.svg',
+  './app.js?v=2.5.0','./assets/launch-week-core.js?v=2.5.0','./assets/launch-week.js?v=2.5.0',
+  './assets/cinematic-launch.css?v=2.6.0','./assets/cinematic-launch.js?v=2.6.0','./assets/vice-city-skyline.svg',
   './data/news.json?v=2.5.0','./manifest.webmanifest',
   './assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
   './privacy.html','./terms.html','./spoilers.html'

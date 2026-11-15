@@ -134,6 +134,103 @@ async function main(){
       });
     }
 
+    // Cinematic mode must not alter the live countdown or the spoiler shield.
+    // Preview should remain independently controllable on a normal day.
+    for(const [width,height] of [[360,780],[1440,900]]){
+      await runCase('cinematic preview and zero transition '+width+'px',async()=>{
+        const context=await browser.newContext({
+          viewport:{width,height},
+          timezoneId:'Australia/Sydney',serviceWorkers:'block',
+          reducedMotion:'no-preference'
+        });
+        try{
+          const page=await context.newPage();
+          const errors=[];
+          page.on('pageerror',e=>errors.push(e.message));
+          await page.clock.install({time:new Date('2026-11-16T00:00:00.000Z')});
+          await page.goto(BASE,{waitUntil:'domcontentloaded'});
+          await page.waitForFunction(()=>window.ViceCinematicLaunch&&window.ViceCountdown);
+          const originalRelease=await page.evaluate(()=>window.ViceCountdown.getState().release);
+          assert.equal(await page.locator('#vc-cinema').isVisible(),false);
+          await page.locator('#vc-cinema-preview').click();
+          assert.equal(await page.locator('#vc-cinema').isVisible(),true);
+          assert.equal(await page.locator('#vc-cinema-sim-controls').isVisible(),true);
+          assert.equal(await page.locator('#vc-cinema-number').textContent(),'60');
+          assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).mode,'preview');
+          // Preview countdown is not allowed to change the actual release.
+          assert.equal(await page.evaluate(()=>window.ViceCountdown.getState().release),originalRelease);
+          const overflow=await page.evaluate(()=>({
+            w:document.querySelector('#vc-cinema').scrollWidth,
+            viewport:window.innerWidth
+          }));
+          assert.ok(overflow.w<=overflow.viewport+2,
+            'Cinematic mobile overflow '+JSON.stringify(overflow));
+          if(width===1440){
+            await page.screenshot({path:path.join(SHOTS,'cinematic-fullscreen-60-seconds.png')});
+          }
+          await page.locator('#vc-cinema-skip').click();
+          assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'final-ten');
+          await page.clock.runFor(3300);
+          const num=Number(await page.locator('#vc-cinema-number').textContent());
+          assert.ok(num>=6&&num<=8,'Final-ten clock not updating: '+num);
+          if(width===360)await page.screenshot({path:path.join(SHOTS,'cinematic-final-ten-mobile.png')});
+          await page.clock.runFor(7500);
+          assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
+          assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'launched');
+          assert.equal(await page.locator('#launch-hub').isVisible(),false,
+            'Preview must not falsely launch the actual countdown');
+          assert.equal(await page.evaluate(()=>window.ViceCountdown.getState().release),originalRelease);
+          if(width===1440)await page.screenshot({path:path.join(SHOTS,'cinematic-welcome-desktop.png')});
+          await page.locator('#vc-cinema-restart').click();
+          assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),false);
+          assert.equal(await page.locator('#vc-cinema-number').textContent(),'60');
+          await page.locator('#vc-cinema-close').click();
+          assert.equal(await page.locator('#vc-cinema').isVisible(),false);
+          assert.equal(await page.locator('#vc-cinema-preview').isVisible(),true);
+          assert.equal(await page.locator('#countdown-heading').textContent(),'MIDNIGHT CALLING');
+          assert.equal(errors.length,0,'Cinematic preview JS errors: '+errors.join(' | '));
+        }finally{await context.close();}
+      });
+    }
+    await runCase('real Sydney cinematic starts at T-minus-60 and respects region',async()=>{
+      const context=await browser.newContext({
+        viewport:{width:375,height:812},
+        timezoneId:'Australia/Sydney',serviceWorkers:'block',
+        reducedMotion:'reduce'
+      });
+      try{
+        const page=await context.newPage();
+        const errors=[];
+        page.on('pageerror',e=>errors.push(e.message));
+        await page.clock.install({time:new Date('2026-11-18T12:58:59.000Z')});
+        await page.goto(BASE,{waitUntil:'domcontentloaded'});
+        await page.waitForFunction(()=>window.ViceCinematicLaunch&&window.ViceCountdown);
+        assert.equal(await page.locator('#vc-cinema').isVisible(),false,'Should not auto-open before T-60');
+        await page.clock.runFor(2200);
+        assert.equal(await page.locator('#vc-cinema').isVisible(),true,'Should open inside final minute');
+        assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).mode,'real');
+        assert.ok((await page.locator('#vc-cinema-region').textContent()).includes('Sydney'));
+        await page.locator('#vc-cinema-close').click();
+        assert.equal(await page.locator('#vc-cinema').isVisible(),false);
+        assert.equal(await page.locator('#vc-cinema-reopen').isVisible(),true);
+        await page.clock.runFor(1500);
+        assert.equal(await page.locator('#vc-cinema').isVisible(),false,
+          'Closing the automatic overlay should not reopen it against user intent');
+        await page.locator('#vc-cinema-reopen').click();
+        assert.equal(await page.locator('#vc-cinema').isVisible(),true);
+        await page.clock.runFor(51000);
+        assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).phase,'final-ten');
+        await page.clock.runFor(12000);
+        assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
+        assert.equal(await page.locator('#launch-hub').isVisible(),true);
+        await page.locator('#vc-cinema-close').click();
+        await page.locator('#timezone').selectOption('America/Los_Angeles');
+        assert.equal(await page.locator('#launch-hub').isVisible(),false);
+        assert.equal(await page.locator('#vc-cinema').isVisible(),false);
+        assert.equal(errors.length,0,'Real cinematic timing errors: '+errors.join(' | '));
+      }finally{await context.close();}
+    });
+
     await runCase('Sydney midnight transition and region reversal',async()=>{
       const context=await browser.newContext({
         viewport:{width:375,height:812},
@@ -267,7 +364,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v9');
+          return keys.includes('vice-city-countdown-v10');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});
