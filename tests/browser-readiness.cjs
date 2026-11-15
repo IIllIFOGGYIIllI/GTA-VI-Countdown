@@ -300,13 +300,18 @@ async function main(){
           assert.equal(await page.locator('#guide-grid img').count(),0,
             'Story images should not even exist before the reveal');
           if(width===1366||width===375){
-            await page.locator('#news').scrollIntoViewIfNeeded();
+            const first=page.locator('#news-grid .news-card').first();
+            await first.scrollIntoViewIfNeeded();
             await page.waitForFunction(()=>{
               const img=document.querySelector('#news-grid img.news-visual-image');
               return !!img&&(img.naturalWidth>0||img.dataset.failed==='true');
             },undefined,{timeout:11000});
-            await page.waitForTimeout(350);
-            const first=page.locator('#news-grid .news-card').first();
+            await first.locator('img.news-visual-image').evaluate(async img=>{
+              if(img.naturalWidth&&img.decode)
+                await Promise.race([img.decode().catch(()=>{}),
+                  new Promise(resolve=>setTimeout(resolve,3500))]);
+            });
+            await page.waitForTimeout(450);
             await first.screenshot({path:path.join(SHOTS,width===1366
               ?'news-official-screenshot-desktop.png'
               :'news-official-screenshot-mobile.png')});
