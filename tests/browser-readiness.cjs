@@ -162,6 +162,7 @@ async function main(){
           const response=await page.goto(BASE+'preview/celebration.html',{waitUntil:'load'});
           assert.equal(response.status(),200);
           assert.equal(await page.locator('#launch-message').isVisible(),false);
+          if(vw===1440)await page.locator('#demo-30').click();
           const scroll=await page.evaluate(()=>({
             documentWidth:document.documentElement.scrollWidth,
             viewportWidth:window.innerWidth
@@ -209,6 +210,20 @@ async function main(){
             if(vw===1440 && name!=='palms'){
               await page.screenshot({path:path.join(SHOTS,'celebration-'+name+'-before-midnight.png')});
             }
+          }
+          if(vw===1440){
+            // All bright bursts have faded; the selected motif must still
+            // remain visible in the full-sized sky just like the live sample.
+            await page.waitForTimeout(3700);
+            const persistent=await page.evaluate(()=>{
+              const sky=document.querySelector('#fireworks');
+              const rgba=sky.getContext('2d').getImageData(0,0,sky.width,sky.height).data;
+              let visible=0;
+              for(let i=3;i<rgba.length;i+=64)if(rgba[i]>12)visible++;
+              return visible;
+            });
+            assert.ok(persistent>20,'Full skyline design vanished between firework bursts');
+            await page.screenshot({path:path.join(SHOTS,'celebration-persistent-background.png')});
           }
           // The sound button must be pressed before the demo midnight.
           await page.locator('#audio-toggle').click();

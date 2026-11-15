@@ -153,7 +153,8 @@ function drawFireworkMotif(g,type,x,y,size,time,alpha=1,reduced=false){
 // visual motif, rather than a generic fallback, powers the full-size sky.
 window.ViceFireworksPreview=Object.freeze({
  selectedDesign:()=>state.fireworkStyle,
- largeMotifTypes:()=>state.motifs.map(motif=>motif.type),
+ // The selected ambient motif is always painted, including between bursts.
+ largeMotifTypes:()=>[state.fireworkStyle,...state.motifs.map(motif=>motif.type)],
  previewAndSkyShareRenderer:true
 });
 function launchFirework(x,y,type,scale=1,at=performance.now()){
@@ -199,6 +200,14 @@ function render(now){
  }
  ctx.clearRect(0,0,state.width,state.height);
  ctx.save();ctx.globalCompositeOperation='lighter';
+ // The full-size sky continuously displays the *same* selected design as
+ // the panel preview. Bursts brighten it; neither a late selection nor a
+ // slow device can leave the primary fireworks stage completely empty.
+ const ambientSize=Math.min(160,Math.max(86,state.width*.13));
+ const ambientX=state.fireworkStyle==='vi'?.40:.36;
+ drawFireworkMotif(ctx,state.fireworkStyle,state.width*ambientX,state.height*.18,
+   ambientSize*(state.fireworkStyle==='vi'?1.28:1.02),
+   now/1000,state.launched?.27:.48,state.reduce);
  for(let i=state.rockets.length-1;i>=0;i--){
   const r=state.rockets[i],u=Math.min(1,(now-r.began)/r.ms),ease=1-(1-u)**2;
   const x=r.x0+(r.x1-r.x0)*ease,y=r.y0+(r.y1-r.y0)*ease;
