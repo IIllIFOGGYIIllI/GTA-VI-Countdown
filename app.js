@@ -218,7 +218,7 @@
     const grid=$('news-grid'),status=$('news-status'),verified=$('news-verified');
     if(!grid||!status)return;
     try{
-      const response=await fetch('./data/news.json?v=2.9.0',{cache:'no-store'});
+      const response=await fetch('./data/news.json?v=2.9.1',{cache:'no-store'});
       if(!response.ok)throw Error('Approved news is unavailable');
       const feed=await response.json();
       if(!Array.isArray(feed.articles))throw Error('Invalid approved-news format');

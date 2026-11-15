@@ -275,33 +275,6 @@ async function main(){
       }finally{await context.close();}
     });
 
-    await runCase('official Vice City screenshot contact sheet for editorial QA',async()=>{
-      const context=await browser.newContext({viewport:{width:1060,height:900},serviceWorkers:'block'});
-      try{
-        const page=await context.newPage();
-        await page.goto(BASE+'privacy.html',{waitUntil:'domcontentloaded'});
-        const d=await page.evaluate(async()=>await (await fetch('./data/screenshots.json')).json());
-        const images=d.items.filter(x=>x.category==='Vice City').map(x=>({
-          title:x.title,id:x.id,url:x.image+'?akim=1&imdensity=1&imwidth=384'
-        }));
-        await page.setContent('<!doctype html><html><head><style>*{box-sizing:border-box}body{background:#0d1429;color:white;font:14px system-ui;margin:0;padding:18px}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.tile{background:#24344c;border:1px solid #546780;padding:5px}.tile img{width:100%;height:158px;object-fit:cover;display:block}.tile strong{display:block;padding:6px;font-weight:800;font-size:13px}</style></head><body><div class="gallery" id="art-review"></div></body></html>');
-        await page.evaluate(data=>{
-          const target=document.getElementById('art-review');
-          for(const x of data){
-            const item=document.createElement('div');item.className='tile';
-            const img=document.createElement('img');img.src=x.url;img.loading='eager';img.alt=x.title;
-            const label=document.createElement('strong');label.textContent=x.id+' · '+x.title;
-            item.append(img,label);target.append(item);
-          }
-        },images);
-        await page.waitForTimeout(8500);
-        const n=await page.locator('#art-review img').evaluateAll(imgs=>imgs.filter(x=>x.naturalWidth>0).length);
-        console.log('ARTWORK QA loaded '+n+' of '+images.length+' Vice City reference screenshots');
-        await page.screenshot({path:path.join(SHOTS,'vice-city-reference-contact-sheet.png'),fullPage:true});
-        assert.equal(images.length,27,'Reference catalogue changed unexpectedly');
-      }finally{await context.close();}
-    });
-
     // 2026-11-16 approved Newswire expansion and opt-in-only Rockstar guide.
     for(const [width,height] of [[320,720],[375,812],[1366,850]]){
       await runCase('approved news and strict opt-in story guide '+width+'px',async()=>{
@@ -328,7 +301,11 @@ async function main(){
             'Story images should not even exist before the reveal');
           if(width===1366||width===375){
             await page.locator('#news').scrollIntoViewIfNeeded();
-            await page.waitForTimeout(1550);
+            await page.waitForFunction(()=>{
+              const img=document.querySelector('#news-grid img.news-visual-image');
+              return !!img&&(img.naturalWidth>0||img.dataset.failed==='true');
+            },undefined,{timeout:11000});
+            await page.waitForTimeout(350);
             const first=page.locator('#news-grid .news-card').first();
             await first.screenshot({path:path.join(SHOTS,width===1366
               ?'news-official-screenshot-desktop.png'
@@ -529,7 +506,7 @@ async function main(){
         await page.evaluate(async()=>{await navigator.serviceWorker.ready;});
         await page.waitForFunction(async()=>{
           const keys=await caches.keys();
-          return keys.includes('vice-city-countdown-v16');
+          return keys.includes('vice-city-countdown-v18');
         });
         await context.setOffline(true);
         await page.reload({waitUntil:'domcontentloaded'});

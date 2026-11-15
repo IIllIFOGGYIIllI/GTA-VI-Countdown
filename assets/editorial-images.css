@@ -87,3 +87,6 @@
 .vc-low-motion .news-card .news-visual-image,.vc-low-motion .vc-intel-card .vc-intel-card-picture img{
  transition:none!important;transform:none!important
 }
+
+/* Hide photographic attribution until the actual official image loads. */
+.vc-intel-card .vc-intel-card-picture:not(.has-artwork) .vc-intel-picture-badge{visibility:hidden}

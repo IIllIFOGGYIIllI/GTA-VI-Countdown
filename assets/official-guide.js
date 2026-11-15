@@ -1,4 +1,4 @@
-/* Official Rockstar information archive v2.9.0
+/* Official Rockstar information archive v2.9.1
  * No story or character data is loaded until the visitor explicitly opts in.
  * The existing Strict Spoiler Lock is an overriding permission gate.
  */
@@ -130,7 +130,7 @@ async function reveal(){
  toggle.disabled=true;toggle.textContent='Preparing official files…';
  lock.textContent='Loading only approved, Rockstar-confirmed facts…';
  try{
-  const response=await fetch('./data/official-guide.json?v=2.9.0');
+  const response=await fetch('./data/official-guide.json?v=2.9.1');
   if(!response.ok)throw Error('Official archive unavailable');
   const documentData=await response.json();
   if(attempt!==requestId||locked())return;
