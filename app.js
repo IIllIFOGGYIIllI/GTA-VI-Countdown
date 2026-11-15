@@ -257,7 +257,7 @@
         const number=document.createElement('span');number.className='news-visual-corner';number.textContent=String(i+1).padStart(2,'0');visual.append(heading,number);
         const content=document.createElement('div');content.className='news-content';
         const metadata=document.createElement('div');metadata.className='news-meta';
-        const label=document.createElement('span');label.textContent=String(item.tag||item.category).slice(0,28).toLowerCase().replace(/(^|[\\s-])([a-z])/g,(_,a,b)=>a+b.toUpperCase());
+        const label=document.createElement('span');label.textContent=String(item.tag||item.category).slice(0,28).toLowerCase().replace(/(^|[\s-])([a-z])/g,(_,a,b)=>a+b.toUpperCase());
         const published=document.createElement('time');published.dateTime=item.date;published.textContent=new Date(item.date+'T12:00:00Z').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'});
         metadata.append(label,published);
         const title=document.createElement('h3');title.textContent=item.title.replace(/\.+$/,'').replace(/\b[a-z]/g,c=>c.toUpperCase());
