@@ -104,7 +104,7 @@ function launchCelebration(){
   fireworks.start();
   fireworksPlaying=true;
   overlay.classList.add('vc-cinema-celebrating');
-  fireworksStatus.textContent='FIREWORKS SHOW IN PROGRESS';
+  fireworksStatus.textContent='Fireworks Show in Progress';
   // A paced, 38-second show: salute, colour waves, gold willows, grand finale.
   afterFireworks(1400,()=>{
    const rect=fireworksStage.getBoundingClientRect();
@@ -123,13 +123,13 @@ function launchCelebration(){
   },run);
   afterFireworks(25200,()=>{
     fireworks.launchFinale({stopAfter:false});
-    fireworksStatus.textContent='✦ THE GRAND FINALE ✦';
+    fireworksStatus.textContent='✦ The Grand Finale ✦';
   },run);
   afterFireworks(FIREWORK_DURATION,()=>{
     // Fade naturally, leaving the welcome screen and replay control visible.
     fireworks.stop({finale:false});
     fireworksPlaying=false;
-    fireworksStatus.textContent='CELEBRATION COMPLETE · REPLAY ANYTIME';
+    fireworksStatus.textContent='Celebration Complete · Replay Anytime';
   },run);
  }catch(error){
   clearCelebration();
@@ -156,9 +156,9 @@ function setState(name){
  $('vc-cinema-stars').setAttribute('aria-hidden','true');
  if(name==='launched'){
   $('vc-cinema-sim-controls').hidden=true;
-  phase.textContent='19 NOVEMBER 2026 · MIDNIGHT';
-  label.textContent='THE WAIT IS OVER';
-  liveFlag.textContent=mode==='preview'?'SIMULATED MIDNIGHT':'SCHEDULED MIDNIGHT';
+  phase.textContent='19 November 2026 · Midnight';
+  label.textContent='The Wait Is Over';
+  liveFlag.textContent=mode==='preview'?'Simulated Midnight':'Scheduled Midnight';
   countdownArea.hidden=true;
   welcome.hidden=false;
   restartButton.hidden=mode!=='preview';
@@ -166,9 +166,9 @@ function setState(name){
   launchCelebration();
  }else{
   $('vc-cinema-sim-controls').hidden=mode!=='preview'||atTen;
-  phase.textContent=atTen?'THE FINAL TEN SECONDS':'THE FINAL 60 SECONDS';
-  label.textContent=atTen?'THIS IS THE MOMENT':'VICE CITY IS CALLING';
-  liveFlag.textContent=mode==='preview'?'SIMULATION · NO REAL-TIME CHANGES':'LIVE REGION COUNTDOWN';
+  phase.textContent=atTen?'The Final Ten Seconds':'The Final 60 Seconds';
+  label.textContent=atTen?'This Is the Moment':'Vice City Is Calling';
+  liveFlag.textContent=mode==='preview'?'Simulation · No Real-Time Changes':'Live Region Countdown';
   countdownArea.hidden=false;
   welcome.hidden=true;
   restartButton.hidden=true;
@@ -262,7 +262,7 @@ function update(){
  const secs=Math.ceil(remaining/1000);
  if(launched){
   setState('launched');
-  left.textContent='SCHEDULED MIDNIGHT MILESTONE';
+  left.textContent='Scheduled Midnight Milestone';
   progress.style.width='100%';
   timer.textContent='00';
   $('vc-cinema-progress-ring').style.strokeDashoffset='0';
@@ -278,7 +278,7 @@ function update(){
  progress.style.width=(elapsed/60000*100).toFixed(2)+'%';
  $('vc-cinema-progress-ring').style.strokeDashoffset=
   String((1-clamps(elapsed/60000,0,1))*565.487);
- left.textContent=lastTen?'TEN SECONDS UNTIL MIDNIGHT':'THE LAST MINUTE BEFORE MIDNIGHT';
+ left.textContent=lastTen?'Ten Seconds Until Midnight':'The Last Minute Before Midnight';
  region.textContent=mode==='preview'?getRegion(state)+' · simulated preview':getRegion(state);
 }
 function skipToTen(){
@@ -309,13 +309,13 @@ fullButton.addEventListener('click',async()=>{
  try{
   if(document.fullscreenElement===overlay)await document.exitFullscreen();
   else if(overlay.requestFullscreen)await overlay.requestFullscreen();
-  else fullButton.textContent='FULLSCREEN NOT SUPPORTED';
+  else fullButton.textContent='Fullscreen Not Supported';
  }catch{
-  fullButton.textContent='FULLSCREEN NOT AVAILABLE';
+  fullButton.textContent='Fullscreen Not Available';
  }
 });
 document.addEventListener('fullscreenchange',()=>{
- fullButton.textContent=document.fullscreenElement===overlay?'EXIT FULLSCREEN':'⛶ FULLSCREEN';
+ fullButton.textContent=document.fullscreenElement===overlay?'Exit Fullscreen':'⛶ Fullscreen';
 });
 window.addEventListener('vice:tick',update);
 document.addEventListener('visibilitychange',()=>{

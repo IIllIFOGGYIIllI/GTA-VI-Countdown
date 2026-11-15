@@ -71,7 +71,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn("launch-week.css?v=2.5.0",worker)
         self.assertIn("launch-week-core.js?v=2.5.0",worker)
         self.assertIn("launch-week.js?v=2.8.0",worker)
-        self.assertIn("vice-city-countdown-v18",worker)
+        self.assertIn("vice-city-countdown-v19",worker)
         self.assertIn("preview/vendor/GrandFireworks.min.js?v=1.11.1",worker)
         self.assertIn("cinematic-launch.css?v=2.7.2",worker)
         self.assertIn("cinematic-launch.js?v=2.7.1",worker)
@@ -129,11 +129,13 @@ class SiteTests(unittest.TestCase):
         self.assertIn("img.loading='lazy'",info)
         self.assertIn('officialScreenshot',info)
         self.assertIn('editorial-images.css?v=2.9.1',self.html)
+        self.assertIn('site-pages.css?v=3.0.0',self.html)
+        self.assertIn('site-pages.js?v=3.0.0',worker)
 
     def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
         self.assertIn('id="launch-state" hidden',self.html)
         self.assertIn('id="launch-hub" hidden',self.html)
-        self.assertIn("GTA VI HAS LAUNCHED",self.html)
+        self.assertIn("GTA VI Has Launched",self.html)
         self.assertNotIn("autoplay",self.html.split('id="launch-hub"')[1].split('</section>')[0])
         css=(ROOT/'assets/launch-mode.css').read_text(encoding='utf-8')
         self.assertIn('#launch-hub[hidden]',css)

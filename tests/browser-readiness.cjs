@@ -99,14 +99,14 @@ async function main(){
             await page.locator('#kit-strict').check();
             assert.equal(await page.locator('#media-toggle').isDisabled(),true);
             await page.locator('#kit-check-items input[data-task="preload"]').check();
-            assert.equal(await page.locator('#kit-check-count').textContent(),'1 OF 6 READY');
+            assert.equal(await page.locator('#kit-check-count').textContent(),'1 of 6 Ready');
             await page.reload({waitUntil:'domcontentloaded'});
             await page.waitForFunction(()=>document.body.classList.contains('vc-launch-kit-ready'));
             assert.equal(await page.locator('#kit-platform').inputValue(),'PS5');
             assert.equal(await page.locator('#kit-motion').isChecked(),true);
             assert.equal(await page.locator('#kit-strict').isChecked(),true);
             assert.equal(await page.locator('#media-toggle').isDisabled(),true);
-            assert.equal(await page.locator('#kit-check-count').textContent(),'1 OF 6 READY');
+            assert.equal(await page.locator('#kit-check-count').textContent(),'1 of 6 Ready');
             // Opening the media remains an explicit opt-in even after disabling strict mode.
             await page.locator('#kit-strict').uncheck();
             assert.equal(await page.locator('#media-toggle').isEnabled(),true);
@@ -230,7 +230,7 @@ async function main(){
           await page.locator('#vc-cinema-close').click();
           assert.equal(await page.locator('#vc-cinema').isVisible(),false);
           assert.equal(await page.locator('#vc-cinema-preview').isVisible(),true);
-          assert.equal(await page.locator('#countdown-heading').textContent(),'MIDNIGHT CALLING');
+          assert.equal(await page.locator('#countdown-heading').textContent(),'Midnight Calling');
           assert.equal(errors.length,0,'Cinematic preview JS errors: '+errors.join(' | '));
         }finally{await context.close();}
       });
@@ -393,17 +393,17 @@ async function main(){
         page.on('pageerror',e=>errors.push(e.message));
         await page.goto(BASE,{waitUntil:'domcontentloaded'});
         await page.waitForFunction(()=>document.body.classList.contains('vc-launch-kit-ready'));
-        assert.equal(await page.locator('#countdown-heading').textContent(),'MIDNIGHT CALLING');
+        assert.equal(await page.locator('#countdown-heading').textContent(),'Midnight Calling');
         assert.equal(await page.locator('#launch-hub').isVisible(),false);
         await page.clock.runFor(2500);
-        assert.equal(await page.locator('#countdown-heading').textContent(),'THE WAIT IS OVER');
+        assert.equal(await page.locator('#countdown-heading').textContent(),'The Wait Is Over');
         assert.equal(await page.locator('#launch-hub').isVisible(),true);
         assert.equal(await page.locator('#launch-state').isVisible(),true);
         assert.equal(await page.locator('#media-content').isVisible(),false);
         await page.screenshot({path:path.join(SHOTS,'midnight-launch-mobile.png'),fullPage:true});
         await page.locator('#timezone').selectOption('America/Los_Angeles');
         assert.equal(await page.locator('#launch-hub').isVisible(),false);
-        assert.equal(await page.locator('#countdown-heading').textContent(),'MIDNIGHT CALLING');
+        assert.equal(await page.locator('#countdown-heading').textContent(),'Midnight Calling');
         await page.locator('#timezone').selectOption('Australia/Sydney');
         assert.equal(await page.locator('#launch-hub').isVisible(),true);
         assert.equal(errors.length,0,'Launch switch JS errors: '+errors.join(' | '));

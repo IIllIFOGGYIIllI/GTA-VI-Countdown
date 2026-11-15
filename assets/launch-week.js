@@ -92,7 +92,7 @@
       if(box.checked)done++;
     }
     const total=tasks.length;
-    $('kit-check-count').textContent=done+' OF '+total+' READY';
+    $('kit-check-count').textContent=done+' of '+total+' Ready';
     $('kit-check-progress').style.width=(total?done/total*100:0)+'%';
     $('kit-check-message').textContent=done===total
       ?'Launch kit complete — enjoy your first night!'
@@ -161,7 +161,7 @@
     }
     const t=core.remainingParts(ms);
     const preview=phase==='launched'
-      ?'LAUNCH TIME REACHED'
+      ?'Launch Time Reached'
       :core.padded(t.days)+'D '+core.padded(t.hours)+'H '+core.padded(t.minutes)+'M';
     if($('kit-preview-count').textContent!==preview){
       $('kit-preview-count').textContent=preview;
@@ -285,9 +285,9 @@
     ctx.strokeRect(50,50,W-100,H-100);
     ctx.textAlign='left';
     ctx.fillStyle='#9bfced';ctx.font='bold 30px Arial,sans-serif';
-    ctx.fillText('THE FINAL COUNTDOWN',88,142);
+    ctx.fillText('The Final Countdown',88,142);
     ctx.fillStyle='#fff2d6';ctx.font='italic bold 48px Georgia,serif';
-    ctx.fillText('GREETINGS FROM',88,234);
+    ctx.fillText('Greetings From',88,234);
     ctx.shadowColor='rgba(55,16,85,.75)';ctx.shadowBlur=12;
     ctx.fillStyle='#fff9e8';ctx.font='italic 1000 158px Impact,Arial Black,sans-serif';
     ctx.fillText('VICE',78,392);
@@ -298,9 +298,9 @@
     ctx.strokeStyle='rgba(123,249,232,.85)';ctx.lineWidth=2;ctx.strokeRect(88,990,904,213);
     const rem=core.remainingParts(state.remainingMs);
     const launched=state.launched||state.remainingMs<=0;
-    const counter=launched?'LAUNCH TIME REACHED':
+    const counter=launched?'Launch Time Reached':
       core.padded(rem.days)+'D  '+core.padded(rem.hours)+'H  '+core.padded(rem.minutes)+'M';
-    ctx.fillStyle='#9ffff0';ctx.font='bold 21px Arial,sans-serif';ctx.fillText('19 NOVEMBER 2026 · SELECTED REGION',117,1036);
+    ctx.fillStyle='#9ffff0';ctx.font='bold 21px Arial,sans-serif';ctx.fillText('19 November 2026 · Selected Region',117,1036);
     ctx.fillStyle='#fff4e5';ctx.font=launched?'bold 49px Impact,Arial Black,sans-serif':'bold 71px Impact,Arial Black,sans-serif';
     ctx.fillText(counter,113,1128);
     ctx.font='bold 20px Arial,sans-serif';ctx.fillStyle='#ffdbb8';
@@ -308,7 +308,7 @@
     const zoneSafe=zoneName.length>55?zoneName.slice(0,52)+'…':zoneName;
     ctx.fillText(zoneSafe+(settings.platform==='none'?'':' · '+settings.platform),116,1174);
     ctx.fillStyle='#fff0e5';ctx.font='bold 21px Arial,sans-serif';
-    ctx.fillText('SPOILER-FREE · UNOFFICIAL FAN PROJECT',88,1271);
+    ctx.fillText('Spoiler-Free · Unofficial Fan Project',88,1271);
     return canvas;
   }
   $('kit-download-card').addEventListener('click',()=>{

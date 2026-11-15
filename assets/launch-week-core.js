@@ -22,13 +22,13 @@
     return 'normal';
   }
   const PHASE_LABELS=Object.freeze({
-    normal:['THE FINAL COUNTDOWN','The city awaits'],
-    'last-day':['FINAL 24 HOURS','Less than one day until your region reaches midnight'],
-    'final-six':['FINAL SIX HOURS','The night is almost here'],
-    'final-hour':['FINAL HOUR','The last 60 minutes of the countdown'],
-    'final-ten':['FINAL TEN MINUTES','Stay close to the clock'],
-    'final-minute':['FINAL 60 SECONDS','Midnight is almost here'],
-    launched:['WELCOME TO LEONIDA','The scheduled launch time has arrived']
+    normal:['The Final Countdown','The city awaits'],
+    'last-day':['Final 24 Hours','Less than one day until your region reaches midnight'],
+    'final-six':['Final Six Hours','The night is almost here'],
+    'final-hour':['Final Hour','The last 60 minutes of the countdown'],
+    'final-ten':['Final Ten Minutes','Stay close to the clock'],
+    'final-minute':['Final 60 Seconds','Midnight is almost here'],
+    launched:['Welcome to Leonida','The scheduled launch time has arrived']
   });
   function padded(n){return String(Math.trunc(n)).padStart(2,'0');}
   function remainingParts(ms){

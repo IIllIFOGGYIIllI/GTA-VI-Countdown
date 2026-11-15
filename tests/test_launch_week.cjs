@@ -21,7 +21,7 @@ assert.equal(core.phase(1),'final-minute');
 assert.equal(core.phase(0),'launched');
 assert.equal(core.phase(-1),'launched');
 assert.equal(core.phase(NaN),'normal');
-assert.equal(core.PHASE_LABELS['final-minute'][0],'FINAL 60 SECONDS');
+assert.equal(core.PHASE_LABELS['final-minute'][0],'Final 60 Seconds');
 
 const parts=core.remainingParts(day+hour+minute+999);
 assert.deepEqual(parts,{days:1,hours:1,minutes:1,seconds:1});
@@ -65,11 +65,14 @@ for(const pathName of [
  assert.ok(site.includes(pathName),'Missing app-shell asset: '+pathName);
  assert.ok(worker.includes(pathName),'Missing offline cache asset: '+pathName);
 }
-assert.ok(worker.includes('vice-city-countdown-v18'));
+assert.ok(worker.includes('vice-city-countdown-v19'));
 assert.ok(!worker.split('];',1)[0].includes("'./data/official-guide.json?v=2.9.1'"),
   'Private Leonida facts must not be downloaded by PWA installation');
 assert.ok(worker.includes('data/news.json?v=2.9.1'));
 assert.ok(site.includes('assets/editorial-images.css?v=2.9.1'));
+assert.ok(site.includes('assets/site-pages.css?v=3.0.0'));
+assert.ok(worker.includes('assets/site-pages.js?v=3.0.0'));
+assert.ok(site.includes('href="./news.html"'));
 assert.ok(site.includes('app.js?v=2.9.1'));
 assert.ok(worker.includes('app.js?v=2.9.1'));
 assert.ok(worker.includes('assets/editorial-images.css?v=2.9.1'));

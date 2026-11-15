@@ -100,7 +100,7 @@ function assertHidden(actual,expected,description){assert.equal(actual,expected,
   assert.equal(element('seconds').textContent,'01','last pre-launch second remains visible');
   assertHidden(element('launch-state').hidden,true,'launch panel must be hidden pre-release');
   assertHidden(element('launch-hub').hidden,true,'launch hub must be hidden pre-release');
-  assert.equal(element('countdown-heading').textContent,'MIDNIGHT CALLING');
+  assert.equal(element('countdown-heading').textContent,'Midnight Calling');
 
   clock.now=Date.parse('2026-11-18T13:00:00.000Z');
   tick();
@@ -108,10 +108,10 @@ function assertHidden(actual,expected,description){assert.equal(actual,expected,
   assertHidden(element('count-progress').hidden,true,'countdown progress should disappear at launch');
   assertHidden(element('launch-state').hidden,false,'launch panel must appear at midnight');
   assertHidden(element('launch-hub').hidden,false,'launch hub must appear at midnight');
-  assert.equal(element('countdown-heading').textContent,'THE WAIT IS OVER');
+  assert.equal(element('countdown-heading').textContent,'The Wait Is Over');
   assert.equal(element('launch-elapsed').textContent,'00H 00M');
   assert.equal(element('hero-primary-label').textContent,'Launch guide');
-  assert.equal(element('hero-primary-action').href,'#launch-hub');
+  assert.equal(element('hero-primary-action').href,'./launch-info.html#launch-hub');
   assert.equal(body.classList.contains('has-launched'),true);
 
   // Selecting Los Angeles at the same instant reverts to the pending countdown.

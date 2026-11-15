@@ -16,7 +16,7 @@ const lock=$('guide-lock-status');
 const strict=$('kit-strict');
 if(!toggle||!panel||!grid||!strict)return;
 let items=null,selected='all',requestId=0;
-const labels={story:'STORY',characters:'CHARACTERS',places:'LOCATIONS',world:'WORLD & FEATURES'};
+const labels={story:'Story',characters:'Characters',places:'Locations',world:'World & Features'};
 const locked=()=>strict.checked||document.documentElement.classList.contains('vc-strict-spoilers');
 const officialScreenshot=value=>{
  try{
@@ -63,7 +63,7 @@ function render(){
       ?item.imageAlt:'Official Rockstar Games GTA VI promotional screenshot';
     img.addEventListener('load',()=>{picture.classList.add('has-artwork');card.classList.add('has-artwork');});
     img.addEventListener('error',()=>{picture.classList.remove('has-artwork');card.classList.remove('has-artwork');img.removeAttribute('src');});
-    const badge=make('span','vc-intel-picture-badge','OFFICIAL ROCKSTAR SCREENSHOT');
+    const badge=make('span','vc-intel-picture-badge','Official Rockstar Screenshot');
     picture.append(fallback,img,badge);
     card.append(picture);
     // This function is invoked only after the explicit Show Story Details
@@ -142,7 +142,12 @@ async function reveal(){
   if(!checked.length)throw Error('No verified facts');
   items=checked;
   panel.hidden=false;
-  selected='all';search.value='';
+  const preset=window.VicePageRouter?.getCategory?.()||'all';
+  selected=(preset==='all'||valid.has(preset))?preset:'all';
+  filters.querySelectorAll('[data-guide-filter]').forEach(el=>{
+   const active=el.dataset.guideFilter===selected;el.classList.toggle('is-active',active);el.setAttribute('aria-pressed',String(active));
+  });
+  search.value='';
   render();syncLock();
   hideButton.focus();
  }catch(e){

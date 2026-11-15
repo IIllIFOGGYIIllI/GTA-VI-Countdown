@@ -39,16 +39,16 @@
       zones.forEach(([value, title]) => { if(seen.has(value))return; const o=document.createElement('option');o.value=value;o.textContent=title;element.append(o);seen.add(value); });
       if(element.children.length)zoneSelect.append(element);
     }
-    group('POPULAR REGIONS',favoriteZones);
+    group('Popular Regions',favoriteZones);
     try {
       const supported = Intl.supportedValuesOf('timeZone');
       const expanded = supported.map(z=>[z,z.replaceAll('_',' ').replaceAll('/',' / ')]);
-      group('ALL TIMEZONES (IANA)',expanded);
+      group('All Timezones (IANA)',expanded);
     } catch { /* defaults remain available in older browsers */ }
     const detected = getDetectedZone();
-    if(!seen.has(detected))group('YOUR DEVICE',[[detected,detected]]);
+    if(!seen.has(detected))group('Your Device',[[detected,detected]]);
     const stored = getSavedZone();
-    if(stored && !seen.has(stored))group('SAVED REGION',[[stored,stored]]);
+    if(stored && !seen.has(stored))group('Saved Region',[[stored,stored]]);
     zoneSelect.value = stored || detected;
     if(!zoneSelect.value)zoneSelect.value=detected;
     if(!zoneSelect.value)zoneSelect.value='Australia/Sydney';
@@ -93,15 +93,15 @@
     $('count-progress').hidden=!showTimer;
     $('launch-state').hidden=!launched;
     $('launch-hub').hidden=!launched;
-    $('countdown-heading').textContent=launched?'THE WAIT IS OVER':'MIDNIGHT CALLING';
+    $('countdown-heading').textContent=launched?'The Wait Is Over':'Midnight Calling';
     $('countdown-intro').textContent=launched
       ?'Scheduled release time reached · 19 November 2026'
       :'Until midnight · 19 November 2026';
-    $('card-status-label').textContent=launched?'LAUNCH MILESTONE · REGION':'LIVE · YOUR REGION';
-    $('header-state-label').textContent=launched?'LAUNCH DAY':'LIVE COUNTDOWN';
+    $('card-status-label').textContent=launched?'Launch Milestone · Region':'Live · Your Region';
+    $('header-state-label').textContent=launched?'Launch Day':'Live Countdown';
     $('hero-primary-label').textContent=launched?'Launch guide':'See the countdown';
-    $('hero-primary-action').href=launched?'#launch-hub':'#countdown-panel';
-    $('hero-chapter').textContent=launched?'01 / THE CITY IS YOURS':'01 / THE FINAL COUNTDOWN';
+    $('hero-primary-action').href=launched?'./launch-info.html#launch-hub':'./index.html#countdown-panel';
+    $('hero-chapter').textContent=launched?'01 / The City Is Yours':'01 / The Final Countdown';
     $('hero-intro').textContent=launched
       ?'The wait is over in your selected region. Explore official launch information, keep your first playthrough spoiler-free, and welcome back to Vice City.'
       :'Sunset skies. Neon nights. One final countdown. Track the launch of Grand Theft Auto VI across the globe, without ruining a second of the story.';
@@ -235,7 +235,7 @@
       safe.forEach((item,i)=>{
         const card=document.createElement('article');card.className='news-card';card.dataset.category=item.category;
         const visual=document.createElement('div');visual.className='news-visual news-visual-'+(i%3+1);visual.setAttribute('aria-hidden','true');
-        const heading=document.createElement('span');heading.className='news-visual-big';heading.textContent=item.category==='preload'?'READY':i%3===1?'19 / 11':'VI';
+        const heading=document.createElement('span');heading.className='news-visual-big';heading.textContent=item.category==='preload'?'Ready':i%3===1?'19 / 11':'VI';
         const picture=officialScreenshotURL(item.image);
         if(picture){
           const img=document.createElement('img');
@@ -257,12 +257,12 @@
         const number=document.createElement('span');number.className='news-visual-corner';number.textContent=String(i+1).padStart(2,'0');visual.append(heading,number);
         const content=document.createElement('div');content.className='news-content';
         const metadata=document.createElement('div');metadata.className='news-meta';
-        const label=document.createElement('span');label.textContent=String(item.tag||item.category).slice(0,28).toUpperCase();
-        const published=document.createElement('time');published.dateTime=item.date;published.textContent=new Date(item.date+'T12:00:00Z').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}).toUpperCase();
+        const label=document.createElement('span');label.textContent=String(item.tag||item.category).slice(0,28).toLowerCase().replace(/(^|[\\s-])([a-z])/g,(_,a,b)=>a+b.toUpperCase());
+        const published=document.createElement('time');published.dateTime=item.date;published.textContent=new Date(item.date+'T12:00:00Z').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'});
         metadata.append(label,published);
-        const title=document.createElement('h3');title.textContent=item.title.replace(/\.+$/,'');
+        const title=document.createElement('h3');title.textContent=item.title.replace(/\.+$/,'').replace(/\b[a-z]/g,c=>c.toUpperCase());
         const summary=document.createElement('p');summary.textContent=item.summary;
-        const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Open official source for '+item.title);link.textContent='OPEN OFFICIAL SOURCE  ↗';
+        const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Open official source for '+item.title);link.textContent='Open Official Source ↗';
         content.append(metadata,title,summary,link);card.append(visual,content);fragment.append(card);
       });
       grid.replaceChildren(fragment);
@@ -272,8 +272,8 @@
       for(const article of grid.querySelectorAll('.news-card'))article.hidden=category!=='all'&&article.dataset.category!==category;
       const dateText=feed.reviewedAt&&Number.isFinite(Date.parse(feed.reviewedAt))
         ?new Date(feed.reviewedAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase()
-        :'DATE UNAVAILABLE';
-      verified.textContent='✓ EDITOR APPROVED · '+dateText;
+        :'Date Unavailable';
+      verified.textContent='✓ Editor Approved · '+dateText;
       status.textContent=safe.length+' verified updates · Official sources only · New discoveries require manual approval.';
     }catch{
       status.textContent='Offline or unable to refresh; showing the last saved, editor-approved news.';
@@ -386,7 +386,7 @@
       if(!Array.isArray(data.items))throw new Error('Invalid catalogue');
       galleryItems=data.items.filter(x=>typeof x.title==='string'&&typeof x.category==='string'&&typeof x.image==='string'&&x.image.startsWith(imagePrefix));
       galleryLoaded=true;
-      $('gallery-total').textContent=galleryItems.length+' VERIFIED IMAGES';
+      $('gallery-total').textContent=galleryItems.length+' Verified Images';
       renderScreenshots(true);
     }catch{
       galleryStatus.textContent='Screenshots are unavailable. You can still open Rockstar’s official gallery below.';
@@ -449,7 +449,7 @@
 
   // Update-aware PWA: request fresh service-worker code and reload once when
   // a new worker takes control, while keeping offline fallback functional.
-  const APP_VERSION='2.5.0';
+  const APP_VERSION='3.0.0';
   const refreshButton=$('check-updates');
   if(refreshButton){
     refreshButton.addEventListener('click',async()=>{
