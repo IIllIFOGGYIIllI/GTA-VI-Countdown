@@ -133,7 +133,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v28",sw)
+        self.assertIn("vice-city-countdown-v29",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -165,7 +165,7 @@ class SiteTests(unittest.TestCase):
         self.assertFalse('autoplay' in page)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
-        self.assertIn('vice-city-history.css?v=3.4.0',worker)
+        self.assertIn('vice-city-history.css?v=3.4.1',worker)
         self.assertIn('vice-city-history.js?v=3.4.0',worker)
 
     def test_expanded_vice_city_archive_and_sources(self):
@@ -181,7 +181,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="vh-gallery-dialog"',html)
         self.assertIn('id="vh-memory-reset"',html)
         self.assertIn('id="vh-then-image"',html)
-        self.assertIn('Images: Rockstar Games promotional screenshots',html)
+        self.assertIn('Archival and promotional screenshots are credited to Rockstar Games',html)
         self.assertIn('mirrored by',html.lower())
         for theme in ('coast','city','night','cars','water','sunset'):
             self.assertIn(theme+':{original:',script)
@@ -189,8 +189,8 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v28',worker)
-        self.assertIn('vice-city-history.css?v=3.4.0',worker)
+        self.assertIn('vice-city-countdown-v29',worker)
+        self.assertIn('vice-city-history.css?v=3.4.1',worker)
         self.assertIn('vice-city-history.js?v=3.4.0',worker)
         # The historical images can be fetched normally, but optional GTA VI
         # images must never be downloaded during PWA installation
@@ -200,7 +200,7 @@ class SiteTests(unittest.TestCase):
         content=self.pages['vice-city-history.html']
         import re
         self.assertEqual(content.count('data-vh-open-art'),33)
-        self.assertEqual(content.count('class="vh-era-photo"'),5)
+        self.assertEqual(content.count('vh-era-photo'),5)
         self.assertEqual(content.count('class="vh-character-art"'),0)
         self.assertEqual(content.count('vh-character-art'),4)
         self.assertEqual(content.count('vh-vehicle-art'),12)

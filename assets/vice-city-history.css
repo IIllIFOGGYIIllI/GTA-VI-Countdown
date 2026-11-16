@@ -218,3 +218,6 @@ body[data-page="history"]{--vh-pink:#ff9bbb;--vh-mint:#a1ffed;--vh-peach:#ffe0b7
 .vh-visual-footer a{color:#b9ffef;text-decoration:underline;font-weight:850}
 @media(max-width:600px){.vh-era-photo{aspect-ratio:16/10}.vh-place>span:not(.vh-image-error),.vh-place>h3,.vh-place>p,.vh-place>small,.vh-people article>small,.vh-people article>h3,.vh-people article>p,.vh-vehicle-card>.vh-vehicle-top,.vh-vehicle-card>h3,.vh-vehicle-card>p,.vh-vehicle-card>.vh-vehicle-tag{margin-left:15px;margin-right:15px}.vh-visual-dialog{padding:10px}}
 @media(prefers-reduced-motion:reduce){.vh-open-art img{transition:none}.vh-open-art:hover img{transform:none}}
+
+/* Respect hidden on unloaded or failed external visuals */
+.vh-open-art img[hidden],.vh-radio-art img[hidden]{display:none!important}
