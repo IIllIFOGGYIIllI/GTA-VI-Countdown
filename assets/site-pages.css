@@ -62,7 +62,7 @@ body[data-page="news"] #news,body[data-page="media"] #media,body[data-page="leon
 body[data-page="app"] #app,body[data-page="launch-info"] #milestones,body[data-page="launch-kit"] #launch-kit {padding-top:30px}
 body[data-page="leonida-files"] .vc-intel {border-radius:13px}
 .mobile-tab-link[aria-current="page"] {color:#b8fff0}
-@media(max-width:1130px){
+@media(max-width:1230px){
  .desktop-nav {display:none!important}
  .site-pages-menu {display:block}
 }

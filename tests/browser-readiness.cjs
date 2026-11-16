@@ -33,6 +33,7 @@ async function main(){
    ['launch-kit.html','launch-kit'],
    ['news.html','news'],
    ['leonida-files.html','intel'],
+   ['vice-city-history.html','history'],
    ['media.html','media'],
    ['app.html','app']
   ];
@@ -49,7 +50,7 @@ async function main(){
       const visible=await page.locator('#'+section).isVisible();
       assert.equal(visible,true,file+' has no visible primary section');
       const mainSections=await page.locator('main section[id]').evaluateAll(nodes=>nodes.map(n=>n.id));
-      assert.ok(mainSections.length<=2,file+' has too many sections: '+mainSections);
+      assert.ok(file==='vice-city-history.html'?mainSections.length===7:mainSections.length<=2,file+' has unexpected sections: '+mainSections);
       const sizes=await page.evaluate(()=>({
        document:document.documentElement.scrollWidth,viewport:innerWidth}));
       assert.ok(sizes.document<=sizes.viewport+2,'Overflow '+file+' '+JSON.stringify(sizes));
@@ -186,6 +187,39 @@ async function main(){
     assert.deepEqual(errors,[]);
    }finally{await ctx.close();}
   });
+  await runCase('Vice City history timeline, radio and opt-in comparison',async()=>{
+   const ctx=await browser.newContext({viewport:{width:375,height:812},
+    timezoneId:'Australia/Sydney',serviceWorkers:'block',reducedMotion:'reduce'});
+   try{
+    const page=await ctx.newPage(),errors=[],requests=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    page.on('request',request=>{if(request.url().includes('/VI/_next/static/media/Vice_City_'))requests.push(request.url());});
+    await page.goto(BASE+'vice-city-history.html',{waitUntil:'load'});
+    await page.waitForFunction(()=>!!window.ViceHistory);
+    assert.equal(await page.locator('[data-vh-era]:visible').count(),1);
+    await page.locator('[data-vh-year="2012"]').click();
+    assert.equal(await page.locator('[data-vh-era="2012"]').isVisible(),true);
+    await page.locator('[data-vh-year="2006"]').click();
+    assert.equal(await page.locator('[data-vh-era="2006"]').isVisible(),true);
+    await page.locator('[data-vh-station="vrock"]').click();
+    assert.equal(await page.locator('#vh-radio-name').textContent(),'V-Rock');
+    assert.equal(requests.length,0,'Modern screenshots were requested without reveal');
+    await page.locator('[data-vh-compare="city"]').click();
+    assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
+    await page.locator('#vh-compare-reveal').click();
+    assert.equal((await page.evaluate(()=>window.ViceHistory.getState())).revealed,true);
+    assert.ok((await page.locator('#vh-modern-image').getAttribute('src')).includes('Vice_City_03'));
+    await page.locator('#vh-compare-reveal').click();
+    assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
+    await page.goto(BASE+'launch-kit.html',{waitUntil:'load'});
+    await page.waitForFunction(()=>document.body.classList.contains('vc-launch-kit-ready'));
+    await page.locator('#kit-strict').check();
+    await page.goto(BASE+'vice-city-history.html',{waitUntil:'load'});
+    assert.equal(await page.locator('#vh-compare-reveal').isDisabled(),true);
+    assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
+    assert.deepEqual(errors,[],'History page JavaScript errors');
+   }finally{await ctx.close();}
+  });
   await runCase('PWA offline routes and updated shortcuts',async()=>{
    const ctx=await browser.newContext({viewport:{width:375,height:812},serviceWorkers:'allow',
     timezoneId:'Australia/Sydney'});
@@ -195,17 +229,17 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v21')||!navigator.serviceWorker.controller)return false;
+      if(!keys.includes('vice-city-countdown-v22')||!navigator.serviceWorker.controller)return false;
       const cache=await caches.open('vice-city-countdown-v21');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
-    for(const route of ['news.html','launch-kit.html','media.html']){
+    for(const route of ['news.html','launch-kit.html','media.html','vice-city-history.html']){
      const response=await page.goto(BASE+route,{waitUntil:'domcontentloaded'});
      assert.ok(response?.ok(),route+' offline navigation failed');
      assert.equal(await page.locator('.page-lead h1').isVisible(),true);
     }
-    assert.equal(await page.locator('#media-toggle').isDisabled(),false);
+    assert.equal(await page.locator('[data-vh-year="2002"]').count(),1);
    }finally{await ctx.close();}
   });
  }finally{

@@ -1,8 +1,8 @@
-/* Vice City Countdown v3.1 — shared navigation, preferences and PWA lifecycle. */
+/* Vice City Countdown v3.2 — shared navigation, preferences and PWA lifecycle. */
 (()=>{
  'use strict';
  const page=document.body.dataset.page||'home';
- const map={home:'./index.html','launch-info':'./launch-info.html','launch-kit':'./launch-kit.html',news:'./news.html',
+ const map={home:'./index.html','launch-info':'./launch-info.html','launch-kit':'./launch-kit.html',news:'./news.html',history:'./vice-city-history.html',
   'leonida-files':'./leonida-files.html',media:'./media.html',app:'./app.html'};
  const config={
   news:{selector:'.news-tools [data-filter]',values:['all','launch','preload','updates'],attr:'filter'},

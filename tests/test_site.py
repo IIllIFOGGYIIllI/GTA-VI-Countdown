@@ -13,6 +13,7 @@ PAGE_SECTIONS={
     'launch-kit.html':{'launch-kit'},
     'news.html':{'news'},
     'leonida-files.html':{'intel'},
+    'vice-city-history.html':{'history','history-timeline','history-places','history-people','history-culture','history-compare','history-sources'},
     'media.html':{'media'},
     'app.html':{'app','faq'},
 }
@@ -22,6 +23,7 @@ MODULES={
     'launch-kit.html':{'assets/region-clock.js','assets/launch-week.js'},
     'news.html':{'assets/news.js'},
     'leonida-files.html':{'assets/official-guide.js'},
+    'vice-city-history.html':{'assets/vice-city-history.js'},
     'media.html':{'assets/media.js'},
     'app.html':{'assets/install.js'},
 }
@@ -75,6 +77,7 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('href="./news.html"',self.pages[f])
                 self.assertIn('href="./leonida-files.html"',self.pages[f])
                 self.assertIn('href="./media.html"',self.pages[f])
+                self.assertIn('href="./vice-city-history.html"',self.pages[f])
                 self.assertIn('<link rel="canonical"',self.pages[f])
                 self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h or 'Countdown' in h
                                     for h in p.headings))
@@ -129,13 +132,14 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v21",sw)
+        self.assertIn("vice-city-countdown-v22",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
         self.assertIn('./news.html',urls)
         self.assertIn('./launch-kit.html',urls)
         self.assertIn('./media.html',urls)
+        self.assertIn('./vice-city-history.html',urls)
         self.assertIn('./index.html#countdown',urls)
         sw=(ROOT/'sw.js').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn('./'+file,sw)
@@ -143,6 +147,26 @@ class SiteTests(unittest.TestCase):
                       'assets/site-pages.js','assets/install.js'):
             self.assertIn(asset,sw)
         self.assertIn('SKIP_WAITING',sw)
+        self.assertIn('assets/vice-city-history.js',sw)
+    def test_classic_vice_city_history_and_spoiler_reveal(self):
+        page=self.pages['vice-city-history.html']
+        self.assertIn('The History Of',page)
+        for marker in ('data-vh-year="2002"','data-vh-year="2006"','data-vh-year="2012"',
+                       'data-vh-year="2021"','data-vh-year="2026"',
+                       'data-vh-station="flash"','data-vh-compare="coast"','id="vh-modern-image"'):
+            self.assertIn(marker,page)
+        history=(ROOT/'assets/vice-city-history.js').read_text(encoding='utf-8')
+        self.assertIn('vc-strict-spoilers',history)
+        self.assertIn('removeAttribute(\'src\')',history)
+        self.assertIn('ViceHistory',history)
+        self.assertIn('Reveal Official Comparison',page)
+        self.assertIn('not matched camera angles',page.lower())
+        self.assertFalse('autoplay' in page)
+        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
+        self.assertIn('vice-city-history.html',worker)
+        self.assertIn('vice-city-history.css?v=3.2.0',worker)
+        self.assertIn('vice-city-history.js?v=3.2.0',worker)
+
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn(file,w)
