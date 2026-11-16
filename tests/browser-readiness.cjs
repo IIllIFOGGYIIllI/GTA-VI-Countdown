@@ -54,10 +54,13 @@ async function main(){
       const sizes=await page.evaluate(()=>({
        document:document.documentElement.scrollWidth,viewport:innerWidth}));
       if(sizes.document>sizes.viewport+2){
+       const bounds=await page.evaluate(()=>['.vh-years','.vh-timeline','#history-timeline','.vh-hero-grid','.vh-main']
+         .map(selector=>{const el=document.querySelector(selector),r=el?.getBoundingClientRect();
+          return {selector,left:Math.round(r?.left||0),right:Math.round(r?.right||0),width:Math.round(r?.width||0),scroll:el?.scrollWidth};}));
        const culprits=await page.evaluate(()=>[...document.querySelectorAll('body *')]
          .filter(el=>{const r=el.getBoundingClientRect();return r.right>innerWidth+2 && r.width>0;})
          .slice(0,10).map(el=>({tag:el.tagName,classes:String(el.className).slice(0,70),right:Math.round(el.getBoundingClientRect().right)})));
-       throw Error('Overflow '+file+' '+JSON.stringify(sizes)+' '+JSON.stringify(culprits));
+       throw Error('Overflow '+file+' '+JSON.stringify(sizes)+' '+JSON.stringify(bounds)+' '+JSON.stringify(culprits));
       }
       assert.equal(await page.locator('.desktop-nav a[aria-current="page"],.site-pages-menu a[aria-current="page"]').count(),2,file);
       const title=await page.title();assert.ok(title.includes('GTA VI')||title.includes('Vice City'),file+' title');
@@ -236,8 +239,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v24')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v24');
+      if(!keys.includes('vice-city-countdown-v25')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v25');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);

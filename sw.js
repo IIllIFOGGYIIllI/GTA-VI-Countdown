@@ -1,5 +1,5 @@
 /* Vice City Countdown · PWA v2.9 · Official editorial card artwork + offline fallback */
-const CACHE='vice-city-countdown-v24';
+const CACHE='vice-city-countdown-v25';
 const CORE=[
   "./",
   "./index.html",
@@ -10,7 +10,7 @@ const CORE=[
   "./media.html",
   "./app.html",
   "./vice-city-history.html",
-  "./assets/vice-city-history.css?v=3.2.2",
+  "./assets/vice-city-history.css?v=3.2.3",
   "./assets/vice-city-history.js?v=3.2.0",
   "./styles.css?v=2.2.0",
   "./assets/vice-city-theme.css?v=2.2.0",

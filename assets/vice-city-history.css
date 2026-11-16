@@ -85,3 +85,9 @@ body[data-page="history"]{--vh-pink:#ff9bbb;--vh-mint:#a1ffed;--vh-peach:#ffe0b7
  .vh-years{width:100%;max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain}
  .vh-era-content{min-width:0;overflow-wrap:anywhere}
 }
+
+/* Mobile timeline: flex-scroller avoids CSS Grid min-content overflow. */
+@media(max-width:760px){
+ .vh-years{display:flex;flex-direction:row;align-items:stretch;justify-content:flex-start;gap:9px;overflow-x:auto;overflow-y:hidden;width:100%;max-width:calc(100vw - 28px);min-width:0}
+ .vh-years button{flex:0 0 155px;width:155px;max-width:155px;min-width:0}
+}
