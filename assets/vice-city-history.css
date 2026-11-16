@@ -91,3 +91,12 @@ body[data-page="history"]{--vh-pink:#ff9bbb;--vh-mint:#a1ffed;--vh-peach:#ffe0b7
  .vh-years{display:flex;flex-direction:row;align-items:stretch;justify-content:flex-start;gap:9px;overflow-x:auto;overflow-y:hidden;width:100%;max-width:calc(100vw - 28px);min-width:0}
  .vh-years button{flex:0 0 155px;width:155px;max-width:155px;min-width:0}
 }
+
+/* Two-column fact/vehicle strips cannot impose intrinsic minimum widths on 320px phones. */
+@media(max-width:760px){
+ .vh-stat-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .vh-stat-strip>div{min-width:0}
+ .vh-stat-strip span{min-width:0;overflow-wrap:anywhere}
+ .vh-vehicles{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .vh-vehicles span{min-width:0}
+}

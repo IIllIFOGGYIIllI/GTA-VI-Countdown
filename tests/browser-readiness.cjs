@@ -54,11 +54,11 @@ async function main(){
       const sizes=await page.evaluate(()=>({
        document:document.documentElement.scrollWidth,viewport:innerWidth}));
       if(sizes.document>sizes.viewport+2){
-       const bounds=await page.evaluate(()=>['.vh-years','.vh-timeline','#history-timeline','.vh-hero-grid','.vh-main']
+       const bounds=await page.evaluate(()=>['.vh-years','.vh-timeline','#history-timeline','.vh-stat-strip','.vh-vehicles','.vh-culture','.vh-hero-grid','.vh-main']
          .map(selector=>{const el=document.querySelector(selector),r=el?.getBoundingClientRect();
           return {selector,left:Math.round(r?.left||0),right:Math.round(r?.right||0),width:Math.round(r?.width||0),scroll:el?.scrollWidth};}));
        const culprits=await page.evaluate(()=>[...document.querySelectorAll('body *')]
-         .filter(el=>{const r=el.getBoundingClientRect();return r.right>innerWidth+2 && r.width>0;})
+         .filter(el=>{const r=el.getBoundingClientRect();return !el.closest('.vh-years') && r.right>innerWidth+2 && r.width>0;})
          .slice(0,10).map(el=>({tag:el.tagName,classes:String(el.className).slice(0,70),right:Math.round(el.getBoundingClientRect().right)})));
        throw Error('Overflow '+file+' '+JSON.stringify(sizes)+' '+JSON.stringify(bounds)+' '+JSON.stringify(culprits));
       }
@@ -239,8 +239,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v25')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v25');
+      if(!keys.includes('vice-city-countdown-v26')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v26');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
