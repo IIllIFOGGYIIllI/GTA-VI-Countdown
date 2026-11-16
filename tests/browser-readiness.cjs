@@ -53,7 +53,12 @@ async function main(){
       assert.ok(file==='vice-city-history.html'?mainSections.length===7:mainSections.length<=2,file+' has unexpected sections: '+mainSections);
       const sizes=await page.evaluate(()=>({
        document:document.documentElement.scrollWidth,viewport:innerWidth}));
-      assert.ok(sizes.document<=sizes.viewport+2,'Overflow '+file+' '+JSON.stringify(sizes));
+      if(sizes.document>sizes.viewport+2){
+       const culprits=await page.evaluate(()=>[...document.querySelectorAll('body *')]
+         .filter(el=>{const r=el.getBoundingClientRect();return r.right>innerWidth+2 && r.width>0;})
+         .slice(0,10).map(el=>({tag:el.tagName,classes:String(el.className).slice(0,70),right:Math.round(el.getBoundingClientRect().right)})));
+       throw Error('Overflow '+file+' '+JSON.stringify(sizes)+' '+JSON.stringify(culprits));
+      }
       assert.equal(await page.locator('.desktop-nav a[aria-current="page"],.site-pages-menu a[aria-current="page"]').count(),2,file);
       const title=await page.title();assert.ok(title.includes('GTA VI')||title.includes('Vice City'),file+' title');
       if(width===375)await page.screenshot({
@@ -197,6 +202,8 @@ async function main(){
     await page.goto(BASE+'vice-city-history.html',{waitUntil:'load'});
     await page.waitForFunction(()=>!!window.ViceHistory);
     assert.equal(await page.locator('[data-vh-era]:visible').count(),1);
+    await page.locator('[data-vh-year="1997"]').click();
+    assert.equal(await page.locator('[data-vh-era="1997"]').isVisible(),true);
     await page.locator('[data-vh-year="2012"]').click();
     assert.equal(await page.locator('[data-vh-era="2012"]').isVisible(),true);
     await page.locator('[data-vh-year="2006"]').click();
@@ -229,15 +236,15 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v22')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v21');
+      if(!keys.includes('vice-city-countdown-v23')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v23');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
     for(const route of ['news.html','launch-kit.html','media.html','vice-city-history.html']){
      const response=await page.goto(BASE+route,{waitUntil:'domcontentloaded'});
      assert.ok(response?.ok(),route+' offline navigation failed');
-     assert.equal(await page.locator('.page-lead h1').isVisible(),true);
+     assert.equal(await page.locator(route==='vice-city-history.html'?'#vh-title':'.page-lead h1').isVisible(),true);
     }
     assert.equal(await page.locator('[data-vh-year="2002"]').count(),1);
    }finally{await ctx.close();}
