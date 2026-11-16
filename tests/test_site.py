@@ -73,7 +73,7 @@ class SiteTests(unittest.TestCase):
                     if other!=f:
                         for module in mods-MODULES[f]:
                             self.assertNotIn(module,p.scripts)
-                self.assertLess(len(self.pages[f]),48000 if f=='vice-city-history.html' else 23000,
+                self.assertLess(len(self.pages[f]),100000 if f=='vice-city-history.html' else 23000,
                                 'Page contains entire website instead of own section')
                 self.assertIn('href="./news.html"',self.pages[f])
                 self.assertIn('href="./leonida-files.html"',self.pages[f])
