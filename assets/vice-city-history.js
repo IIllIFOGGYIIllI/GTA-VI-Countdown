@@ -1,4 +1,4 @@
-/* Vice City History v3.2 — timeline, visual-only radio and spoiler-conscious comparison */
+/* Vice City History v3.3 — timeline, visual-only radio and spoiler-conscious comparison */
 (()=>{
 'use strict';
 if(document.body.dataset.page!=='history')return;
@@ -36,31 +36,14 @@ stations.forEach(button=>button.addEventListener('click',()=>{
 // Image choices are verified official scenic Rockstar screenshots already in
 // the website's approved 138-image catalogue. None are requested before reveal.
 const eras={
- coast:{
-  original:'A City Built On Neon',
-  originalCopy:'The original game’s pastel storefronts, palm trees and beach roads captured the cinematic imagination of a fictional 1980s Miami.',
-  modern:'A Modern Return To Vice City',
-  modernCopy:'Rockstar’s official images show a contemporary coastal city, now part of the wider state of Leonida.',
-  url:'https://www.rockstargames.com/VI/_next/static/media/Vice_City_01.135x56yoeu.6t.jpg',
-  alt:'Official GTA VI promotional screenshot featuring Vice City'
- },
- city:{
-  original:'Downtown, Beyond The Beach',
-  originalCopy:'The first Vice City mixed pastel beachfront avenues with denser Downtown streets, traffic and a big-city skyline.',
-  modern:'The New City Skyline',
-  modernCopy:'Rockstar’s GTA VI screenshots depict the modern city on a different scale, without promising identical streets or buildings.',
-  url:'https://www.rockstargames.com/VI/_next/static/media/Vice_City_03.0nqz~lrqdmlze.jpg',
-  alt:'Official GTA VI city screenshot released by Rockstar Games'
- },
- night:{
-  original:'The City After Sunset',
-  originalCopy:'Neon signs, radio music and brightly lit streets made night-time free-roaming one of the original game’s signatures.',
-  modern:'Another Generation Of Neon',
-  modernCopy:'Promotional images of modern Vice City evoke a new chapter of the same sun-and-neon atmosphere.',
-  url:'https://www.rockstargames.com/VI/_next/static/media/Vice_City_09.0~ng.c8ack3fp.jpg',
-  alt:'Official GTA VI Vice City scenic promotional screenshot'
- }
+ coast:{original:"A City Built On Neon",originalCopy:"The original game’s pastel storefronts, palm trees and beach roads defined a fictional 1980s Miami.",modern:"A Modern Return To Vice City",modernCopy:"Rockstar’s official promotional material shows contemporary coastal Vice City within Leonida.",url:"https://www.rockstargames.com/VI/_next/static/media/Vice_City_01.135x56yoeu.6t.jpg",originalImage:"https://www.gtabase.com/igallery/gta-vice-city-screens/gtavicecity-ps2-01-1080.jpg",alt:"Official GTA VI Vice City promotional screenshot"},
+ city:{original:"Downtown, Beyond The Beach",originalCopy:"The original Vice City balanced vibrant beachfronts with denser streets, traffic and high-rise downtown districts.",modern:"The New City Skyline",modernCopy:"Rockstar’s GTA VI images show a different generation of city streets and towers. Matching buildings have not been verified.",url:"https://www.rockstargames.com/VI/_next/static/media/Vice_City_03.0nqz~lrqdmlze.jpg",originalImage:"https://www.gtabase.com/igallery/gta-vice-city-screens/gtavicecity-ps2-07-1080.jpg",alt:"Official GTA VI Vice City cityscape promotional screenshot"},
+ night:{original:"The City After Sunset",originalCopy:"A neon-lit Malibu Club and 1980s nightlife gave the original its familiar after-dark identity.",modern:"Another Generation Of Neon",modernCopy:"GTA VI promotional imagery depicts a modern city with its own after-dark atmosphere.",url:"https://www.rockstargames.com/VI/_next/static/media/Vice_City_09.0~ng.c8ack3fp.jpg",originalImage:"https://www.gtabase.com/igallery/gta-vice-city-screens/gtavicecity-ps2-11-1080.jpg",alt:"Official Rockstar GTA VI Vice City promotional screenshot"},
+ cars:{original:"The Sports Car Dream",originalCopy:"Open roads, the Cheetah and the Infernus made Vice City a playground for sports-car fans.",modern:"Modern Vice City Roads",modernCopy:"Rockstar has shown another era of streets and traffic in the city; these screenshots are not exact-location matches.",url:"https://www.rockstargames.com/VI/_next/static/media/Vice_City_04.06evqutgh7624.jpg",originalImage:"https://www.gtabase.com/igallery/gta-vice-city-screens/gtavicecity-ps2-09-1080.jpg",alt:"Official Rockstar GTA VI Vice City screenshot from the published media gallery"},
+ water:{original:"Around The Waterfront",originalCopy:"Docks, the marina and large yachts helped make the original Vice City feel like a coastal playground.",modern:"The Coast Returns",modernCopy:"The published imagery captures the modern coastal setting without confirming that any individual 2002 harbour asset returns.",url:"https://www.rockstargames.com/VI/_next/static/media/Vice_City_05.0~r~o0jzpp4a-.jpg",originalImage:"https://www.gtabase.com/igallery/gta-vice-city-screens/gtavicecity-ps2-06-1080.jpg",alt:"Official Rockstar GTA VI scenic Vice City promotional screenshot"},
+ sunset:{original:"Last Light In Vice City",originalCopy:"Golden light, palm trees and open roads were central to the original game’s 1980s-inspired atmosphere.",modern:"Sunset In A New Era",modernCopy:"Official Rockstar images present a new take on Vice City’s coastal atmosphere and natural light.",url:"https://www.rockstargames.com/VI/_next/static/media/Vice_City_08.0bbg_xp4hqdvz.jpg",originalImage:"https://www.gtabase.com/igallery/gta-vice-city-screens/gtavicecity-ps2-23-1080.jpg",alt:"Official Rockstar GTA VI Vice City promotional screenshot"},
 };
+const thenImage=$('vh-then-image');
 const selections=[...document.querySelectorAll('[data-vh-compare]')];
 const image=$('vh-modern-image'),placeholder=$('vh-modern-placeholder'),button=$('vh-compare-reveal'),
  label=$('vh-reveal-title'),status=$('vh-reveal-status');
@@ -84,6 +67,10 @@ function selectComparison(id){
  setPressed(selections,'vhCompare',id);
  $('vh-then-heading').textContent=era.original;
  $('vh-then-copy').textContent=era.originalCopy;
+ if(thenImage){
+  thenImage.alt='Original Grand Theft Auto: Vice City PlayStation 2 promotional screenshot, thematic '+id+' comparison';
+  thenImage.src=era.originalImage;
+ }
  $('vh-now-heading').textContent=era.modern;
  $('vh-now-copy').textContent=era.modernCopy;
  if(revealed&&!locked())showComparison();
@@ -121,12 +108,111 @@ archival?.addEventListener('error',()=>{
  const text=document.querySelector('.vh-photo figcaption strong');
  if(text)text.textContent='Original Screenshot Unavailable · Visit Rockstar’s Archive';
 });
+
+// The original game's locations and vehicles are public archive information:
+// no story spoilers and no images are requested by these filters.
+function createArchiveFilter(buttonSelector,cardSelector,dataKey,countId,displayName){
+ const buttons=[...document.querySelectorAll(buttonSelector)];
+ const cards=[...document.querySelectorAll(cardSelector)];
+ const message=$(countId);
+ buttons.forEach(button=>button.addEventListener('click',()=>{
+  const active=button.dataset[dataKey];setPressed(buttons,dataKey,active);
+  let shown=0;
+  for(const card of cards){
+   card.hidden=active!=='all'&&card.dataset[dataKey.replace('Filter','')]!==active;
+   if(!card.hidden)shown++;
+  }
+  if(message)message.textContent=active==='all'
+   ?'Showing All '+shown+' Classic '+displayName
+   :'Showing '+shown+' '+displayName+' In '+button.textContent.trim();
+ }));
+}
+createArchiveFilter('[data-vh-place-filter]','[data-vh-place]','vhPlaceFilter','vh-place-result','Locations');
+createArchiveFilter('[data-vh-vehicle-filter]','[data-vh-vehicle]','vhVehicleFilter','vh-vehicle-result','Vehicles');
+
+// Images are Rockstar promotional PS2 shots mirrored by GTABase; the viewer
+// never describes them as frame-matched GTA VI captures.
+const galleryButtons=[...document.querySelectorAll('[data-vh-gallery-index]')];
+const galleryDialog=$('vh-gallery-dialog'),galleryImage=$('vh-gallery-full');
+const galleryTitle=$('vh-gallery-modal-title'),galleryCaption=$('vh-gallery-modal-caption');
+const galleryCounter=$('vh-gallery-counter'),galleryLink=$('vh-gallery-source');
+const galleryClose=$('vh-gallery-close');
+let galleryIndex=0,lastGalleryFocus=null;
+function galleryAt(index){
+ if(!galleryButtons.length||!galleryImage)return;
+ galleryIndex=(index+galleryButtons.length)%galleryButtons.length;
+ const card=galleryButtons[galleryIndex];
+ const thumbnail=card.querySelector('img');
+ const title=card.querySelector('.vh-gallery-title')?.textContent||'Original Vice City Screenshot';
+ galleryImage.src=thumbnail?.src||'';
+ galleryImage.alt=thumbnail?.alt||title;
+ galleryTitle.textContent=title;
+ galleryCaption.textContent='Rockstar Games original PlayStation 2 promotional screenshot, mirrored by GTABase';
+ galleryCounter.textContent=String(galleryIndex+1).padStart(2,'0')+' / '+String(galleryButtons.length).padStart(2,'0');
+ galleryLink.href='https://www.gtabase.com/gta-vice-city/screenshots/';
+}
+function closeGallery(){
+ if(galleryDialog?.open)galleryDialog.close();
+ galleryImage?.removeAttribute('src');
+ lastGalleryFocus?.focus();
+}
+galleryButtons.forEach((card,index)=>{
+ card.addEventListener('click',()=>{
+  lastGalleryFocus=card;galleryAt(index);
+  if(typeof galleryDialog?.showModal==='function')galleryDialog.showModal();
+  else galleryDialog?.setAttribute('open','');
+  galleryClose?.focus();
+ });
+ const image=card.querySelector('img');
+ image?.addEventListener('error',()=>{
+  image.style.display='none';
+  const cardFrame=card.querySelector('.vh-gallery-frame');
+  if(cardFrame&&!cardFrame.querySelector('.vh-image-unavailable')){
+   const fallback=document.createElement('span');
+   fallback.className='vh-image-unavailable';
+   fallback.textContent='Archival Screenshot Unavailable';
+   cardFrame.append(fallback);
+  }
+ });
+});
+galleryClose?.addEventListener('click',closeGallery);
+$('vh-gallery-prev')?.addEventListener('click',()=>galleryAt(galleryIndex-1));
+$('vh-gallery-next')?.addEventListener('click',()=>galleryAt(galleryIndex+1));
+galleryDialog?.addEventListener('close',()=>{galleryImage?.removeAttribute('src');lastGalleryFocus?.focus();});
+galleryDialog?.addEventListener('click',event=>{
+ if(event.target===galleryDialog)closeGallery();
+});
+galleryDialog?.addEventListener('keydown',event=>{
+ if(event.key==='ArrowRight'){event.preventDefault();galleryAt(galleryIndex+1);}
+ if(event.key==='ArrowLeft'){event.preventDefault();galleryAt(galleryIndex-1);}
+});
+
+// Nostalgia checklist is purely local and does not infer player achievement.
+const memoryKey='vice-history-memories-v1';
+const memories=[...document.querySelectorAll('[data-vh-memory]')];
+let savedMemories=[];
+try{const stored=JSON.parse(localStorage.getItem(memoryKey)||'[]');if(Array.isArray(stored))savedMemories=stored.filter(x=>Number.isInteger(x)&&x>=0&&x<memories.length);}catch{}
+for(const item of memories)item.checked=savedMemories.includes(Number(item.dataset.vhMemory));
+function updateMemories(){
+ const selected=memories.filter(item=>item.checked).map(item=>Number(item.dataset.vhMemory));
+ $('vh-memory-count').textContent=selected.length+' / '+memories.length+' Memories';
+ $('vh-memory-progress-fill').style.width=Math.round(selected.length/memories.length*100)+'%';
+ try{localStorage.setItem(memoryKey,JSON.stringify(selected));}catch{}
+}
+memories.forEach(item=>item.addEventListener('change',updateMemories));
+$('vh-memory-reset')?.addEventListener('click',()=>{
+ for(const item of memories)item.checked=false;updateMemories();
+});
+updateMemories();
+
 syncPreferences();
 window.ViceHistory=Object.freeze({
  getState:()=>({
   year:years.find(x=>x.getAttribute('aria-pressed')==='true')?.dataset.vhYear||'2002',
   station:stations.find(x=>x.getAttribute('aria-pressed')==='true')?.dataset.vhStation||'flash',
-  comparison:selected,revealed,locked:locked()
+  comparison:selected,revealed,locked:locked(),
+  galleryIndex:galleryDialog?.open?galleryIndex:null,
+  memories:memories.filter(x=>x.checked).length
  })
 });
 })();
