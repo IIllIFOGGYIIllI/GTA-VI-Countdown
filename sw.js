@@ -1,5 +1,5 @@
 /* Vice City Countdown · PWA v3.3 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-countdown-v29';
+const CACHE='vice-city-countdown-v30';
 const CORE=[
   "./",
   "./index.html",
@@ -11,7 +11,7 @@ const CORE=[
   "./app.html",
   "./vice-city-history.html",
   "./assets/vice-city-history.css?v=3.4.1",
-  "./assets/vice-city-history.js?v=3.4.0",
+  "./assets/vice-city-history.js?v=3.4.2",
   "./styles.css?v=2.2.0",
   "./assets/vice-city-theme.css?v=2.2.0",
   "./assets/mobile-experience.css?v=2.3.0",
