@@ -132,7 +132,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v23",sw)
+        self.assertIn("vice-city-countdown-v24",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -164,7 +164,7 @@ class SiteTests(unittest.TestCase):
         self.assertFalse('autoplay' in page)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
-        self.assertIn('vice-city-history.css?v=3.2.1',worker)
+        self.assertIn('vice-city-history.css?v=3.2.2',worker)
         self.assertIn('vice-city-history.js?v=3.2.0',worker)
 
     def test_qa_and_deployment_preserved(self):

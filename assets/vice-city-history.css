@@ -78,3 +78,10 @@ body[data-page="history"]{--vh-pink:#ff9bbb;--vh-mint:#a1ffed;--vh-peach:#ffe0b7
 
 /* 320px handsets: prevent the radio display's two labels from forcing horizontal scroll. */
 @media(max-width:500px){.vh-radio-header{flex-wrap:wrap}.vh-radio-header span:first-child{min-width:0;overflow-wrap:anywhere}.vh-hero-grid,.vh-section,.vh-timeline,.vh-culture,.vh-compare{min-width:0}}
+
+/* Prevent 155px timeline tracks from setting the min-content width at 320px. */
+@media(max-width:760px){
+ .vh-timeline{grid-template-columns:minmax(0,1fr);width:100%;min-width:0}
+ .vh-years{width:100%;max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain}
+ .vh-era-content{min-width:0;overflow-wrap:anywhere}
+}
