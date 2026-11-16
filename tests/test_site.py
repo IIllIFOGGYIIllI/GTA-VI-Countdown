@@ -13,7 +13,7 @@ PAGE_SECTIONS={
     'launch-kit.html':{'launch-kit'},
     'news.html':{'news'},
     'leonida-files.html':{'intel'},
-    'vice-city-history.html':{'history','history-timeline','history-places','history-people','history-culture','history-compare','history-sources'},
+    'vice-city-history.html':{'history','history-timeline','history-places','history-people','history-culture','history-vehicles','history-gallery','history-compare','history-memories','history-sources'},
     'media.html':{'media'},
     'app.html':{'app','faq'},
 }
@@ -73,7 +73,8 @@ class SiteTests(unittest.TestCase):
                     if other!=f:
                         for module in mods-MODULES[f]:
                             self.assertNotIn(module,p.scripts)
-                self.assertLess(len(self.pages[f]),23000,'Page contains entire website instead of own section')
+                self.assertLess(len(self.pages[f]),48000 if f=='vice-city-history.html' else 23000,
+                                'Page contains entire website instead of own section')
                 self.assertIn('href="./news.html"',self.pages[f])
                 self.assertIn('href="./leonida-files.html"',self.pages[f])
                 self.assertIn('href="./media.html"',self.pages[f])
@@ -132,7 +133,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v26",sw)
+        self.assertIn("vice-city-countdown-v27",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -164,8 +165,36 @@ class SiteTests(unittest.TestCase):
         self.assertFalse('autoplay' in page)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
-        self.assertIn('vice-city-history.css?v=3.2.4',worker)
+        self.assertIn('vice-city-history.css?v=3.3.0',worker)
         self.assertIn('vice-city-history.js?v=3.2.0',worker)
+
+    def test_expanded_vice_city_archive_and_sources(self):
+        html=self.pages['vice-city-history.html']
+        script=(ROOT/'assets/vice-city-history.js').read_text(encoding='utf-8')
+        self.assertEqual(html.count('data-vh-place="'),12)
+        self.assertEqual(html.count('data-vh-vehicle="'),12)
+        self.assertEqual(html.count('data-vh-gallery-index="'),8)
+        self.assertEqual(html.count('data-vh-memory="'),8)
+        self.assertEqual(html.count('data-vh-compare="'),6)
+        self.assertIn('data-vh-place-filter="all"',html)
+        self.assertIn('data-vh-vehicle-filter="water"',html)
+        self.assertIn('id="vh-gallery-dialog"',html)
+        self.assertIn('id="vh-memory-reset"',html)
+        self.assertIn('id="vh-then-image"',html)
+        self.assertIn('Images: Rockstar Games promotional screenshots',html)
+        self.assertIn('mirrored by',html.lower())
+        for theme in ('coast','city','night','cars','water','sunset'):
+            self.assertIn(theme+':{original:',script)
+        self.assertIn('vice-history-memories-v1',script)
+        self.assertIn('vh-gallery-full',script)
+        self.assertIn("if(locked())return;",script)
+        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
+        self.assertIn('vice-city-countdown-v27',worker)
+        self.assertIn('vice-city-history.css?v=3.3.0',worker)
+        self.assertIn('vice-city-history.js?v=3.3.0',worker)
+        # The historical images can be fetched normally, but optional GTA VI
+        # images must never be downloaded during PWA installation
+        self.assertNotIn('/VI/_next/static/media/',worker.split('];',1)[0])
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

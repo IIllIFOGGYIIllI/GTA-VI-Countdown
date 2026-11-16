@@ -50,7 +50,7 @@ async function main(){
       const visible=await page.locator('#'+section).isVisible();
       assert.equal(visible,true,file+' has no visible primary section');
       const mainSections=await page.locator('main section[id]').evaluateAll(nodes=>nodes.map(n=>n.id));
-      assert.ok(file==='vice-city-history.html'?mainSections.length===7:mainSections.length<=2,file+' has unexpected sections: '+mainSections);
+      assert.ok(file==='vice-city-history.html'?mainSections.length===10:mainSections.length<=2,file+' has unexpected sections: '+mainSections);
       const sizes=await page.evaluate(()=>({
        document:document.documentElement.scrollWidth,viewport:innerWidth}));
       if(sizes.document>sizes.viewport+2){
@@ -213,12 +213,44 @@ async function main(){
     assert.equal(await page.locator('[data-vh-era="2006"]').isVisible(),true);
     await page.locator('[data-vh-station="vrock"]').click();
     assert.equal(await page.locator('#vh-radio-name').textContent(),'V-Rock');
-    assert.equal(requests.length,0,'Modern screenshots were requested without reveal');
+    // Archive filters and gallery remain accessible without the modern reveal.
+    assert.equal(await page.locator('[data-vh-place]').count(),12);
+    assert.equal(await page.locator('[data-vh-vehicle]').count(),12);
+    assert.equal(await page.locator('[data-vh-gallery-index]').count(),8);
+    await page.locator('[data-vh-place-filter="nightlife"]').click();
+    assert.equal(await page.locator('[data-vh-place]:visible').count(),2);
+    await page.locator('[data-vh-place-filter="all"]').click();
+    assert.equal(await page.locator('[data-vh-place]:visible').count(),12);
+    await page.locator('[data-vh-vehicle-filter="bikes"]').click();
+    assert.equal(await page.locator('[data-vh-vehicle]:visible').count(),3);
+    await page.locator('[data-vh-vehicle-filter="all"]').click();
+    assert.equal(await page.locator('[data-vh-vehicle]:visible').count(),12);
+    await page.locator('[data-vh-gallery-index="0"]').click();
+    assert.equal(await page.locator('#vh-gallery-dialog').evaluate(el=>el.open),true);
+    assert.ok((await page.locator('#vh-gallery-full').getAttribute('src')).includes('ps2-23'));
+    await page.keyboard.press('ArrowRight');
+    assert.ok((await page.locator('#vh-gallery-full').getAttribute('src')).includes('ps2-01'));
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#vh-gallery-dialog').evaluate(el=>el.open),false);
+    await page.locator('[data-vh-memory="0"]').check();
+    await page.locator('[data-vh-memory="4"]').check();
+    assert.equal(await page.locator('#vh-memory-count').textContent(),'2 / 8 Memories');
+    await page.reload({waitUntil:'load'});
+    await page.waitForFunction(()=>!!window.ViceHistory);
+    assert.equal(await page.locator('[data-vh-memory="0"]').isChecked(),true);
+    assert.equal(await page.locator('[data-vh-memory="4"]').isChecked(),true);
+    await page.locator('#vh-memory-reset').click();
+    assert.equal(await page.locator('#vh-memory-count').textContent(),'0 / 8 Memories');
+    assert.equal(requests.length,0,'Modern comparison screenshot loaded before opt-in');
+    await page.locator('[data-vh-compare="cars"]').click();
+    assert.ok((await page.locator('#vh-then-image').getAttribute('src')).includes('ps2-09'));
     await page.locator('[data-vh-compare="city"]').click();
     assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
     await page.locator('#vh-compare-reveal').click();
     assert.equal((await page.evaluate(()=>window.ViceHistory.getState())).revealed,true);
     assert.ok((await page.locator('#vh-modern-image').getAttribute('src')).includes('Vice_City_03'));
+    await page.locator('[data-vh-compare="water"]').click();
+    assert.ok((await page.locator('#vh-modern-image').getAttribute('src')).includes('Vice_City_05'));
     await page.locator('#vh-compare-reveal').click();
     assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
     await page.goto(BASE+'launch-kit.html',{waitUntil:'load'});
@@ -239,8 +271,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v26')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v26');
+      if(!keys.includes('vice-city-countdown-v27')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v27');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
