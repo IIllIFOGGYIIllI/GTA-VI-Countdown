@@ -166,7 +166,7 @@ class SiteTests(unittest.TestCase):
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
         self.assertIn('vice-city-history.css?v=3.3.0',worker)
-        self.assertIn('vice-city-history.js?v=3.2.0',worker)
+        self.assertIn('vice-city-history.js?v=3.3.0',worker)
 
     def test_expanded_vice_city_archive_and_sources(self):
         html=self.pages['vice-city-history.html']
