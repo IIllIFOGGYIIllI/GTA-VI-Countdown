@@ -76,7 +76,7 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('href="./leonida-files.html"',self.pages[f])
                 self.assertIn('href="./media.html"',self.pages[f])
                 self.assertIn('<link rel="canonical"',self.pages[f])
-                self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h
+                self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h or 'Countdown' in h
                                     for h in p.headings))
     def test_links_and_assets_have_existing_local_paths(self):
         for file,content in self.pages.items():
