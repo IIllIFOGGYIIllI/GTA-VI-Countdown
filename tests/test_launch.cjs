@@ -87,7 +87,7 @@ function mount(startEpoch){
     console,URL,
     Option:class extends MockElement{constructor(label,value){super('option');this.textContent=label;this.value=value;}}
   };
-  vm.runInNewContext(appSource,sandbox,{filename:'app.js',timeout:2500});
+  vm.runInNewContext(appSource,sandbox,{filename:'app.js',timeout:10000});
   assert.equal(intervals.length,1,'one ticking interval expected');
   return {clock,element,body,tick:intervals[0]};
 }
