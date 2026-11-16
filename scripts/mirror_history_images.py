@@ -25,7 +25,7 @@ STATIC_HOSTS = {
 }
 IMAGE_EXT = {".png", ".webp", ".jpg", ".jpeg"}
 # The tokenizer deliberately collects full /image.jpg/800px-image.jpg wiki URLs.
-TOKEN = re.compile(r'''https://[^"'<>\\s]+''', re.I)
+TOKEN = re.compile(r'''https://[^"'<>\s]+''', re.I)
 MAX_BYTES = 12 * 1024 * 1024
 
 def is_image(url: str) -> bool:
