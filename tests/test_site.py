@@ -218,6 +218,18 @@ class SiteTests(unittest.TestCase):
         self.assertIn('if(locked()||!eraImage)return',script)
         self.assertIn('radioImages',script)
 
+    def test_history_image_mirroring_is_required_for_publication(self):
+        script=(ROOT/'scripts/mirror_history_images.py').read_text(encoding='utf-8')
+        flow=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
+        self.assertIn('python3 scripts/mirror_history_images.py dist',flow)
+        self.assertIn('content_kind(data)',script)
+        self.assertIn('unresolved = collect(html) + collect(script)',script)
+        self.assertIn('image-sources.json',script)
+        self.assertIn('Mirroring',script)
+        self.assertIn('www.gtabase.com',script)
+        self.assertIn('upload.wikimedia.org',script)
+        self.assertNotIn('www.rockstargames.com',script)
+
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn(file,w)

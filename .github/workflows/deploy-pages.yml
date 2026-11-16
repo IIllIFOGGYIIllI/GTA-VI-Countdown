@@ -54,6 +54,10 @@ jobs:
           cp index.html launch-info.html launch-kit.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
           cp -R assets data preview dist/
           touch dist/.nojekyll
+      - name: Download and verify original Vice City archive images
+        run: |
+          python3 scripts/mirror_history_images.py dist
+          test -f dist/assets/history/image-sources.json
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
