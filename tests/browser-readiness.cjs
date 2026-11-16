@@ -231,6 +231,7 @@ async function main(){
     await page.keyboard.press('Escape');
     await page.locator('[data-vh-year="2026"]').click();
     assert.equal(await page.locator('#vh-era-2026-image').getAttribute('src'),null);
+    assert.equal(requests.length,0,'GTA VI images loaded without an explicit reveal');
     await page.locator('#vh-era-show-image').click();
     assert.ok((await page.locator('#vh-era-2026-image').getAttribute('src')).includes('Vice_City_01'));
     await page.locator('#vh-era-show-image').click();
@@ -263,7 +264,7 @@ async function main(){
     assert.equal(await page.locator('[data-vh-memory="4"]').isChecked(),true);
     await page.locator('#vh-memory-reset').click();
     assert.equal(await page.locator('#vh-memory-count').textContent(),'0 / 8 Memories');
-    assert.equal(requests.length,0,'Modern comparison screenshot loaded before opt-in');
+    assert.ok(requests.length>=1,'The deliberately revealed timeline screenshot was never requested');
     await page.locator('[data-vh-compare="cars"]').click();
     assert.ok((await page.locator('#vh-then-image').getAttribute('src')).includes('ps2-09'));
     await page.locator('[data-vh-compare="city"]').click();
