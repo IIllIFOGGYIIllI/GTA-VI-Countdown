@@ -1,4 +1,4 @@
-/* Vice City History v3.3 — timeline, visual-only radio and spoiler-conscious comparison */
+/* Vice City History v3.4 — timeline, visual-only radio and spoiler-conscious comparison */
 (()=>{
 'use strict';
 if(document.body.dataset.page!=='history')return;
@@ -18,6 +18,7 @@ years.forEach(button=>button.addEventListener('click',()=>{
  setPressed(years,'vhYear',year);
  eraPanels.forEach(panel=>{panel.hidden=panel.dataset.vhEra!==year;});
 }));
+const radioImages={"flash":["https://www.gtabase.com/igallery/8201-8300/GTA_ViceCity_Artwork_DJ_Toni_Flash-8295-1600.jpg","Official Flash FM host Toni promotional artwork"],"vrock":["https://www.gtabase.com/igallery/8301-8400/GTA_ViceCity_Artwork_DJ_Lazlow_VRock-8301-1600.jpg","Official V-Rock Lazlow promotional artwork"],"fever":["https://www.gtabase.com/igallery/8301-8400/GTA_ViceCity_Artwork_DJ_Fever105-8334-1600.jpg","Official Fever 105 DJ promotional artwork"],"wave":["https://www.gtabase.com/igallery/8201-8300/GTA_ViceCity_Artwork_DJ_Adam_Fist_Wave-8300-1600.jpg","Official Wave 103 DJ Adam Fist promotional artwork"],"emotion":["https://www.gtabase.com/igallery/8201-8300/GTA_ViceCity_Artwork_DJ_Fernando_Emotion-8299-1600.jpg","Official Emotion 98.3 Fernando Martinez promotional artwork"]};
 const stationDescriptions={
  flash:['Flash FM','Big 1980s pop and bright, familiar hooks for a drive along the coastline.'],
  vrock:['V-Rock','Hard rock and heavy metal energy for Vice City road trips and high-speed chases.'],
@@ -32,6 +33,8 @@ stations.forEach(button=>button.addEventListener('click',()=>{
  setPressed(stations,'vhStation',key);
  $('vh-radio-name').textContent=info[0];
  $('vh-radio-description').textContent=info[1];
+ const artwork=radioImages[key],photo=$('vh-radio-art'),fallback=$('vh-radio-art-fallback');
+ if(artwork&&photo){photo.src=artwork[0];photo.alt=artwork[1];photo.hidden=false;if(fallback)fallback.hidden=true;}
 }));
 // Image choices are verified official scenic Rockstar screenshots already in
 // the website's approved 138-image catalogue. None are requested before reveal.
@@ -204,6 +207,88 @@ $('vh-memory-reset')?.addEventListener('click',()=>{
  for(const item of memories)item.checked=false;updateMemories();
 });
 updateMemories();
+
+
+// Every historical visual card is backed by an item-specific image and source.
+// The dialog displays the clicked image rather than a static preview.
+const visualDialog=$('vh-visual-dialog');
+const visualImg=$('vh-visual-image');
+const visualTitle=$('vh-visual-title');
+const visualSource=$('vh-visual-source');
+const visualError=$('vh-visual-error');
+let visualReturnFocus=null;
+document.querySelectorAll('[data-vh-open-art]').forEach(trigger=>{
+ const image=trigger.querySelector('img');
+ const fallback=trigger.querySelector('.vh-image-error');
+ image?.addEventListener('error',()=>{
+  if(fallback)fallback.hidden=false;
+  image.hidden=true;
+ });
+ trigger.addEventListener('click',()=>{
+  visualReturnFocus=trigger;
+  const url=trigger.dataset.image,title=trigger.dataset.title,source=trigger.dataset.source;
+  if(!url||!title||!source)return;
+  visualImg.hidden=false;
+  visualError.hidden=true;
+  visualImg.alt=image?.alt||title;
+  visualImg.src=url;
+  visualTitle.textContent=title;
+  visualSource.href=source;
+  visualDialog.showModal();
+  $('vh-visual-close')?.focus();
+ });
+});
+visualImg?.addEventListener('error',()=>{
+ visualImg.hidden=true;
+ visualError.hidden=false;
+});
+function closeVisual(){
+ if(visualDialog?.open)visualDialog.close();
+ visualImg?.removeAttribute('src');
+ visualReturnFocus?.focus();
+}
+$('vh-visual-close')?.addEventListener('click',closeVisual);
+visualDialog?.addEventListener('close',()=>{visualImg?.removeAttribute('src');visualReturnFocus?.focus();});
+visualDialog?.addEventListener('click',e=>{if(e.target===visualDialog)closeVisual();});
+const eraImage=$('vh-era-2026-image');
+const eraReveal=$('vh-era-show-image');
+const eraCover=$('vh-era-modern-cover');
+function hideModernTimeline(){
+ if(!eraImage)return;
+ eraImage.hidden=true;eraImage.removeAttribute('src');
+ if(eraCover)eraCover.hidden=false;
+ if(eraReveal)eraReveal.textContent='Reveal GTA VI Preview';
+}
+function syncModernTimeline(){
+ if(!eraReveal)return;
+ if(locked())hideModernTimeline();
+ eraReveal.disabled=locked();
+ if(locked())eraReveal.textContent='Preview Locked By Spoiler Setting';
+}
+eraReveal?.addEventListener('click',()=>{
+ if(locked()||!eraImage)return;
+ if(!eraImage.hidden){
+  hideModernTimeline();return;
+ }
+ const url=eraImage.dataset.vhSource;
+ if(!url)return;
+ eraImage.src=url+'?akim=1&imdensity=1&imwidth=960';
+ eraImage.hidden=false;
+ if(eraCover)eraCover.hidden=true;
+ eraReveal.textContent='Hide GTA VI Preview';
+});
+eraImage?.addEventListener('error',()=>{
+ hideModernTimeline();
+ if(eraCover)eraCover.querySelector('span').textContent='Official Preview Unavailable';
+});
+document.addEventListener('vice:preferences',syncModernTimeline);
+window.addEventListener('storage',syncModernTimeline);
+window.addEventListener('pageshow',syncModernTimeline);
+$('vh-radio-art')?.addEventListener('error',()=>{
+ $('vh-radio-art').hidden=true;
+ $('vh-radio-art-fallback').hidden=false;
+});
+syncModernTimeline();
 
 syncPreferences();
 window.ViceHistory=Object.freeze({

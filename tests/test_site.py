@@ -133,7 +133,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v27",sw)
+        self.assertIn("vice-city-countdown-v28",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -165,8 +165,8 @@ class SiteTests(unittest.TestCase):
         self.assertFalse('autoplay' in page)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
-        self.assertIn('vice-city-history.css?v=3.3.0',worker)
-        self.assertIn('vice-city-history.js?v=3.3.0',worker)
+        self.assertIn('vice-city-history.css?v=3.4.0',worker)
+        self.assertIn('vice-city-history.js?v=3.4.0',worker)
 
     def test_expanded_vice_city_archive_and_sources(self):
         html=self.pages['vice-city-history.html']
@@ -189,12 +189,34 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v27',worker)
-        self.assertIn('vice-city-history.css?v=3.3.0',worker)
-        self.assertIn('vice-city-history.js?v=3.3.0',worker)
+        self.assertIn('vice-city-countdown-v28',worker)
+        self.assertIn('vice-city-history.css?v=3.4.0',worker)
+        self.assertIn('vice-city-history.js?v=3.4.0',worker)
         # The historical images can be fetched normally, but optional GTA VI
         # images must never be downloaded during PWA installation
         self.assertNotIn('/VI/_next/static/media/',worker.split('];',1)[0])
+
+    def test_every_history_visual_card_has_specific_image(self):
+        content=self.pages['vice-city-history.html']
+        import re
+        self.assertEqual(content.count('data-vh-open-art'),33)
+        self.assertEqual(content.count('class="vh-era-photo"'),5)
+        self.assertEqual(content.count('class="vh-character-art"'),0)
+        self.assertEqual(content.count('vh-character-art'),4)
+        self.assertEqual(content.count('vh-vehicle-art'),12)
+        self.assertEqual(content.count('data-vh-place="'),12)
+        self.assertIn('id="vh-radio-art"',content)
+        self.assertIn('id="vh-visual-dialog"',content)
+        self.assertIn('id="vh-era-2026-image"',content)
+        self.assertNotRegex(content,r'<img\s+id="vh-era-2026-image"[^>]*\ssrc=')
+        self.assertIn('data-vh-source="https://www.rockstargames.com/VI/',content)
+        for url in re.findall(r'data-image="([^"]+)"',content):
+            self.assertTrue(url.startswith('https://'))
+        script=(ROOT/'assets/vice-city-history.js').read_text(encoding='utf-8')
+        self.assertIn('data-vh-open-art',script)
+        self.assertIn('hideModernTimeline()',script)
+        self.assertIn('if(locked()||!eraImage)return',script)
+        self.assertIn('radioImages',script)
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

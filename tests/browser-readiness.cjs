@@ -217,6 +217,28 @@ async function main(){
     assert.equal(await page.locator('[data-vh-place]').count(),12);
     assert.equal(await page.locator('[data-vh-vehicle]').count(),12);
     assert.equal(await page.locator('[data-vh-gallery-index]').count(),8);
+    assert.equal(await page.locator('.vh-place .vh-open-art img').count(),12);
+    assert.equal(await page.locator('.vh-people .vh-open-art img').count(),4);
+    assert.equal(await page.locator('.vh-vehicle-card .vh-open-art img').count(),12);
+    assert.equal(await page.locator('.vh-era-photo img').count(),5);
+    await page.locator('.vh-place .vh-open-art').first().click();
+    assert.equal(await page.locator('#vh-visual-dialog').evaluate(el=>el.open),true);
+    assert.ok((await page.locator('#vh-visual-image').getAttribute('src')).includes('OceanBeach'));
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#vh-visual-dialog').evaluate(el=>el.open),false);
+    await page.locator('.vh-vehicle-card .vh-open-art').first().click();
+    assert.ok((await page.locator('#vh-visual-image').getAttribute('src')).includes('infernus.webp'));
+    await page.keyboard.press('Escape');
+    await page.locator('[data-vh-year="2026"]').click();
+    assert.equal(await page.locator('#vh-era-2026-image').getAttribute('src'),null);
+    await page.locator('#vh-era-show-image').click();
+    assert.ok((await page.locator('#vh-era-2026-image').getAttribute('src')).includes('Vice_City_01'));
+    await page.locator('#vh-era-show-image').click();
+    assert.equal(await page.locator('#vh-era-2026-image').getAttribute('src'),null);
+    await page.locator('[data-vh-year="2006"]').click();
+    await page.locator('[data-vh-station="wave"]').click();
+    assert.ok((await page.locator('#vh-radio-art').getAttribute('src')).includes('Adam_Fist_Wave'));
+    await page.locator('[data-vh-station="vrock"]').click();
     await page.locator('[data-vh-place-filter="nightlife"]').click();
     assert.equal(await page.locator('[data-vh-place]:visible').count(),2);
     await page.locator('[data-vh-place-filter="all"]').click();
@@ -258,6 +280,8 @@ async function main(){
     await page.locator('#kit-strict').check();
     await page.goto(BASE+'vice-city-history.html',{waitUntil:'load'});
     assert.equal(await page.locator('#vh-compare-reveal').isDisabled(),true);
+    assert.equal(await page.locator('#vh-era-show-image').isDisabled(),true);
+    assert.equal(await page.locator('#vh-era-2026-image').getAttribute('src'),null);
     assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
     assert.deepEqual(errors,[],'History page JavaScript errors');
    }finally{await ctx.close();}
@@ -271,8 +295,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v27')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v27');
+      if(!keys.includes('vice-city-countdown-v28')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v28');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);

@@ -164,3 +164,57 @@ body[data-page="history"]{--vh-pink:#ff9bbb;--vh-mint:#a1ffed;--vh-peach:#ffe0b7
 @media(max-width:600px){.vh-jumplinks{margin-top:-20px;margin-bottom:44px}.vh-jumplinks>span{flex:1 0 100%}.vh-memory-grid{grid-template-columns:1fr}.vh-memories-top{align-items:start;flex-direction:column}.vh-vehicle-archive,.vh-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vh-vehicle-card{padding:16px;min-height:230px}.vh-gallery-title{font-size:12px}.vh-gallery-card>small{font-size:10px}.vh-vehicle-card h3{font-size:29px}}
 @media(max-width:355px){.vh-gallery-grid,.vh-vehicle-archive{grid-template-columns:1fr}.vh-gallery-frame{aspect-ratio:16/9}.vh-vehicle-card{min-height:180px}}
 @media(prefers-reduced-motion:reduce){.vh-gallery-card{transition:none;transform:none}.vh-memory-progress>span{transition:none}}
+
+/* History v3.4 — Full image-backed visual archive */
+.vh-open-art{appearance:none;display:block;position:relative;border:0;padding:0;margin:0;width:100%;background:linear-gradient(135deg,#362c4e,#20394b);overflow:hidden;cursor:zoom-in;text-align:left;border-bottom:1px solid #a99dc078}
+.vh-open-art img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;filter:saturate(1.05)}
+.vh-open-art:hover img{transform:scale(1.045)}
+.vh-open-art:focus-visible{outline:3px solid #b5ffec;outline-offset:-3px}
+.vh-art-overlay{position:absolute;bottom:0;left:0;right:0;padding:26px 12px 10px;background:linear-gradient(transparent,#081023db);color:#fff7ed;font-weight:900;font-size:11px;display:flex;justify-content:space-between;gap:8px;letter-spacing:.01em}
+.vh-image-error{position:absolute;inset:0;display:grid;place-items:center;padding:15px;text-align:center;background:linear-gradient(135deg,#403353,#1e3347);color:#ffd4db;font-size:12px;font-weight:800}
+.vh-image-error[hidden]{display:none}
+.vh-place,.vh-people article,.vh-vehicle-card{overflow:hidden;padding:0}
+.vh-place>.vh-open-art,.vh-vehicle-card>.vh-open-art{aspect-ratio:16/10}
+.vh-place>span:not(.vh-image-error),.vh-place>h3,.vh-place>p,.vh-place>small{margin-left:19px;margin-right:19px}
+.vh-place>span:first-of-type{margin-top:17px}
+.vh-place>h3{margin-top:10px}
+.vh-place>small:last-child{margin-bottom:20px}
+.vh-place>b[aria-hidden]{display:none}
+.vh-people article{padding:0 0 21px}
+.vh-people .vh-character-art{aspect-ratio:4/3}
+.vh-people article>small,.vh-people article>h3,.vh-people article>p{margin-left:19px;margin-right:19px}
+.vh-people article>small{margin-top:17px}
+.vh-people .vh-avatar{display:none}
+.vh-vehicle-card .vh-vehicle-art{aspect-ratio:16/10}
+.vh-vehicle-card>.vh-vehicle-top,.vh-vehicle-card>h3,.vh-vehicle-card>p,.vh-vehicle-card>.vh-vehicle-tag{margin-left:19px;margin-right:19px}
+.vh-vehicle-card>.vh-vehicle-top{margin-top:16px}
+.vh-vehicle-card>.vh-vehicle-tag{margin-bottom:17px}
+.vh-vehicle-card h3{margin-top:9px}
+.vh-era-photo{aspect-ratio:16/8;max-height:270px;border-radius:7px;margin-bottom:21px}
+.vh-era-content{padding:clamp(16px,2.4vw,30px)}
+.vh-era-content article>h3,.vh-era-content article>p,.vh-era-content article>a{margin-left:1px}
+.vh-era-photo img{object-fit:cover}
+.vh-era-modern-protected{position:relative;aspect-ratio:16/8;border-radius:7px;overflow:hidden;margin-bottom:20px;background:linear-gradient(135deg,#5a3156,#203c52)}
+.vh-era-modern-protected>img{width:100%;height:100%;object-fit:cover;display:block}
+.vh-era-modern-protected>img[hidden]{display:none}
+.vh-era-modern-cover{position:absolute;inset:0;display:grid;place-content:center;gap:8px;text-align:center;color:#ffced8}
+.vh-era-modern-cover strong{font:italic 900 88px/.8 Impact,sans-serif;opacity:.65}
+.vh-era-modern-cover span{font-size:11px;font-weight:900}
+.vh-era-modern-protected>button{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);min-width:170px;min-height:43px;padding:10px 14px;border:1px solid #b5ffea;background:#1d2b43;color:#ccfff2;font-weight:900;font-size:11px;border-radius:6px;cursor:pointer}
+.vh-era-modern-protected>button[disabled]{opacity:.7;cursor:not-allowed}
+.vh-radio-art{aspect-ratio:16/7;overflow:hidden;border:1px solid #9d9db66b;border-radius:7px;background:#28213d;position:relative}
+.vh-radio-art img{width:100%;height:100%;object-fit:cover;object-position:center 24%;display:block}
+.vh-radio-art span{position:absolute;inset:0;display:grid;place-items:center;color:#f9d5e0;font-size:12px;font-weight:900}
+.vh-radio-art span[hidden]{display:none}
+.vh-visual-dialog{width:min(980px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;padding:19px;background:linear-gradient(140deg,#211d39,#172c41);border:1px solid #caa0ba;border-radius:12px;box-shadow:0 35px 100px #050819e6;color:#fff0e7}
+.vh-visual-dialog::backdrop{background:#040718e0;backdrop-filter:blur(4px)}
+.vh-visual-heading{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:13px}
+.vh-visual-heading h3{font:italic 900 clamp(24px,3vw,37px)/1.1 Impact,sans-serif;color:#ffe9df;margin:4px 0}
+.vh-visual-heading button{min-width:44px;min-height:44px;border:1px solid #e5b2ca;background:#38243c;color:#fff;border-radius:6px;cursor:pointer;font-size:16px}
+.vh-visual-image-wrap{min-height:200px;max-height:70vh;overflow:hidden;background:#19243b;display:grid;place-items:center}
+.vh-visual-image-wrap img{max-width:100%;max-height:69vh;width:auto;height:auto;object-fit:contain}
+.vh-visual-image-wrap p{color:#ffd7d1;font-size:13px;text-align:center;padding:22px}
+.vh-visual-footer{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;margin-top:13px;font-size:11px;color:#cbbbd6}
+.vh-visual-footer a{color:#b9ffef;text-decoration:underline;font-weight:850}
+@media(max-width:600px){.vh-era-photo{aspect-ratio:16/10}.vh-place>span:not(.vh-image-error),.vh-place>h3,.vh-place>p,.vh-place>small,.vh-people article>small,.vh-people article>h3,.vh-people article>p,.vh-vehicle-card>.vh-vehicle-top,.vh-vehicle-card>h3,.vh-vehicle-card>p,.vh-vehicle-card>.vh-vehicle-tag{margin-left:15px;margin-right:15px}.vh-visual-dialog{padding:10px}}
+@media(prefers-reduced-motion:reduce){.vh-open-art img{transition:none}.vh-open-art:hover img{transform:none}}
