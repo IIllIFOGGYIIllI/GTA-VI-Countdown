@@ -166,7 +166,7 @@ class SiteTests(unittest.TestCase):
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
         self.assertIn('vice-city-history.css?v=3.4.1',worker)
-        self.assertIn('vice-city-history.js?v=3.4.0',worker)
+        self.assertIn('vice-city-history.js?v=3.4.2',worker)
 
     def test_expanded_vice_city_archive_and_sources(self):
         html=self.pages['vice-city-history.html']
@@ -191,7 +191,7 @@ class SiteTests(unittest.TestCase):
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-countdown-v30',worker)
         self.assertIn('vice-city-history.css?v=3.4.1',worker)
-        self.assertIn('vice-city-history.js?v=3.4.0',worker)
+        self.assertIn('vice-city-history.js?v=3.4.2',worker)
         # The historical images can be fetched normally, but optional GTA VI
         # images must never be downloaded during PWA installation
         self.assertNotIn('/VI/_next/static/media/',worker.split('];',1)[0])
