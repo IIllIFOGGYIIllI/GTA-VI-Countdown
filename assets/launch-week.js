@@ -149,10 +149,12 @@
     if(previous!==phase){
       document.body.dataset.launchPhase=phase;
       const banner=$('launch-eve-banner');
-      banner.hidden=phase==='normal'||phase==='launched';
-      if(!banner.hidden){
-        $('launch-eve-title').textContent=labels[0];
-        $('launch-eve-detail').textContent=labels[1];
+      if(banner){
+        banner.hidden=phase==='normal'||phase==='launched';
+        if(!banner.hidden){
+          $('launch-eve-title').textContent=labels[0];
+          $('launch-eve-detail').textContent=labels[1];
+        }
       }
       if(previous!==null&&!settings.motion &&
          (phase==='final-minute'||phase==='launched')){

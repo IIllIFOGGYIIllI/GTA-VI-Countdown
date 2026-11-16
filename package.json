@@ -1,7 +1,7 @@
 {
   "name": "vice-city-countdown-qa",
   "private": true,
-  "version": "2.5.0",
+  "version": "3.1.0",
   "description": "Chromium readiness smoke tests for the static GTA VI countdown",
   "scripts": {
     "test:browser": "node tests/browser-readiness.cjs"

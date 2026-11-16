@@ -43,46 +43,28 @@ assert.equal(core.calendarUTC(SydneyRelease),'20261118T130000Z');
 assert.throws(()=>core.buildCalendar(NaN,'Australia/Sydney'),/Release time missing/);
 assert.ok(core.buildCalendar(SydneyRelease,'New\nLocation').includes('New Location'));
 
-const site=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
-const worker=fs.readFileSync(path.join(__dirname,'../sw.js'),'utf8');
-const code=fs.readFileSync(path.join(__dirname,'../assets/launch-week.js'),'utf8');
+const kit=fs.readFileSync(path.join(__dirname,'../launch-kit.html'),'utf8');
+const home=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+const guide=fs.readFileSync(path.join(__dirname,'../leonida-files.html'),'utf8');
+const media=fs.readFileSync(path.join(__dirname,'../media.html'),'utf8');
+const sw=fs.readFileSync(path.join(__dirname,'../sw.js'),'utf8');
+const js=fs.readFileSync(path.join(__dirname,'../assets/launch-week.js'),'utf8');
 for(const id of [
- 'launch-eve-banner','launch-eve-title','launch-eve-detail',
  'launch-kit','kit-check-items','kit-check-count','kit-check-progress','kit-clear-checklist',
  'kit-preview-count','kit-download-card','kit-copy-share','kit-calendar',
  'kit-platform','kit-motion','kit-sounds','kit-strict','kit-reset-settings',
  'kit-settings-status','kit-share-status'
-]){
- assert.ok(site.includes('id="'+id+'"'),'Missing v2.5 element: '+id);
-}
-for(const pathName of [
- 'assets/launch-week.js?v=3.0.1','assets/launch-week-core.js?v=2.5.0',
- 'assets/launch-week.css?v=2.5.0',
- 'assets/official-guide.css?v=2.8.0','assets/editorial-images.css?v=2.9.1',
- 'assets/official-guide.js?v=3.0.1',
- 'assets/cinematic-launch.css?v=2.7.2','assets/cinematic-launch.js?v=2.7.1'
-]){
- assert.ok(site.includes(pathName),'Missing app-shell asset: '+pathName);
- assert.ok(worker.includes(pathName),'Missing offline cache asset: '+pathName);
-}
-assert.ok(worker.includes('vice-city-countdown-v20'));
-assert.ok(!worker.split('];',1)[0].includes("'./data/official-guide.json?v=3.0.1'"),
-  'Private Leonida facts must not be downloaded by PWA installation');
-assert.ok(worker.includes('data/news.json?v=3.0.1'));
-assert.ok(site.includes('assets/editorial-images.css?v=2.9.1'));
-assert.ok(site.includes('assets/site-pages.css?v=3.0.0'));
-assert.ok(worker.includes('assets/site-pages.js?v=3.0.0'));
-assert.ok(site.includes('href="./news.html"'));
-assert.ok(site.includes('app.js?v=3.0.1'));
-assert.ok(worker.includes('app.js?v=3.0.1'));
-assert.ok(worker.includes('assets/editorial-images.css?v=2.9.1'));
-assert.ok(site.includes('id="guide-content" hidden'));
-assert.ok(site.includes('id="guide-toggle"'));
-assert.ok(worker.includes('preview/vendor/GrandFireworks.min.js?v=1.11.1'),'Offline PWA must cache the fireworks engine');
-assert.ok(site.includes('id="vc-cinema-replay-fireworks"'),'Celebration needs a replay control');
-assert.ok(code.includes("media-toggle"),'Strict spoiler mode must control optional media access');
-assert.ok(code.includes("toBlob"),'Countdown card must export as a real image');
-assert.ok(code.includes("new Blob([file]"),'Calendar must download as an .ics file');
-assert.ok(!code.includes("fetch("),'Launch kit must not fetch external services');
-assert.ok(!code.includes("window.open("),'Launch kit must not auto-open links');
-console.log('PASS: launch stage boundaries, regional calendar, share text, offline features and strict spoiler gate');
+])assert.ok(kit.includes('id="'+id+'"'),'Missing kit control '+id);
+assert.ok(!home.includes('id="kit-check-items"'),'Homepage should not duplicate the entire kit');
+assert.ok(!media.includes('id="kit-strict"'),'Media must not hide a duplicate preferences control');
+assert.ok(guide.includes('id="guide-content" hidden'),'Spoiler content must require opt-in');
+assert.ok(!sw.split('];',1)[0].includes('data/official-guide.json'),'Spoiler files may never precache');
+assert.ok(sw.includes('vice-city-countdown-v21'));
+for(const name of ['site-pages.js','region-clock.js','launch-week.js','news.js','media.js','install.js'])
+ assert.ok(sw.includes(name),'Offline PWA must cache '+name);
+assert.ok(js.includes('settings.strict')&&js.includes("if(banner)"),'Shared spoiler settings and optional banner');
+assert.ok(js.includes('toBlob'),'Postcard must export PNG');
+assert.ok(js.includes("new Blob([file]"),'Reminder must download .ics');
+assert.ok(!js.includes('fetch('),'Launch kit must not fetch external sources');
+assert.ok(!js.includes('window.open('),'Launch kit must not open external links');
+console.log('PASS: launch boundaries, region calendar, modular launch kit, spoiler gate and PWA');

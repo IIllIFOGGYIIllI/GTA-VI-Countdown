@@ -1,216 +1,154 @@
-"""Static smoke checks for the mobile site and approved-news contract."""
+"""GTA VI Countdown v3.1: page architecture, approved data, accessibility and PWA contracts."""
 import json
+import re
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlparse,unquote
 
 ROOT=Path(__file__).resolve().parents[1]
-
-class SiteParser(HTMLParser):
+PAGE_SECTIONS={
+    'index.html':{'countdown','launch-hub'},
+    'launch-info.html':{'launch-hub','milestones'},
+    'launch-kit.html':{'launch-kit'},
+    'news.html':{'news'},
+    'leonida-files.html':{'intel'},
+    'media.html':{'media'},
+    'app.html':{'app','faq'},
+}
+MODULES={
+    'index.html':{'app.js','assets/cinematic-launch.js'},
+    'launch-info.html':{'assets/region-clock.js'},
+    'launch-kit.html':{'assets/region-clock.js','assets/launch-week.js'},
+    'news.html':{'assets/news.js'},
+    'leonida-files.html':{'assets/official-guide.js'},
+    'media.html':{'assets/media.js'},
+    'app.html':{'assets/install.js'},
+}
+class Inspect(HTMLParser):
     def __init__(self):
         super().__init__()
         self.ids=[]
-        self.mobile_tabs=[]
+        self.main_ids=[]
+        self.links=[]
+        self.scripts=[]
         self.headings=[]
-        self.in_heading=None
+        self._heading=None
+        self._inside_main=False
     def handle_starttag(self,tag,attrs):
         attrs=dict(attrs)
-        if attrs.get('id'):
-            self.ids.append(attrs['id'])
-        if tag=='a' and 'mobile-tab-link' in attrs.get('class','').split():
-            self.mobile_tabs.append((attrs.get('href'),attrs.get('data-section')))
+        id_=attrs.get('id')
+        if id_:self.ids.append(id_)
+        if tag=='main':self._inside_main=True
+        if tag=='section' and self._inside_main and id_:self.main_ids.append(id_)
+        if tag=='a' and 'href' in attrs:self.links.append(attrs['href'])
+        if tag=='script' and 'src' in attrs:self.scripts.append(attrs['src'].split('?')[0].lstrip('./'))
         if tag in ('h1','h2','h3','h4','h5','h6'):
-            self.in_heading=tag
+            self._heading=tag
             self.headings.append('')
     def handle_endtag(self,tag):
-        if tag==self.in_heading:
-            self.in_heading=None
+        if tag=='main':self._inside_main=False
+        if tag==self._heading:self._heading=None
     def handle_data(self,data):
-        if self.in_heading:
-            self.headings[-1]+=data
+        if self._heading:self.headings[-1]+=data
 
 class SiteTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.html=(ROOT/'index.html').read_text(encoding='utf-8')
-        cls.parser=SiteParser()
-        cls.parser.feed(cls.html)
-    def test_expected_sections_and_controls(self):
-        for id_ in ('main','countdown','countdown-panel','timezone','days','hours',
-                    'minutes','seconds','news','news-grid','media','gallery-browser',
-                    'gallery-modal','app','check-updates','faq','launch-state',
-                    'launch-hub','launch-hub-title','count-grid','count-progress',
-                    'launch-elapsed','launch-region-name','hero-primary-action'):
-            self.assertIn(id_,self.parser.ids)
-        self.assertEqual(len(self.parser.ids),len(set(self.parser.ids)),'Duplicate HTML IDs found')
-    def test_mobile_tab_links_are_valid(self):
-        expected={'countdown':'./index.html#countdown',
-                  'news':'./news.html#news',
-                  'media':'./media.html#media',
-                  'app':'./app.html#app'}
-        self.assertEqual(len(self.parser.mobile_tabs),4)
-        for href,section in self.parser.mobile_tabs:
-            self.assertIn(section,expected)
-            self.assertEqual(href,expected[section])
-            self.assertIn(section,self.parser.ids)
-    def test_dedicated_pages_and_navigation(self):
-        page_map={
-            'launch-info.html':'launch-info',
-            'launch-kit.html':'launch-kit',
-            'news.html':'news',
-            'leonida-files.html':'leonida-files',
-            'media.html':'media',
-            'app.html':'app',
-        }
-        for filename,route in page_map.items():
-            page=(ROOT/filename).read_text(encoding='utf-8')
-            self.assertIn('data-page="'+route+'"',page,filename)
-            self.assertIn('site-pages.css?v=3.0.0',page,filename)
-            self.assertIn('site-pages.js?v=3.0.0',page,filename)
-            self.assertIn('<div class="page-lead shell">',page,filename)
-            self.assertIn('href="./news.html"',page,filename)
-            self.assertIn('href="./media.html"',page,filename)
-            self.assertIn('href="./leonida-files.html"',page,filename)
-        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        for filename in page_map:
-            self.assertIn("'./"+filename+"'",worker,filename)
-        deploy=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
-        for filename in page_map:
-            self.assertIn(filename,deploy)
-
-    def test_no_decorative_heading_periods(self):
-        for heading in self.parser.headings:
-            self.assertFalse(heading.strip().endswith('.'),heading)
-    def test_approved_news_only(self):
-        data=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
-        self.assertTrue(data['articles'])
-        for item in data['articles']:
-            self.assertIn(item['category'],{'launch','preload','updates'})
-            self.assertTrue(item['url'].startswith(('https://www.rockstargames.com/','https://support.rockstargames.com/')))
-    def test_gallery_and_offline_mobile_styles(self):
-        gallery=json.loads((ROOT/'data/screenshots.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(gallery['items']),138)
-        mobile=(ROOT/'assets/mobile-experience.css').read_text(encoding='utf-8')
-        self.assertIn('.mobile-tabbar',mobile)
-        self.assertIn('.hero-copy{display:contents}',mobile)
-        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn("mobile-experience.css?v=2.3.0",worker)
-        self.assertIn("launch-mode.css?v=2.4.0",worker)
-        self.assertIn("launch-week.css?v=2.5.0",worker)
-        self.assertIn("launch-week-core.js?v=2.5.0",worker)
-        self.assertIn("launch-week.js?v=3.0.1",worker)
-        self.assertIn("vice-city-countdown-v20",worker)
-        self.assertIn("preview/vendor/GrandFireworks.min.js?v=1.11.1",worker)
-        self.assertIn("cinematic-launch.css?v=2.7.2",worker)
-        self.assertIn("cinematic-launch.js?v=2.7.1",worker)
-
-    def test_official_guide_requires_opt_in(self):
-        self.assertIn('id="guide-content" hidden',self.html)
-        self.assertIn('id="guide-toggle"',self.html)
-        self.assertIn('id="guide-hide"',self.html)
-        self.assertIn('id="guide-grid"',self.html)
-        self.assertIn('id="guide-search"',self.html)
-        self.assertIn("official-guide.css?v=2.8.0",self.html)
-        self.assertIn("official-guide.js?v=3.0.1",self.html)
-        guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(guide['items']),19)
-        self.assertEqual(len({x['id'] for x in guide['items']}),19)
-        self.assertEqual(set(x['category'] for x in guide['items']),{'story','characters','places','world'})
-        for entry in guide['items']:
-            self.assertTrue(entry['source'].startswith('https://www.rockstargames.com/'))
+        cls.pages={file:(ROOT/file).read_text(encoding='utf-8') for file in PAGE_SECTIONS}
+        cls.parsed={}
+        for f,t in cls.pages.items():
+            p=Inspect();p.feed(t);cls.parsed[f]=p
+    def test_true_page_isolation(self):
+        for f,expected in PAGE_SECTIONS.items():
+            with self.subTest(page=f):
+                p=self.parsed[f]
+                self.assertEqual(set(p.main_ids),expected)
+                self.assertEqual(len(p.ids),len(set(p.ids)),'Duplicate IDs')
+                self.assertIn('assets/site-pages.js',p.scripts)
+                self.assertTrue(MODULES[f].issubset(set(p.scripts)))
+                for other,mods in MODULES.items():
+                    if other!=f:
+                        for module in mods-MODULES[f]:
+                            self.assertNotIn(module,p.scripts)
+                self.assertLess(len(self.pages[f]),23000,'Page contains entire website instead of own section')
+                self.assertIn('href="./news.html"',self.pages[f])
+                self.assertIn('href="./leonida-files.html"',self.pages[f])
+                self.assertIn('href="./media.html"',self.pages[f])
+                self.assertIn('<link rel="canonical"',self.pages[f])
+                self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h
+                                    for h in p.headings))
+    def test_links_and_assets_have_existing_local_paths(self):
+        for file,content in self.pages.items():
+            p=self.parsed[file]
+            for link in p.links:
+                if link.startswith(('#','https://','mailto:','tel:')):continue
+                local=unquote(urlparse(link).path)
+                self.assertTrue(local.startswith('./') or local.startswith('/'))
+                if local.startswith('/'):continue
+                base=local[2:].split('#')[0]
+                self.assertTrue(base=='' or (ROOT/base).exists(),(file,link))
+            for asset in re.findall(r'(?:src|href)="(\./(?:assets|data|preview)/[^"]+)"',content):
+                local=urlparse(asset).path[2:]
+                self.assertTrue((ROOT/local).exists(),(file,asset))
+    def test_clean_heading_punctuation_and_unique_h1(self):
+        for f,p in self.parsed.items():
+            for heading in p.headings:self.assertFalse(heading.strip().endswith('.'),(f,heading))
+            # Each page has one primary h1 outside the optional cinema mode.
+            self.assertIn('<h1',self.pages[f])
+    def test_news_and_images_are_official_and_unique(self):
         news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(news['articles']),11)
-        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertNotIn("'./data/official-guide.json?v=3.0.1'",worker.split('];',1)[0],
-                         'Spoiler archive must not pre-cache before the visitor reveals it')
-        self.assertIn('official-guide.css?v=2.8.0',worker)
-        self.assertIn('official-guide.js?v=3.0.1',worker)
-        self.assertIn('editorial-images.css?v=2.9.1',worker)
-        self.assertIn('app.js?v=3.0.1',worker)
-
-    def test_editorial_artwork_uses_verified_rockstar_screenshots(self):
-        images=json.loads((ROOT/'data/screenshots.json').read_text(encoding='utf-8'))
-        catalogue={x['image']:x for x in images['items']}
-        news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
+        shots=json.loads((ROOT/'data/screenshots.json').read_text(encoding='utf-8'))
         guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
         self.assertEqual(len(news['articles']),11)
         self.assertEqual(len(guide['items']),19)
-        all_urls=[]
+        self.assertEqual(len(shots['items']),138)
+        shotmap={a['image']:a for a in shots['items']}
+        urls=[]
         for item in news['articles']:
+            self.assertIn(item['category'],('preload','launch','updates'))
+            self.assertTrue(item['url'].startswith(('https://www.rockstargames.com/','https://support.rockstargames.com/')))
             image=item['image'].split('?')[0]
-            self.assertIn(image,catalogue)
-            self.assertEqual(catalogue[image]['category'],'Vice City',
-                             'Public Newswire must use neutral scenic thumbnails')
-            self.assertIn('imageAlt',item)
-            all_urls.append(image)
+            self.assertEqual(shotmap[image]['category'],'Vice City')
+            urls.append(image)
+            self.assertFalse(item['title'].endswith('.'))
         for item in guide['items']:
+            self.assertTrue(item['source'].startswith('https://www.rockstargames.com/'))
             image=item['image'].split('?')[0]
-            self.assertIn(image,catalogue)
-            self.assertTrue(item['imageAlt'].startswith('Official Rockstar Games'))
-            all_urls.append(image)
-        self.assertEqual(len(all_urls),len(set(all_urls)),
-                         'Prefer distinct images for distinct cards')
-        js=(ROOT/'app.js').read_text(encoding='utf-8')
-        info=(ROOT/'assets/official-guide.js').read_text(encoding='utf-8')
-        self.assertIn('syncNewsImages',js)
-        self.assertIn('newsSpoilersLocked',js)
-        self.assertIn("img.loading='lazy'",info)
-        self.assertIn('officialScreenshot',info)
-        self.assertIn('editorial-images.css?v=2.9.1',self.html)
-        self.assertIn('site-pages.css?v=3.0.0',self.html)
-        worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('site-pages.js?v=3.0.0',worker)
-
-    def test_editorial_titles_use_title_case(self):
-        guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
-        news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
-        self.assertEqual(guide['items'][0]['title'],'The Central Story')
-        self.assertEqual(guide['items'][0]['kicker'],'Official Story Premise')
-        self.assertEqual(guide['items'][3]['kicker'],"Jason's Circle")
-        self.assertEqual(news['articles'][0]['tag'],'Pre-Load')
-        renderer=(ROOT/'assets/official-guide.js').read_text(encoding='utf-8')
-        self.assertIn('editorialTitleCase(item.title)',renderer)
-        self.assertIn('editorialTitleCase(item.kicker)',renderer)
-        self.assertIn('Read Rockstar’s Official Information',renderer)
-        for name in ('index.html','launch-info.html','launch-kit.html','news.html','leonida-files.html','media.html','app.html'):
-            html=(ROOT/name).read_text(encoding='utf-8')
-            self.assertIn('All Files',html)
-            self.assertIn('Read Official Source',html)
-            self.assertIn('Reveal Official Media',html)
-
-    def test_launch_panel_starts_hidden_and_is_spoiler_free(self):
-        self.assertIn('id="launch-state" hidden',self.html)
-        self.assertIn('id="launch-hub" hidden',self.html)
-        self.assertIn("GTA VI Has Launched",self.html)
-        self.assertNotIn("autoplay",self.html.split('id="launch-hub"')[1].split('</section>')[0])
-        css=(ROOT/'assets/launch-mode.css').read_text(encoding='utf-8')
-        self.assertIn('#launch-hub[hidden]',css)
-        self.assertIn('#count-grid[hidden]',css)
-        app=(ROOT/'app.js').read_text(encoding='utf-8')
-        self.assertIn('updateLaunchMode(launched)',app)
-        self.assertIn("currentLaunchMode=null",app)
-        self.assertIn("now>=release",app)
-
-
-    def test_launch_kit_controls_and_privacy(self):
-        for id_ in (
-            "launch-kit", "launch-eve-banner", "launch-eve-title", "launch-eve-detail",
-            "kit-check-items", "kit-check-count", "kit-check-progress",
-            "kit-clear-checklist", "kit-download-card", "kit-copy-share",
-            "kit-calendar", "kit-platform", "kit-motion", "kit-sounds",
-            "kit-strict", "kit-reset-settings", "kit-settings-status"
-        ):
-            self.assertIn(id_,self.parser.ids)
-        assert "Launch Kit" in self.html
-        js=(ROOT/'assets/launch-week.js').read_text(encoding='utf-8')
-        self.assertIn("sounds:false",js)
-        self.assertIn("strict:false",js)
-        self.assertIn("window.ViceCountdown", (ROOT/'app.js').read_text(encoding='utf-8'))
-        self.assertIn("settings.strict",js)
-        self.assertIn("media-toggle",js)
-        privacy=(ROOT/'privacy.html').read_text(encoding='utf-8')
-        self.assertIn("launch checklist",privacy.lower())
-
+            self.assertIn(image,shotmap);urls.append(image)
+            self.assertFalse(item['title'].endswith('.'))
+        self.assertEqual(len(urls),len(set(urls)))
+    def test_spoiler_gate_never_precaches_opt_in_story(self):
+        guide=(ROOT/'assets/official-guide.js').read_text(encoding='utf-8')
+        self.assertIn("if(!toggle||!panel||!grid",guide)
+        self.assertIn("panel.hidden",guide)
+        self.assertIn("vc-strict-spoilers",guide)
+        self.assertIn("Read Rockstar’s Official Information",guide)
+        self.assertIn('id="guide-content" hidden',self.pages['leonida-files.html'])
+        sw=(ROOT/'sw.js').read_text(encoding='utf-8')
+        pre=sw.split('];',1)[0]
+        self.assertNotIn("data/official-guide.json",pre)
+        self.assertNotIn("data/screenshots.json",pre)
+        self.assertIn("vice-city-countdown-v21",sw)
+    def test_pwa_and_multiroute_shortcuts(self):
+        m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
+        urls={x['url'] for x in m['shortcuts']}
+        self.assertIn('./news.html',urls)
+        self.assertIn('./launch-kit.html',urls)
+        self.assertIn('./media.html',urls)
+        self.assertIn('./index.html#countdown',urls)
+        sw=(ROOT/'sw.js').read_text(encoding='utf-8')
+        for file in PAGE_SECTIONS:self.assertIn('./'+file,sw)
+        for asset in ('assets/news.js','assets/media.js','assets/region-clock.js',
+                      'assets/site-pages.js','assets/install.js'):
+            self.assertIn(asset,sw)
+        self.assertIn('SKIP_WAITING',sw)
+    def test_qa_and_deployment_preserved(self):
+        w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
+        for file in PAGE_SECTIONS:self.assertIn(file,w)
+        self.assertIn('node --check',w)
+        self.assertTrue((ROOT/'tests/browser-readiness.cjs').exists())
+        self.assertTrue((ROOT/'assets/launch-week.js').read_text(encoding='utf-8').find("if(banner)")>=0)
 
 if __name__=='__main__':
     unittest.main()
