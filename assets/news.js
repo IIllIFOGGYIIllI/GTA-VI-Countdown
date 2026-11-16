@@ -50,6 +50,8 @@
   $('kit-strict')?.addEventListener('change',syncNewsImages);
   $('kit-reset-settings')?.addEventListener('click',syncNewsImages);
   window.addEventListener('pageshow',syncNewsImages);
+  document.addEventListener('vice:preferences',syncNewsImages);
+  window.addEventListener('storage',syncNewsImages);
   async function refreshApprovedNews(){
     const grid=$('news-grid'),status=$('news-status'),verified=$('news-verified');
     if(!grid||!status)return;

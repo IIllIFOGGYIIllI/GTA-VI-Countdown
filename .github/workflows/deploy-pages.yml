@@ -38,6 +38,11 @@ jobs:
           node --check assets/site-pages.js
           node --check assets/launch-week-core.js
           node --check assets/launch-week.js
+          node --check assets/region-clock.js
+          node --check assets/news.js
+          node --check assets/media.js
+          node --check assets/install.js
+          node --check tests/browser-readiness.cjs
           python3 -m json.tool data/news.json > /dev/null
           python3 -m json.tool data/official-guide.json > /dev/null
           python3 -m json.tool data/screenshots.json > /dev/null

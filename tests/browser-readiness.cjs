@@ -85,10 +85,14 @@ async function main(){
     assert.equal(await page.locator('#count-grid').isVisible(),false);
     const state=await page.evaluate(()=>window.ViceCountdown.getState());
     assert.equal(state.selectedZone,'Australia/Sydney');
-    await page.clock.fastForward(24*60*60*1000);
-    assert.ok((await page.locator('#launch-elapsed').textContent()).includes('1D'));
+    // At Sydney midnight, Los Angeles is still waiting for its own midnight.
     await page.locator('#timezone').selectOption('America/Los_Angeles');
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,false);
+    await page.locator('#timezone').selectOption('Australia/Sydney');
+    assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,true);
+    // Moving ahead a full day must refresh elapsed time without 345,600 timer ticks.
+    await page.clock.fastForward(24*60*60*1000);
+    assert.ok((await page.locator('#launch-elapsed').textContent()).includes('1D'));
    }finally{await ctx.close();}
   });
   await runCase('launch kit persists checklist and protects separate pages',async()=>{
