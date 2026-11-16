@@ -58,9 +58,12 @@
    if(reloading)return;
    if(!hadController){hadController=true;return;}
    try{
-    const key='vice-city-v31-reloaded';
-    if(sessionStorage.getItem(key)==='yes')return;
-    sessionStorage.setItem(key,'yes');
+    // Rate-limit navigation refresh, not the entire version lifetime:
+    // multiple future updates must each be allowed to refresh once.
+    const key='vice-city-last-controller-reload';
+    const recent=Number(sessionStorage.getItem(key)||0);
+    if(Date.now()-recent<10000)return;
+    sessionStorage.setItem(key,String(Date.now()));
    }catch{}
    reloading=true;location.reload();
   });

@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: vice-city-browser-qa
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   browser-test:

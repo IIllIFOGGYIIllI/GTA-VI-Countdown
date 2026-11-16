@@ -85,7 +85,7 @@ async function main(){
     assert.equal(await page.locator('#count-grid').isVisible(),false);
     const state=await page.evaluate(()=>window.ViceCountdown.getState());
     assert.equal(state.selectedZone,'Australia/Sydney');
-    await page.clock.runFor(24*60*60*1000);
+    await page.clock.fastForward(24*60*60*1000);
     assert.ok((await page.locator('#launch-elapsed').textContent()).includes('1D'));
     await page.locator('#timezone').selectOption('America/Los_Angeles');
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,false);
@@ -189,7 +189,12 @@ async function main(){
     const page=await ctx.newPage();
     await page.goto(BASE+'index.html',{waitUntil:'load'});
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
-    await page.waitForFunction(async()=>{const keys=await caches.keys();return keys.includes('vice-city-countdown-v21')});
+    await page.waitForFunction(async()=>{
+      const keys=await caches.keys();
+      if(!keys.includes('vice-city-countdown-v21')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v21');
+      return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
+    });
     await ctx.setOffline(true);
     for(const route of ['news.html','launch-kit.html','media.html']){
      const response=await page.goto(BASE+route,{waitUntil:'domcontentloaded'});
