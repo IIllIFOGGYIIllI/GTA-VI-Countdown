@@ -221,3 +221,15 @@ body[data-page="history"]{--vh-pink:#ff9bbb;--vh-mint:#a1ffed;--vh-peach:#ffe0b7
 
 /* Respect hidden on unloaded or failed external visuals */
 .vh-open-art img[hidden],.vh-radio-art img[hidden]{display:none!important}
+
+/* Place the optional GTA VI reveal where the missing-image impression occurs. */
+.vh-modern-frame>.vh-preview-overlay{position:absolute;z-index:2;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px;text-align:center;background:linear-gradient(145deg,rgba(44,32,63,.55),rgba(8,23,45,.66))}
+.vh-modern-frame>.vh-preview-overlay[hidden]{display:none}
+.vh-preview-eyebrow{font:850 11px/1.4 Arial,sans-serif;letter-spacing:.09em;color:#aaffec;text-transform:uppercase}
+.vh-preview-hint{font-size:11px;line-height:1.5;color:#f5dce4;font-weight:750}
+#vh-compare-reveal-inline{border:1px solid #ffd6b6;border-radius:6px;background:linear-gradient(115deg,#ff9eb9,#ffcdab);color:#251c35;font:900 12px/1.35 Arial,sans-serif;min-height:46px;padding:13px 17px;cursor:pointer;box-shadow:0 8px 21px #0005;max-width:100%}
+#vh-compare-reveal-inline:hover:not(:disabled){filter:brightness(1.06);transform:translateY(-1px)}
+#vh-compare-reveal-inline:disabled{cursor:not-allowed;opacity:.75;box-shadow:none}
+.vh-modern-frame>small{z-index:3;pointer-events:none}
+@media(max-width:500px){.vh-modern-frame>.vh-preview-overlay{gap:7px;padding:11px}.vh-preview-eyebrow,.vh-preview-hint{font-size:9px}#vh-compare-reveal-inline{padding:9px 13px;min-height:41px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){#vh-compare-reveal-inline:hover:not(:disabled){transform:none}}

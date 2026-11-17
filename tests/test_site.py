@@ -133,7 +133,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v30",sw)
+        self.assertIn("vice-city-countdown-v31",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -165,8 +165,8 @@ class SiteTests(unittest.TestCase):
         self.assertFalse('autoplay' in page)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
         self.assertIn('vice-city-history.html',worker)
-        self.assertIn('vice-city-history.css?v=3.4.1',worker)
-        self.assertIn('vice-city-history.js?v=3.4.2',worker)
+        self.assertIn('vice-city-history.css?v=3.4.2',worker)
+        self.assertIn('vice-city-history.js?v=3.4.3',worker)
 
     def test_expanded_vice_city_archive_and_sources(self):
         html=self.pages['vice-city-history.html']
@@ -189,9 +189,9 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v30',worker)
-        self.assertIn('vice-city-history.css?v=3.4.1',worker)
-        self.assertIn('vice-city-history.js?v=3.4.2',worker)
+        self.assertIn('vice-city-countdown-v31',worker)
+        self.assertIn('vice-city-history.css?v=3.4.2',worker)
+        self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
         # images must never be downloaded during PWA installation
         self.assertNotIn('/VI/_next/static/media/',worker.split('];',1)[0])
@@ -229,6 +229,15 @@ class SiteTests(unittest.TestCase):
         self.assertIn('www.gtabase.com',script)
         self.assertIn('upload.wikimedia.org',script)
         self.assertNotIn('www.rockstargames.com',script)
+
+    def test_modern_comparison_has_a_visible_opt_in(self):
+        html=self.pages['vice-city-history.html']
+        script=(ROOT/'assets/vice-city-history.js').read_text(encoding='utf-8')
+        self.assertIn('id="vh-compare-reveal-inline"',html)
+        self.assertIn('id="vh-preview-overlay"',html)
+        self.assertIn("inlineButton?.addEventListener('click',toggleModernComparison)",script)
+        self.assertIn("inlineButton.disabled=locked()",script)
+        self.assertIn("if(locked())return;",script)
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

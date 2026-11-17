@@ -268,9 +268,12 @@ async function main(){
     await page.locator('[data-vh-compare="cars"]').click();
     assert.ok((await page.locator('#vh-then-image').getAttribute('src')).includes('ps2-09'));
     await page.locator('[data-vh-compare="city"]').click();
+    assert.equal(await page.locator('#vh-preview-overlay').isVisible(),true);
+    assert.equal(await page.locator('#vh-compare-reveal-inline').isVisible(),true);
     assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
-    await page.locator('#vh-compare-reveal').click();
+    await page.locator('#vh-compare-reveal-inline').click();
     assert.equal((await page.evaluate(()=>window.ViceHistory.getState())).revealed,true);
+    assert.equal(await page.locator('#vh-preview-overlay').isVisible(),false);
     assert.ok((await page.locator('#vh-modern-image').getAttribute('src')).includes('Vice_City_03'));
     await page.locator('[data-vh-compare="water"]').click();
     assert.ok((await page.locator('#vh-modern-image').getAttribute('src')).includes('Vice_City_05'));
@@ -281,6 +284,7 @@ async function main(){
     await page.locator('#kit-strict').check();
     await page.goto(BASE+'vice-city-history.html',{waitUntil:'load'});
     assert.equal(await page.locator('#vh-compare-reveal').isDisabled(),true);
+    assert.equal(await page.locator('#vh-compare-reveal-inline').isDisabled(),true);
     assert.equal(await page.locator('#vh-era-show-image').isDisabled(),true);
     assert.equal(await page.locator('#vh-era-2026-image').getAttribute('src'),null);
     assert.equal(await page.locator('#vh-modern-image').getAttribute('src'),null);
@@ -296,8 +300,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v30')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v30');
+      if(!keys.includes('vice-city-countdown-v31')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v31');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);

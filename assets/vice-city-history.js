@@ -49,19 +49,20 @@ const eras={
 const thenImage=$('vh-then-image');
 const selections=[...document.querySelectorAll('[data-vh-compare]')];
 const image=$('vh-modern-image'),placeholder=$('vh-modern-placeholder'),button=$('vh-compare-reveal'),
+ inlineButton=$('vh-compare-reveal-inline'),overlay=$('vh-preview-overlay'),previewNote=$('vh-preview-note'),
  label=$('vh-reveal-title'),status=$('vh-reveal-status');
 let selected='coast',revealed=false;
 const locked=()=>document.documentElement.classList.contains('vc-strict-spoilers');
 function hideComparison(){
  revealed=false;image.hidden=true;image.removeAttribute('src');image.alt='';
- placeholder.hidden=false;button.setAttribute('aria-pressed','false');
+ placeholder.hidden=false;if(overlay)overlay.hidden=false;button.setAttribute('aria-pressed','false');
 }
 function showComparison(){
  if(locked())return;
  const item=eras[selected];
  image.alt=item.alt;
  image.src=item.url+'?akim=1&imdensity=1&imwidth=960';
- image.hidden=false;placeholder.hidden=true;
+ image.hidden=false;placeholder.hidden=true;if(overlay)overlay.hidden=true;
  revealed=true;button.setAttribute('aria-pressed','true');
 }
 function selectComparison(id){
@@ -90,14 +91,26 @@ function syncPreferences(){
    ?'Scenic promotional imagery only. Hide it again at any time.'
    :'Reveal a scenic GTA VI screenshot only when you choose.';
  }
+ if(inlineButton){
+  inlineButton.disabled=locked();
+  inlineButton.setAttribute('aria-pressed',String(revealed));
+  inlineButton.textContent=locked()
+   ?'Preview Locked — Change Launch Kit Settings'
+   :revealed?'Hide Official Image':'Reveal Official Image ↗';
+ }
+ if(previewNote)previewNote.textContent=locked()
+  ?'Strict Spoiler Lock Is Active'
+  :'Optional Official GTA VI Screenshot';
 }
 selections.forEach(item=>item.addEventListener('click',()=>selectComparison(item.dataset.vhCompare)));
-button.addEventListener('click',()=>{
+function toggleModernComparison(){
  if(locked())return;
  if(revealed)hideComparison();
  else showComparison();
  syncPreferences();
-});
+}
+button.addEventListener('click',toggleModernComparison);
+inlineButton?.addEventListener('click',toggleModernComparison);
 image.addEventListener('error',()=>{
  hideComparison();syncPreferences();
  status.textContent='The official screenshot could not load. Check your connection or try another comparison.';
