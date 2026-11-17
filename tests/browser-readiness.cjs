@@ -110,7 +110,8 @@ async function main(){
     // Moving ahead a full day must refresh elapsed time without 345,600 timer ticks.
     await page.clock.fastForward(24*60*60*1000);
     assert.ok((await page.locator('#launch-elapsed').textContent()).includes('1D'));
-    await page.locator('#vc-cinema-close').click();
+    // Switching the selected region already closed the cinema; the guard
+    // should be inactive well after launch without clicking a hidden Exit.
     assert.equal(await page.evaluate(()=>window.VicePageRouter.isLaunchProtected()),false);
    }finally{await ctx.close();}
   });
