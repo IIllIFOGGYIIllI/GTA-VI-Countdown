@@ -133,7 +133,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v31",sw)
+        self.assertIn("vice-city-countdown-v32",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -189,7 +189,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v31',worker)
+        self.assertIn('vice-city-countdown-v32',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
@@ -238,6 +238,18 @@ class SiteTests(unittest.TestCase):
         self.assertIn("inlineButton?.addEventListener('click',toggleModernComparison)",script)
         self.assertIn("inlineButton.disabled=locked()",script)
         self.assertIn("if(locked())return;",script)
+
+    def test_cinematic_launch_has_no_preview_simulator(self):
+        home=self.pages['index.html']
+        script=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
+        self.assertNotIn('id="vc-cinema-preview"',home)
+        self.assertNotIn('id="vc-cinema-sim-controls"',home)
+        self.assertNotIn('id="vc-cinema-restart"',home)
+        self.assertNotIn("open('preview')",script)
+        self.assertNotIn('preview:',script)
+        self.assertIn("realSeenKey=key;open();",script)
+        self.assertIn("launchCelebration()",script)
+        self.assertIn('id="vc-cinema-replay-fireworks"',home)
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

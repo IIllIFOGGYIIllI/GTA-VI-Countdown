@@ -88,8 +88,14 @@ async function main(){
     await page.goto(BASE+'index.html',{waitUntil:'load'});
     await page.waitForFunction(()=>!!window.ViceCountdown);
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,false);
+    assert.equal(await page.locator('#vc-cinema-preview').count(),0);
+    assert.equal(await page.locator('#vc-cinema-sim-controls').count(),0);
+    assert.equal(await page.locator('#vc-cinema-restart').count(),0);
+    assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).mode,'real');
+    assert.equal(await page.locator('#vc-cinema').isVisible(),true);
     await page.clock.runFor(2200);
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,true);
+    assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
     assert.equal(await page.locator('#launch-state').isVisible(),true);
     assert.equal(await page.locator('#count-grid').isVisible(),false);
     const state=await page.evaluate(()=>window.ViceCountdown.getState());
@@ -300,8 +306,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v31')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v31');
+      if(!keys.includes('vice-city-countdown-v32')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v32');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);

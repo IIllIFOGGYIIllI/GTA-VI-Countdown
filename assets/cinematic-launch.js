@@ -1,7 +1,7 @@
 /* Vice City Countdown — Cinematic Midnight Mode v2.7
  * Uses the authoritative window.ViceCountdown selected-region release.
  * No second release schedule, no spoilers, no automatically playing audio.
- * Preview is a local simulation and does not mutate the real countdown.
+ * Runs only for the real regional launch instant, never a simulation.
  */
 (()=>{
 'use strict';
@@ -9,12 +9,9 @@ const $=id=>document.getElementById(id);
 const countdown=window.ViceCountdown;
 const overlay=$('vc-cinema');
 if(!countdown||!overlay)return;
-const startButton=$('vc-cinema-preview');
 const realButton=$('vc-cinema-reopen');
 const closeButton=$('vc-cinema-close');
 const fullButton=$('vc-cinema-fullscreen');
-const skipButton=$('vc-cinema-skip');
-const restartButton=$('vc-cinema-restart');
 const timer=$('vc-cinema-number');
 const phase=$('vc-cinema-phase');
 const label=$('vc-cinema-label');
@@ -34,8 +31,7 @@ const footer=document.querySelector('footer');
 const releaseKey=state=>state.selectedZone+'|'+state.release;
 const motionPref=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||
   document.documentElement.classList.contains('vc-low-motion');
-let mode=null; // null | 'preview' | 'real'
-let previewTarget=0,previewDuration=60000;
+let mode=null; // null | 'real'
 let realDismissedKey=null,realSeenKey=null;
 let lastRealRegion=null,visibleFocus=null,phaseName=null,lastDisplayedSecond=null;
 let interval=null;
@@ -155,23 +151,19 @@ function setState(name){
  overlay.classList.toggle('vc-cinema-arrived',name==='launched');
  $('vc-cinema-stars').setAttribute('aria-hidden','true');
  if(name==='launched'){
-  $('vc-cinema-sim-controls').hidden=true;
   phase.textContent='19 November 2026 · Midnight';
   label.textContent='The Wait Is Over';
-  liveFlag.textContent=mode==='preview'?'Simulated Midnight':'Scheduled Midnight';
+  liveFlag.textContent='Scheduled Midnight';
   countdownArea.hidden=true;
   welcome.hidden=false;
-  restartButton.hidden=mode!=='preview';
   replayFireworksButton.hidden=false;
   launchCelebration();
  }else{
-  $('vc-cinema-sim-controls').hidden=mode!=='preview'||atTen;
   phase.textContent=atTen?'The Final Ten Seconds':'The Final 60 Seconds';
   label.textContent=atTen?'This Is the Moment':'Vice City Is Calling';
-  liveFlag.textContent=mode==='preview'?'Simulation · No Real-Time Changes':'Live Region Countdown';
+  liveFlag.textContent='Live Region Countdown';
   countdownArea.hidden=false;
   welcome.hidden=true;
-  restartButton.hidden=true;
   replayFireworksButton.hidden=true;
  }
 }
@@ -185,18 +177,10 @@ function constrainFocus(event){
  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
 }
-function open(kind){
- if(mode){
-  if(kind==='preview'){
-   clearCelebration();
-   mode='preview';previewDuration=60000;previewTarget=Date.now()+previewDuration;
-   phaseName=null;update();
-  }
-  return;
- }
- mode=kind;
+function open(){
+ if(mode)return;
+ mode='real';
  visibleFocus=document.activeElement;
- if(kind==='preview'){previewDuration=60000;previewTarget=Date.now()+previewDuration;}
  const state=countdown.getState();
  lastRealRegion=releaseKey(state);
  document.documentElement.classList.add('vc-cinema-open');
@@ -207,12 +191,9 @@ function open(kind){
  header?.setAttribute('inert','');
  footer?.setAttribute('inert','');
  realButton.hidden=true;
- $('vc-cinema-sim-controls').hidden=kind!=='preview';
  phaseName=null;lastDisplayedSecond=null;
- region.textContent=kind==='preview'?getRegion(state)+' · simulated preview':getRegion(state);
- $('vc-cinema-description').textContent=kind==='preview'
-  ?'This is a spoiler-free simulation. Your real countdown will keep running in the background.'
-  :'This milestone follows your selected timezone. Check your console storefront for actual game access.';
+ region.textContent=getRegion(state);
+ $('vc-cinema-description').textContent='This milestone follows your selected timezone. Check your console storefront for actual game access.';
  overlay.classList.toggle('vc-cinema-reduce',!!motionPref());
  closeButton.focus();
  update();
@@ -220,7 +201,7 @@ function open(kind){
 function close(){
  if(!mode)return;
  clearCelebration();
- if(mode==='real')realDismissedKey=releaseKey(countdown.getState());
+ realDismissedKey=releaseKey(countdown.getState());
  mode=null;
  document.documentElement.classList.remove('vc-cinema-open');
  document.body.classList.remove('vc-cinema-open');
@@ -235,17 +216,14 @@ function close(){
  const state=countdown.getState();
  realButton.hidden=!(state.remainingMs<=60000&&!state.launched);
  if(visibleFocus instanceof HTMLElement&&visibleFocus.isConnected)visibleFocus.focus();
- else startButton.focus();
+ else if(!realButton.hidden)realButton.focus();
  visibleFocus=null;
  phaseName=null;
-}
-function secondsForDemo(){
- return Math.max(0,previewTarget-Date.now());
 }
 function update(){
  if(document.hidden)return;
  const state=countdown.getState();
- if(mode==='real'&&lastRealRegion!==releaseKey(state)){
+ if(mode&&lastRealRegion!==releaseKey(state)){
   close();return;
  }
  const eligible=state.remainingMs>0&&state.remainingMs<=60000&&!state.launched;
@@ -253,11 +231,11 @@ function update(){
   realButton.hidden=!eligible;
   const key=releaseKey(state);
   if(eligible&&realDismissedKey!==key&&realSeenKey!==key){
-   realSeenKey=key;open('real');
+   realSeenKey=key;open();
   }
   return;
  }
- const remaining=mode==='preview'?secondsForDemo():Math.max(0,state.release-Date.now());
+ const remaining=Math.max(0,state.release-Date.now());
  const launched=remaining<=0;
  const secs=Math.ceil(remaining/1000);
  if(launched){
@@ -279,28 +257,10 @@ function update(){
  $('vc-cinema-progress-ring').style.strokeDashoffset=
   String((1-clamps(elapsed/60000,0,1))*565.487);
  left.textContent=lastTen?'Ten Seconds Until Midnight':'The Last Minute Before Midnight';
- region.textContent=mode==='preview'?getRegion(state)+' · simulated preview':getRegion(state);
+ region.textContent=getRegion(state);
 }
-function skipToTen(){
- if(mode!=='preview')return;
- clearCelebration();
- previewDuration=10000;
- previewTarget=Date.now()+10000;
- phaseName=null;lastDisplayedSecond=null;
- update();
-}
-function restart(){
- if(mode!=='preview')return;
- clearCelebration();
- previewDuration=60000;previewTarget=Date.now()+60000;
- phaseName=null;lastDisplayedSecond=null;
- update();
-}
-startButton.addEventListener('click',()=>open('preview'));
-realButton.addEventListener('click',()=>open('real'));
+realButton.addEventListener('click',open);
 closeButton.addEventListener('click',close);
-skipButton.addEventListener('click',skipToTen);
-restartButton.addEventListener('click',restart);
 replayFireworksButton.addEventListener('click',()=>{
  if(mode&&phaseName==='launched')launchCelebration();
 });
@@ -327,10 +287,9 @@ window.addEventListener('pagehide',clearCelebration);
 // while the source countdown still owns the release instant.
 interval=window.setInterval(update,100);
 window.ViceCinematicLaunch=Object.freeze({
- preview:()=>open('preview'),
  close,
- getState:()=>({mode,phase:phaseName,remainingMs:mode==='preview'?secondsForDemo():
-   countdown.getState().remainingMs,autoDismissed:realDismissedKey===releaseKey(countdown.getState()),
+ getState:()=>({mode,phase:phaseName,remainingMs:countdown.getState().remainingMs,
+   autoDismissed:realDismissedKey===releaseKey(countdown.getState()),
    fireworksPlaying,fireworksMounted:!!fireworks,fireworksStatus:fireworksStatus.textContent}),
  getFireworksStats:fireworkStats
 });
