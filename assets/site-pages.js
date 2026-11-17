@@ -29,7 +29,16 @@
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu?.open){menu.open=false;menu.querySelector('summary')?.focus();}});
  document.addEventListener('click',e=>{if(menu?.open&&!menu.contains(e.target))menu.open=false;});
  const getCategory=()=>new URL(location.href).searchParams.get('category')||'all';
- window.VicePageRouter=Object.freeze({page,getCategory});
+ // Never reload a visitor's final countdown or live celebration because a
+ // newer PWA shell arrived in the background. The next navigation picks it up.
+ const isLaunchProtected=()=>{
+  if(document.body.classList.contains('vc-cinema-open'))return true;
+  const state=window.ViceCountdown?.getState?.();
+  if(!state||!Number.isFinite(state.release))return false;
+  const msUntilRelease=state.release-Date.now();
+  return msUntilRelease<=120000&&msUntilRelease>=-300000;
+ };
+ window.VicePageRouter=Object.freeze({page,getCategory,isLaunchProtected});
  const applyFilter=()=>{
   if(!config||page==='leonida-files')return; // Leonida is revealed only on deliberate opt-in.
   const category=getCategory();
@@ -56,6 +65,7 @@
   let hadController=Boolean(navigator.serviceWorker.controller),reloading=false;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
    if(reloading)return;
+   if(isLaunchProtected())return;
    if(!hadController){hadController=true;return;}
    try{
     // Rate-limit navigation refresh, not the entire version lifetime:
@@ -71,7 +81,7 @@
    try{
     const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});
     let last=0;
-    const check=()=>{if(Date.now()-last<60000)return;last=Date.now();reg.update().catch(()=>{});};
+    const check=()=>{if(isLaunchProtected()||Date.now()-last<60000)return;last=Date.now();reg.update().catch(()=>{});};
     check();window.addEventListener('focus',check);
     document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
     const button=document.getElementById('check-updates');

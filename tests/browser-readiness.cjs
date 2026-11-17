@@ -88,6 +88,7 @@ async function main(){
     await page.goto(BASE+'index.html',{waitUntil:'load'});
     await page.waitForFunction(()=>!!window.ViceCountdown);
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,false);
+    assert.equal(await page.evaluate(()=>window.VicePageRouter.isLaunchProtected()),true);
     assert.equal(await page.locator('#vc-cinema-preview').count(),0);
     assert.equal(await page.locator('#vc-cinema-sim-controls').count(),0);
     assert.equal(await page.locator('#vc-cinema-restart').count(),0);
@@ -95,6 +96,7 @@ async function main(){
     assert.equal(await page.locator('#vc-cinema').isVisible(),true);
     await page.clock.runFor(2200);
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,true);
+    assert.equal(await page.evaluate(()=>window.VicePageRouter.isLaunchProtected()),true);
     assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
     assert.equal(await page.locator('#launch-state').isVisible(),true);
     assert.equal(await page.locator('#count-grid').isVisible(),false);
@@ -108,6 +110,32 @@ async function main(){
     // Moving ahead a full day must refresh elapsed time without 345,600 timer ticks.
     await page.clock.fastForward(24*60*60*1000);
     assert.ok((await page.locator('#launch-elapsed').textContent()).includes('1D'));
+    await page.locator('#vc-cinema-close').click();
+    assert.equal(await page.evaluate(()=>window.VicePageRouter.isLaunchProtected()),false);
+   }finally{await ctx.close();}
+  });
+  await runCase('late arrival still sees midnight fireworks and can replay without simulation',async()=>{
+   const ctx=await browser.newContext({viewport:{width:375,height:812},
+    timezoneId:'Australia/Sydney',reducedMotion:'reduce',serviceWorkers:'block'});
+   try{
+    const page=await ctx.newPage(),errors=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    await page.clock.install({time:new Date('2026-11-18T13:00:25.000Z')});
+    await page.goto(BASE+'index.html',{waitUntil:'load'});
+    await page.waitForFunction(()=>window.ViceCinematicLaunch?.getState().phase==='launched');
+    assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,true);
+    assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
+    assert.equal(await page.locator('#vc-cinema-preview').count(),0);
+    await page.locator('#vc-cinema-close').click();
+    assert.equal(await page.locator('#vc-cinema-reopen').isVisible(),true);
+    assert.ok((await page.locator('#vc-cinema-reopen').textContent()).includes('Replay Launch Fireworks'));
+    await page.locator('#vc-cinema-reopen').click();
+    assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
+    assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).mode,'real');
+    await page.locator('#vc-cinema-close').click();
+    await page.clock.fastForward(12*60*1000);
+    assert.equal(await page.locator('#vc-cinema-reopen').isVisible(),true);
+    assert.deepEqual(errors,[]);
    }finally{await ctx.close();}
   });
   await runCase('launch kit persists checklist and protects separate pages',async()=>{

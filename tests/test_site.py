@@ -133,7 +133,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v32",sw)
+        self.assertIn("vice-city-countdown-v33",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -189,7 +189,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v32',worker)
+        self.assertIn('vice-city-countdown-v33',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
@@ -250,6 +250,22 @@ class SiteTests(unittest.TestCase):
         self.assertIn("realSeenKey=key;open();",script)
         self.assertIn("launchCelebration()",script)
         self.assertIn('id="vc-cinema-replay-fireworks"',home)
+
+    def test_launch_guard_and_real_celebration_replay(self):
+        shared=(ROOT/'assets/site-pages.js').read_text(encoding='utf-8')
+        cinema=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
+        home=self.pages['index.html']
+        self.assertIn('isLaunchProtected()',shared)
+        self.assertIn("document.body.classList.contains('vc-cinema-open')",shared)
+        self.assertIn('msUntilRelease<=120000',shared)
+        self.assertIn('msUntilRelease>=-300000',shared)
+        self.assertIn('const justLaunched=state.launched',cinema)
+        self.assertIn('RECENT_LAUNCH_WINDOW_MS=90000',cinema)
+        self.assertIn('Replay Launch Fireworks',cinema)
+        self.assertIn('launchCelebration()',cinema)
+        self.assertIn('assets/cinematic-launch.js?v=3.6.0',home)
+        for page in self.pages.values():
+            self.assertIn('assets/site-pages.js?v=3.3.0',page)
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

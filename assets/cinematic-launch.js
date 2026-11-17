@@ -29,6 +29,14 @@ const mobileNav=document.querySelector('.mobile-tabbar');
 const header=document.querySelector('.site-header');
 const footer=document.querySelector('footer');
 const releaseKey=state=>state.selectedZone+'|'+state.release;
+// Late visitors still get the genuine midnight celebration, not a fake countdown.
+const RECENT_LAUNCH_WINDOW_MS=90000;
+function updateLaunchAction(state){
+ const finalMinute=!state.launched&&state.remainingMs>0&&state.remainingMs<=60000;
+ realButton.hidden=!(finalMinute||state.launched);
+ realButton.textContent=state.launched?'✹ Replay Launch Fireworks':'✦ Enter Final 60 Seconds';
+ return finalMinute;
+}
 const motionPref=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||
   document.documentElement.classList.contains('vc-low-motion');
 let mode=null; // null | 'real'
@@ -214,7 +222,7 @@ function close(){
   document.exitFullscreen?.().catch(()=>{});
  }
  const state=countdown.getState();
- realButton.hidden=!(state.remainingMs<=60000&&!state.launched);
+ updateLaunchAction(state);
  if(visibleFocus instanceof HTMLElement&&visibleFocus.isConnected)visibleFocus.focus();
  else if(!realButton.hidden)realButton.focus();
  visibleFocus=null;
@@ -226,11 +234,11 @@ function update(){
  if(mode&&lastRealRegion!==releaseKey(state)){
   close();return;
  }
- const eligible=state.remainingMs>0&&state.remainingMs<=60000&&!state.launched;
  if(!mode){
-  realButton.hidden=!eligible;
+  const eligible=updateLaunchAction(state);
+  const justLaunched=state.launched&&Date.now()-state.release<=RECENT_LAUNCH_WINDOW_MS;
   const key=releaseKey(state);
-  if(eligible&&realDismissedKey!==key&&realSeenKey!==key){
+  if((eligible||justLaunched)&&realDismissedKey!==key&&realSeenKey!==key){
    realSeenKey=key;open();
   }
   return;
