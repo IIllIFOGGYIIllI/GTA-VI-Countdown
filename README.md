@@ -254,3 +254,14 @@ The website displays Rockstar-hosted, optimized image URLs lazily (`imwidth=960`
 ### v2.9.1 editorial image review
 
 A contact sheet of all 27 official Vice City scenic screenshots was used to select more relevant images for each news story. Pre-loading uses a marina overview, the festival uses nightlife, the gallery and release-time announcements use city panoramas, music stories use nightlife imagery and the extended presentation uses an aerial resort screenshot. All 30 published thumbnails remain distinct Rockstar-hosted assets, and character images remain hidden until opt-in. Image attribution appears only once a picture actually loads, and mobile browser QA waits for the image before capturing screenshots. The optional guide remains excluded from PWA install-time caching (cache v18); it can be fetched and cached only after deliberate reveal.
+
+## v3.7 — After Launch hub
+
+- A dedicated `after-launch.html` route extends the site beyond the countdown without changing regional release calculations, the cinematic launch mode, or OBS scenes.
+- Dynamic, selected-region milestone readout uses the existing read-only `assets/region-clock.js`; it describes a **scheduled midnight milestone**, not confirmed entitlement or real-time gameplay access.
+- Spoiler-conscious news cards display at most three approved entries from `data/news.json`. There is no automatic publication and no media or image preload.
+- A five-item first-session checklist is stored only in this browser under `vc-first-session-v1`, with an explicit reset control.
+- Quick routes to news, launch help, media, Leonida Files, Vice City History, and PWA settings each open their own page.
+- Shared desktop/page-menu navigation, home page directory and banner, PWA shortcuts, and offline shell include the new route.
+- The service-worker cache namespace is `vice-city-countdown-v34`. Versioned after-launch CSS is loaded on the home page and dedicated page; existing countdown and OBS scripts were not changed.
+- Privacy notice explicitly includes the new local checklist. Release news remains manually reviewed.
