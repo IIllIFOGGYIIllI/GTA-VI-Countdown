@@ -1,10 +1,11 @@
-/* Vice City Countdown · PWA v3.3 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-countdown-v33';
+/* Vice City Countdown · PWA v3.7 · Multi-page archive, approved material and offline fallback */
+const CACHE='vice-city-countdown-v34';
 const CORE=[
   "./",
   "./index.html",
   "./launch-info.html",
   "./launch-kit.html",
+  "./after-launch.html",
   "./news.html",
   "./leonida-files.html",
   "./media.html",
@@ -16,9 +17,11 @@ const CORE=[
   "./assets/vice-city-theme.css?v=2.2.0",
   "./assets/mobile-experience.css?v=2.3.0",
   "./assets/site-pages.css?v=3.2.0",
+  "./assets/after-launch.css?v=1.0.1",
+  "./assets/after-launch.js?v=1.0.0",
   "./assets/launch-mode.css?v=2.4.0",
   "./assets/cinematic-launch.css?v=2.7.2",
-  "./assets/site-pages.js?v=3.3.0",
+  "./assets/site-pages.js?v=3.4.0",
   "./app.js?v=3.1.0",
   "./preview/vendor/GrandFireworks.min.js?v=1.11.1",
   "./assets/cinematic-launch.js?v=3.6.0",
