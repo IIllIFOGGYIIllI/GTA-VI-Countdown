@@ -274,8 +274,8 @@ class SiteTests(unittest.TestCase):
             self.assertTrue(file.exists(),file)
             html=file.read_text(encoding='utf-8')
             self.assertIn(f'data-scene="{scene}"',html)
-            self.assertIn('obs.css?v=1.0.0',html)
-            self.assertIn('obs.js?v=1.0.0',html)
+            self.assertIn('obs.css?v=1.1.0',html)
+            self.assertIn('obs.js?v=1.1.0',html)
             self.assertIn('class="scene-header"',html)
             self.assertNotIn('https://',html.split('</head>')[0])
             self.assertIn('width=device-width',html)
@@ -292,6 +292,26 @@ class SiteTests(unittest.TestCase):
         self.assertIn('prefers-reduced-motion:reduce',css)
         self.assertIn('cp -R assets data preview obs dist/',workflow)
         self.assertIn('node --check obs/obs.js',workflow)
+
+    def test_obs_live_regional_milestones_and_clean_titles(self):
+        for scene in ('starting','countdown','ending'):
+            html=(ROOT/'obs'/f'{scene}.html').read_text(encoding='utf-8')
+            self.assertIn('id="obs-region-nz"',html)
+            self.assertIn('id="obs-region-au"',html)
+            self.assertIn('REGIONAL RELEASE STATUS',html)
+            self.assertNotIn('ENDS TONIGHT.',html)
+            self.assertNotIn('FOR WATCHING.',html)
+            self.assertNotIn('LOS SANTOS, YOUR TIME IS UP.',html)
+            self.assertIn('obs.css?v=1.1.0',html)
+            self.assertIn('obs.js?v=1.1.0',html)
+        js=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
+        self.assertIn("Date.parse('2026-11-19T00:00:00+13:00')",js)
+        self.assertIn('syncRegionStatus(now)',js)
+        self.assertIn("label:now>=target?'LIVE NOW'",js)
+        self.assertIn('getRegions:',js)
+        css=(ROOT/'obs/obs.css').read_text(encoding='utf-8')
+        self.assertIn('.region-status-card[data-status="live"]',css)
+        self.assertIn('.is-overlay .region-status-board{display:none!important}',css)
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

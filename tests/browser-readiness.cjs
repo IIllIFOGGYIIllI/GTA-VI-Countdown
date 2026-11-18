@@ -355,6 +355,31 @@ async function main(){
     }finally{await ctx.close();}
    }
   });
+  await runCase('OBS NZ and NSW release windows show correct live status',async()=>{
+   const ctx=await browser.newContext({viewport:{width:1920,height:1080},
+    timezoneId:'Pacific/Auckland',reducedMotion:'reduce',serviceWorkers:'block'});
+   try{
+    const page=await ctx.newPage(),errors=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    await page.clock.install({time:new Date('2026-11-18T10:59:58.000Z')});
+    await page.goto(BASE+'obs/starting.html',{waitUntil:'load'});
+    await page.waitForFunction(()=>!!window.OBSLaunchScenes);
+    assert.equal(await page.locator('#obs-region-nz').getAttribute('data-status'),'upcoming');
+    assert.equal(await page.locator('#obs-region-au').getAttribute('data-status'),'upcoming');
+    assert.ok((await page.locator('#obs-nz-status').textContent()).includes('TO GO'));
+    await page.clock.runFor(2200);
+    assert.equal(await page.locator('#obs-nz-status').textContent(),'LIVE NOW');
+    assert.equal(await page.locator('#obs-region-nz').getAttribute('data-status'),'live');
+    assert.equal(await page.locator('#obs-region-au').getAttribute('data-status'),'upcoming');
+    await page.clock.fastForward(2*60*60*1000);
+    assert.equal(await page.locator('#obs-au-status').textContent(),'LIVE NOW');
+    assert.equal(await page.locator('#obs-region-au').getAttribute('data-status'),'live');
+    await page.goto(BASE+'obs/ending.html',{waitUntil:'load'});
+    assert.equal(await page.locator('#obs-nz-status').textContent(),'LIVE NOW');
+    assert.equal(await page.locator('#obs-au-status').textContent(),'LIVE NOW');
+    assert.deepEqual(errors,[]);
+   }finally{await ctx.close();}
+  });
   await runCase('OBS Sydney midnight accuracy and launched state',async()=>{
    const ctx=await browser.newContext({viewport:{width:1920,height:1080},
     timezoneId:'Pacific/Auckland',reducedMotion:'reduce',serviceWorkers:'block'});

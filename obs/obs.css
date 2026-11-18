@@ -1,4 +1,4 @@
-/* Vice City Countdown · OBS Launch Night Scenes 1.0
+/* Vice City Countdown · OBS Launch Night Scenes 1.1
    Canvas: 1920 × 1080, scaled by obs.js to match the browser viewport.
    All graphics are original CSS and SVG silhouettes; no remote assets.
 */
@@ -123,3 +123,26 @@ body.is-overlay{background:transparent}
 @keyframes beat{50%{filter:brightness(1.3);transform:scale(1.035)}}
 @keyframes shimmer{0%,100%{opacity:0;transform:scale(.5)}45%{opacity:1;transform:scale(1.8)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Regional release tracker — compact broadcast-safe status panels */
+.region-status-board{position:absolute;z-index:10;top:169px;right:125px;width:710px;color:#fff1e3;pointer-events:none}
+.region-status-heading{margin:0 0 12px;display:flex;gap:12px;align-items:center;font:900 12px/1.3 "Trebuchet MS",Arial,sans-serif;letter-spacing:.20em;color:#b5ffe9}
+.region-heading-line{width:35px;height:2px;background:#a7ffe9}
+.region-heading-note{margin-left:auto;color:#e8c4d6;letter-spacing:.13em;font-size:11px}
+.region-status-list{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.region-status-card{min-width:0;min-height:90px;display:flex;align-items:center;gap:12px;padding:14px 14px;background:linear-gradient(120deg,#151d36ee,#292642e6);border:1px solid #e8a9c17d;border-radius:10px;box-shadow:0 15px 35px #080b2359;backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.region-status-card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#f3a4c4}
+.region-status-card[data-status="live"]{border-color:#a0ffe1bc;background:linear-gradient(120deg,#132f39eb,#193e43e8)}
+.region-status-card[data-status="live"]::before{background:#96ffdc}
+.region-code{flex:0 0 auto;width:47px;height:47px;display:grid;place-items:center;border:1px solid #daadc3ab;border-radius:9px;background:#412c4cb8;color:#ffdbda;font:900 19px/1 "Trebuchet MS",Arial,sans-serif;letter-spacing:.05em}
+.region-status-card[data-status="live"] .region-code{color:#b5ffea;background:#194744b9;border-color:#8affe0ad}
+.region-status-detail{display:flex;flex:1;flex-direction:column;gap:8px;min-width:0}
+.region-name{font-size:10px;letter-spacing:.075em;font-weight:900;white-space:nowrap;color:#edd6e5}
+.region-value{font-size:19px;line-height:1;letter-spacing:.055em;font-variant-numeric:tabular-nums;font-weight:900;color:#ffe4df;white-space:nowrap}
+.region-status-card[data-status="live"] .region-value{color:#b4ffea;text-shadow:0 0 18px #83f6d843}
+.region-signal{flex:0 0 auto;width:9px;height:9px;background:#e6abc3;border-radius:50%}
+.region-status-card[data-status="live"] .region-signal{background:#98ffe3;box-shadow:0 0 0 5px #98ffe326,0 0 16px #a4ffe1;animation:regionLive 2.8s ease-in-out infinite}
+@keyframes regionLive{50%{opacity:.6;box-shadow:0 0 0 8px #98ffe316,0 0 19px #a4ffe1}}
+/* Transparent gameplay overlay remains minimal and does not introduce extra panels */
+.is-overlay .region-status-board{display:none!important}
+@media(prefers-reduced-motion:reduce){.region-status-card[data-status="live"] .region-signal{animation:none}}

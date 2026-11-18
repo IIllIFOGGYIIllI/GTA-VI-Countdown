@@ -1,4 +1,4 @@
-/* Vice City Countdown · OBS Browser Source scenes · v1
+/* Vice City Countdown · OBS Browser Source scenes · v1.1
    Release instant: 19 Nov 2026 00:00 AEDT (Australia/Sydney).
    Independent of the OBS machine timezone and refreshed from Date.now().
 */
@@ -8,6 +8,9 @@
  if(!root)return;
  const SCENE=document.body.dataset.scene;
  const TARGET_MS=Date.parse('2026-11-19T00:00:00+11:00');
+ // New Zealand reaches Nov 19 midnight exactly two hours before Sydney in November.
+ // Regional launch windows follow published PlayStation Store timing, not live server telemetry.
+ const NZ_TARGET_MS=Date.parse('2026-11-19T00:00:00+13:00');
  const DESIGN_WIDTH=1920,DESIGN_HEIGHT=1080;
  const params=new URLSearchParams(location.search);
  const overlay=SCENE==='countdown'&&params.get('overlay')==='1';
@@ -29,6 +32,22 @@
  fit();
  const byId=id=>document.getElementById(id);
  const pad=n=>String(n).padStart(2,'0');
+ function regionStatus(target,now){
+   const remaining=Math.max(0,target-now);
+   const seconds=Math.ceil(remaining/1000);
+   const hours=Math.floor(seconds/3600),minutes=Math.floor((seconds%3600)/60),secs=seconds%60;
+   return Object.freeze({live:now>=target,remainingMs:remaining,
+     label:now>=target?'LIVE NOW':hours>0?pad(hours)+'H '+pad(minutes)+'M TO GO':pad(minutes)+'M '+pad(secs)+'S TO GO'});
+ }
+ function syncRegionStatus(now){
+   for(const [id,target] of [['nz',NZ_TARGET_MS],['au',TARGET_MS]]){
+     const state=regionStatus(target,now);
+     const card=byId('obs-region-'+id),text=byId('obs-'+id+'-status');
+     if(card)card.dataset.status=state.live?'live':'upcoming';
+     if(text&&text.textContent!==state.label)text.textContent=state.label;
+   }
+ }
+
  const timeLeft=()=>{
    const remaining=Math.max(0,TARGET_MS-Date.now());
    const whole=Math.ceil(remaining/1000);
@@ -42,6 +61,8 @@
  };
  let wasLaunched=null,previousSecond=-1;
  function tick(){
+   const now=Date.now();
+   syncRegionStatus(now);
    if(SCENE==='ending')return;
    const state=timeLeft();
    const whole=Math.ceil(state.remainingMs/1000);
@@ -76,17 +97,17 @@
       :'<span class="ticker-dot"></span> THE FINAL HOURS &nbsp; / &nbsp; WE MADE IT THIS FAR';
    }
  }
- if(SCENE!=='ending'){
-   tick();
-   setInterval(tick,150);
-   document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});
-   window.addEventListener('focus',tick);
-   window.addEventListener('pageshow',tick);
- }
+ tick();
+ setInterval(tick,150);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});
+ window.addEventListener('focus',tick);
+ window.addEventListener('pageshow',tick);
  window.OBSLaunchScenes=Object.freeze({
    scene:SCENE,
    releaseAt:TARGET_MS,
+   nzReleaseAt:NZ_TARGET_MS,
    getState:timeLeft,
+   getRegions:()=>({nz:regionStatus(NZ_TARGET_MS,Date.now()),au:regionStatus(TARGET_MS,Date.now())}),
    refresh:tick,
    overlay
  });
