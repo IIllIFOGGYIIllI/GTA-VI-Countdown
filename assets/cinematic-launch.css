@@ -186,13 +186,15 @@ html.vc-cinema-open,body.vc-cinema-open{overflow:hidden!important}
 #vc-cinema.vc-cinema-arrived .vc-cinema-sun{opacity:1;box-shadow:0 0 140px #ffc7b49c}
 #vc-cinema.vc-cinema-arrived .vc-cinema-stars{opacity:.8;animation:vc-cinema-breathe 2s ease-in-out infinite alternate}
 #vc-cinema-reopen{
- position:fixed;right:clamp(12px,2vw,32px);bottom:clamp(82px,9vh,124px);
- z-index:990;
+ position:static;
+ display:flex;align-items:center;justify-content:center;
+ width:100%;max-width:none;min-height:46px;
+ margin:14px 0 18px;
  border:1px solid #9bfff2;color:#effffb;
- border-radius:9px;padding:12px 17px;
- background:linear-gradient(110deg,#213550f2,#382747f2);
- box-shadow:0 5px 20px #080c1b7d;
- cursor:pointer;font-size:12px;font-weight:950;letter-spacing:.04em;
+ border-radius:8px;padding:12px 16px;
+ background:linear-gradient(115deg,#2b2141,#174e52);
+ box-shadow:0 4px 14px #080c1b40;
+ cursor:pointer;font-size:12px;font-weight:950;letter-spacing:.03em;
 }
 #vc-cinema-reopen:hover{filter:brightness(1.14)}
 #vc-cinema-preview{
@@ -237,7 +239,7 @@ html.vc-cinema-open,body.vc-cinema-open{overflow:hidden!important}
  #vc-cinema .vc-cinema-welcome-title{font-size:clamp(56px,14vw,85px)}
  #vc-cinema .vc-cinema-welcome-copy{font-size:12px;max-width:93vw}
  #vc-cinema .vc-cinema-welcome-mark{font-size:10px;letter-spacing:.16em}
- #vc-cinema-reopen{bottom:78px;right:12px;max-width:52vw}
+ 
 }
 @media(max-width:350px){
  #vc-cinema .vc-cinema-header{flex-wrap:wrap}
