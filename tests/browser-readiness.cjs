@@ -410,7 +410,7 @@ async function main(){
     assert.equal(await page.locator('#obs-launched').isVisible(),true);
     assert.equal(await page.locator('.countdown-tiles').isVisible(),false);
     assert.equal(await page.locator('#obs-launched').isVisible(),true);
-    assert.equal(await page.locator('#obs-fireworks-stage').count(),0);
+    assert.equal(await page.locator('canvas').count(),0);
     const launchText=await page.locator('.launch-message strong').textContent();
     assert.ok(launchText.includes('WELCOME TO')&&launchText.includes('VICE CITY'));
     await page.goto(BASE+'obs/starting.html',{waitUntil:'load'});
@@ -449,8 +449,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v32')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v32');
+      if(!keys.includes('vice-city-countdown-v35')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v35');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
