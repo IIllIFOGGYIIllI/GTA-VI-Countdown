@@ -32,7 +32,7 @@ jobs:
           node tests/test_launch_week.cjs
           node --check app.js
           node --check assets/cinematic-launch.js
-          node --check preview/celebration.js
+          node --check assets/after-launch.js
           node --check sw.js
           node --check assets/official-guide.js
           node --check assets/site-pages.js
@@ -52,8 +52,8 @@ jobs:
       - name: Prepare minimal static site
         run: |
           mkdir -p dist
-          cp index.html launch-info.html launch-kit.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
-          cp -R assets data preview obs dist/
+          cp index.html launch-info.html launch-kit.html after-launch.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
+          cp -R assets data obs dist/
           touch dist/.nojekyll
       - name: Download and verify original Vice City archive images
         run: |
