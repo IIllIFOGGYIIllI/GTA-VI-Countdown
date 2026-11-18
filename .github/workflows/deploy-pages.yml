@@ -44,6 +44,7 @@ jobs:
           node --check assets/install.js
           node --check assets/vice-city-history.js
           node --check tests/browser-readiness.cjs
+          node --check obs/obs.js
           python3 -m json.tool data/news.json > /dev/null
           python3 -m json.tool data/official-guide.json > /dev/null
           python3 -m json.tool data/screenshots.json > /dev/null
@@ -52,7 +53,7 @@ jobs:
         run: |
           mkdir -p dist
           cp index.html launch-info.html launch-kit.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
-          cp -R assets data preview dist/
+          cp -R assets data preview obs dist/
           touch dist/.nojekyll
       - name: Download and verify original Vice City archive images
         run: |
