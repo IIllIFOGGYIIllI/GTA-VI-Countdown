@@ -348,6 +348,18 @@ async function main(){
       assert.ok(!bounds.overflow,scene+' should never scroll');
       assert.ok(bounds.width<=width+1&&bounds.height<=height+1,scene+' scales to source size');
       assert.ok(bounds.width>width*.9&&bounds.height>height*.9,scene+' fills display');
+      if(width===1920){
+       const layout=await page.evaluate(()=>{
+        const rect=selector=>{const b=document.querySelector(selector).getBoundingClientRect();
+          return {left:b.left,right:b.right,top:b.top,bottom:b.bottom,centerX:(b.left+b.right)/2};};
+        return {content:rect('.content'),regions:rect('.region-status-board'),
+          footer:rect('.scene-footer'),scene:rect('#scene')};
+       });
+       assert.ok(Math.abs(layout.content.centerX-960)<7,scene+' content centred');
+       assert.ok(Math.abs(layout.regions.centerX-960)<7,scene+' release board centred');
+       assert.ok(layout.content.bottom<layout.footer.top+1,scene+' content above footer');
+       assert.ok(layout.regions.bottom<layout.content.top+10,scene+' region status clear of headline');
+      }
       if(width===1920)await page.screenshot({
        path:path.join(SHOTS,'obs-'+scene+'-1920x1080.png'),fullPage:false});
      }

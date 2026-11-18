@@ -274,7 +274,7 @@ class SiteTests(unittest.TestCase):
             self.assertTrue(file.exists(),file)
             html=file.read_text(encoding='utf-8')
             self.assertIn(f'data-scene="{scene}"',html)
-            self.assertIn('obs.css?v=1.1.0',html)
+            self.assertIn('obs.css?v=1.2.0',html)
             self.assertIn('obs.js?v=1.1.0',html)
             self.assertIn('class="scene-header"',html)
             self.assertNotIn('https://',html.split('</head>')[0])
@@ -302,7 +302,7 @@ class SiteTests(unittest.TestCase):
             self.assertNotIn('ENDS TONIGHT.',html)
             self.assertNotIn('FOR WATCHING.',html)
             self.assertNotIn('LOS SANTOS, YOUR TIME IS UP.',html)
-            self.assertIn('obs.css?v=1.1.0',html)
+            self.assertIn('obs.css?v=1.2.0',html)
             self.assertIn('obs.js?v=1.1.0',html)
         js=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
         self.assertIn("Date.parse('2026-11-19T00:00:00+13:00')",js)
@@ -312,6 +312,15 @@ class SiteTests(unittest.TestCase):
         css=(ROOT/'obs/obs.css').read_text(encoding='utf-8')
         self.assertIn('.region-status-card[data-status="live"]',css)
         self.assertIn('.is-overlay .region-status-board{display:none!important}',css)
+
+    def test_obs_main_content_and_regional_board_are_centred(self):
+        css=(ROOT/'obs/obs.css').read_text(encoding='utf-8')
+        self.assertIn('width:1560px;transform:translateX(-50%);text-align:center',css)
+        self.assertIn('right:auto;top:168px;width:780px;transform:translateX(-50%)',css)
+        self.assertIn('.scene-starting .starting-timer{',css)
+        self.assertIn('.scene-ending .end-message{align-items:center',css)
+        self.assertIn('.is-overlay .scene-countdown .content{left:55px',css)
+        self.assertIn('.is-overlay .scene-countdown .number-value{font-size:77px}',css)
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')

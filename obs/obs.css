@@ -146,3 +146,57 @@ body.is-overlay{background:transparent}
 /* Transparent gameplay overlay remains minimal and does not introduce extra panels */
 .is-overlay .region-status-board{display:none!important}
 @media(prefers-reduced-motion:reduce){.region-status-card[data-status="live"] .region-signal{animation:none}}
+
+
+/* v1.2 — Balanced, centre-aligned OBS broadcast layouts (1920x1080 design grid) */
+.region-status-board{
+ left:50%;right:auto;top:168px;width:780px;transform:translateX(-50%)
+}
+.content{
+ left:50%;width:1560px;transform:translateX(-50%);text-align:center
+}
+.eyebrow,.subline,.status-ticker{justify-content:center}
+.hero-subtitle{margin-left:auto;margin-right:auto}
+.scene-starting .content{top:322px}
+.scene-starting .hero-title{font-size:118px;line-height:.9;margin:22px 0 13px}
+.scene-starting .hero-subtitle{margin:14px auto 0;font-size:24px}
+.scene-starting .subline{margin-top:26px;font-size:15px}
+.scene-starting .starting-timer{
+ position:relative;top:auto;left:auto;margin:26px auto 0;
+ width:550px;padding:15px 28px 19px;gap:8px;
+ align-items:center;text-align:center
+}
+.scene-starting .starting-timer strong{font-size:40px}
+.status-ticker{position:relative;top:auto;left:auto;margin:24px auto 0;font-size:13px}
+.scene-starting .status-ticker{margin-top:25px}
+.scene-countdown .content{top:318px}
+.scene-countdown .countdown-heading{font-size:93px;line-height:.93;margin:0 auto 21px}
+.scene-countdown .countdown-panel{display:inline-block;max-width:1060px;margin:0 auto;padding:19px 32px 22px}
+.scene-countdown .countdown-kicker{margin-bottom:13px}
+.scene-countdown .time-card{min-width:220px;padding:13px 16px 12px;gap:5px}
+.scene-countdown .number-value{font-size:112px}
+.scene-countdown .colon{font-size:78px}
+.scene-countdown .countdown-progress{margin:19px 0 12px}
+.scene-countdown .status-ticker{margin-top:25px}
+.scene-ending .content{top:314px}
+.scene-ending .ending-heading{font-size:116px;line-height:.93;margin:22px 0 16px}
+.scene-ending .ending-subtitle{margin:16px auto 0;font-size:24px}
+.scene-ending .ending-divider{margin:28px auto 20px}
+.scene-ending .end-message{align-items:center;gap:7px}
+.scene-ending .end-message>strong{font-size:64px}
+.scene-ending .end-message p{margin-top:3px}
+.scene-ending .ending-ticker{margin-top:25px}
+.scene.is-launched .content{top:352px}
+.scene.is-launched .launch-message{align-items:center}
+.scene.is-launched .launch-message strong{font-size:125px}
+.scene.is-launched .launch-footline{text-align:center}
+/* The optional transparent gameplay overlay retains its compact lower-left position. */
+.is-overlay .scene-countdown .content{left:55px;top:auto;bottom:59px;width:auto;transform:none;text-align:left}
+.is-overlay .scene-countdown .countdown-panel{margin:0;max-width:none}
+.is-overlay .scene-countdown .countdown-kicker{text-align:left}
+.is-overlay .scene-countdown .time-card{min-width:140px;padding:12px 14px;gap:5px}
+.is-overlay .scene-countdown .number-value{font-size:77px}
+.is-overlay .scene-countdown .colon{font-size:46px}
+.is-overlay .scene.is-launched .content{left:55px;top:auto;bottom:60px}
+.is-overlay .scene.is-launched .launch-message{align-items:flex-start}
+.is-overlay .scene.is-launched .launch-message strong{font-size:57px}
