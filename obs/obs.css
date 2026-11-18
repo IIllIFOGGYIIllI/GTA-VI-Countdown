@@ -7,7 +7,7 @@
 html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#10152c}
 body{position:relative}
 .scene{width:1920px;height:1080px;position:absolute;top:0;left:0;overflow:hidden;isolation:isolate;background:linear-gradient(155deg,#151a38 0%,#2e294e 33%,#663b67 61%,#241f3f 100%);color:#fff2e7}
-.background,.noise-overlay,.launch-sparkles{position:absolute;inset:0;pointer-events:none}
+.background,.noise-overlay{position:absolute;inset:0;pointer-events:none}
 .background{z-index:0;background:radial-gradient(ellipse at 70% 48%,#d9658d55 0%,transparent 39%),radial-gradient(ellipse at 16% 13%,#253973 0%,transparent 50%)}
 .stars{position:absolute;inset:0;background-image:radial-gradient(#ffffffaa 1px,transparent 1.5px),radial-gradient(#f5ceee6f 1px,transparent 1.5px);background-size:137px 147px,179px 193px;background-position:31px 13px,97px 75px;opacity:.35;mask-image:linear-gradient(#000,transparent 72%)}
 .glow{position:absolute;border-radius:50%;filter:blur(130px);opacity:.44}
@@ -79,19 +79,6 @@ body{position:relative}
 .launch-kicker{font-size:24px;font-weight:900;letter-spacing:.23em;color:#a9fce8}
 .launch-message strong{font:italic 900 134px/.99 Impact,"Arial Black",sans-serif;color:#fff0df;text-shadow:5px 7px #38244c}
 .launch-footline{color:#ffddbc;font-size:21px;font-weight:900;letter-spacing:.19em}
-.launch-sparkles{display:none;z-index:6}
-.scene.is-launched .launch-sparkles{display:block}
-.launch-sparkles i{position:absolute;display:block;width:7px;height:7px;border-radius:50%;background:#ffe9c4;box-shadow:0 0 12px #ffe9bd;animation:shimmer 2.3s linear infinite}
-.launch-sparkles i:nth-child(1){top:20%;left:18%}
-.launch-sparkles i:nth-child(2){top:33%;left:63%;animation-delay:.3s}
-.launch-sparkles i:nth-child(3){top:17%;left:76%;animation-delay:.5s}
-.launch-sparkles i:nth-child(4){top:55%;left:89%;animation-delay:.9s}
-.launch-sparkles i:nth-child(5){top:68%;left:10%;animation-delay:.2s}
-.launch-sparkles i:nth-child(6){top:48%;left:35%;animation-delay:1.5s}
-.launch-sparkles i:nth-child(7){top:74%;left:66%;animation-delay:1s}
-.launch-sparkles i:nth-child(8){top:42%;left:91%;animation-delay:1.2s}
-.launch-sparkles i:nth-child(9){top:26%;left:43%;animation-delay:.7s}
-.launch-sparkles i:nth-child(10){top:65%;left:51%;animation-delay:1.8s}
 .ending-heading{font-size:137px;margin-top:43px}
 .ending-subtitle{margin-top:25px;font-size:27px}
 .ending-divider{display:flex;align-items:center;gap:16px;width:640px;margin:39px 0 27px}
@@ -118,7 +105,6 @@ body.is-overlay{background:transparent}
 .is-overlay .launch-kicker{font-size:13px}
 .is-overlay .launch-message strong{font-size:57px}
 .is-overlay .launch-footline{font-size:10px}
-.is-overlay .scene.is-launched .launch-sparkles{display:none}
 @keyframes pulse{50%{opacity:.44}}
 @keyframes beat{50%{filter:brightness(1.3);transform:scale(1.035)}}
 @keyframes shimmer{0%,100%{opacity:0;transform:scale(.5)}45%{opacity:1;transform:scale(1.8)}}
@@ -201,10 +187,6 @@ body.is-overlay{background:transparent}
 .is-overlay .scene.is-launched .launch-message{align-items:flex-start}
 .is-overlay .scene.is-launched .launch-message strong{font-size:57px}
 
-/* OBS Countdown — broadcast fireworks only at the genuine NSW release instant */
-.obs-fireworks-stage{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
-.obs-fireworks-stage canvas{display:block}
 .scene-countdown.is-launched .launch-message{position:relative;z-index:7;text-shadow:0 7px 25px #0b102abb}
 .scene-countdown.is-launched .launch-message strong{text-shadow:0 8px 28px #0b102be6,5px 7px #38244c}
 .sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-.is-overlay .obs-fireworks-stage{display:none!important}
