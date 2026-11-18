@@ -8,9 +8,10 @@ from urllib.parse import urlparse,unquote
 
 ROOT=Path(__file__).resolve().parents[1]
 PAGE_SECTIONS={
-    'index.html':{'countdown','launch-hub'},
+    'index.html':{'countdown','launch-hub','after-home'},
     'launch-info.html':{'launch-hub','milestones'},
     'launch-kit.html':{'launch-kit'},
+    'after-launch.html':{'after-launch','after-news','after-explore','after-checklist'},
     'news.html':{'news'},
     'leonida-files.html':{'intel'},
     'vice-city-history.html':{'history','history-timeline','history-places','history-people','history-culture','history-vehicles','history-gallery','history-compare','history-memories','history-sources'},
@@ -21,6 +22,7 @@ MODULES={
     'index.html':{'app.js','assets/cinematic-launch.js'},
     'launch-info.html':{'assets/region-clock.js'},
     'launch-kit.html':{'assets/region-clock.js','assets/launch-week.js'},
+    'after-launch.html':{'assets/region-clock.js','assets/after-launch.js'},
     'news.html':{'assets/news.js'},
     'leonida-files.html':{'assets/official-guide.js'},
     'vice-city-history.html':{'assets/vice-city-history.js'},
@@ -79,6 +81,7 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('href="./leonida-files.html"',self.pages[f])
                 self.assertIn('href="./media.html"',self.pages[f])
                 self.assertIn('href="./vice-city-history.html"',self.pages[f])
+                self.assertIn('href="./after-launch.html"',self.pages[f])
                 self.assertIn('<link rel="canonical"',self.pages[f])
                 self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h or 'Countdown' in h
                                     for h in p.headings))
@@ -133,7 +136,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v33",sw)
+        self.assertIn("vice-city-countdown-v34",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -142,6 +145,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('./media.html',urls)
         self.assertIn('./vice-city-history.html',urls)
         self.assertIn('./index.html#countdown',urls)
+        self.assertIn('./after-launch.html',urls)
         sw=(ROOT/'sw.js').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn('./'+file,sw)
         for asset in ('assets/news.js','assets/media.js','assets/region-clock.js',
@@ -149,6 +153,28 @@ class SiteTests(unittest.TestCase):
             self.assertIn(asset,sw)
         self.assertIn('SKIP_WAITING',sw)
         self.assertIn('assets/vice-city-history.js',sw)
+        self.assertIn('assets/after-launch.js?v=1.0.0',sw)
+        self.assertIn('assets/after-launch.css?v=1.0.1',sw)
+    def test_after_launch_hub_keeps_release_and_spoiler_contract(self):
+        html=self.pages['after-launch.html']
+        js=(ROOT/'assets/after-launch.js').read_text(encoding='utf-8')
+        home=self.pages['index.html']
+        sw=(ROOT/'sw.js').read_text(encoding='utf-8')
+        self.assertIn('id="after-news-grid"',html)
+        self.assertIn('data-after-task="console"',html)
+        self.assertIn('assets/after-launch.css?v=1.0.1',html)
+        self.assertIn('assets/after-launch.css?v=1.0.1',home)
+        self.assertIn('vice:tick',js)
+        self.assertIn('window.ViceCountdown',js)
+        self.assertIn('vc-first-session-v1',js)
+        self.assertIn("data/news.json?v=3.1.0",js)
+        self.assertIn("'https:'",js)
+        self.assertNotIn('data/screenshots.json',sw.split('];',1)[0])
+        self.assertNotIn('data/official-guide.json',sw.split('];',1)[0])
+        self.assertIn('after-launch.html',sw)
+        self.assertIn('id="vc-cinema"',home)
+        self.assertIn('assets/cinematic-launch.js?v=3.6.0',home)
+
     def test_classic_vice_city_history_and_spoiler_reveal(self):
         page=self.pages['vice-city-history.html']
         self.assertIn('The History Of',page)
@@ -189,7 +215,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v33',worker)
+        self.assertIn('vice-city-countdown-v34',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
