@@ -172,37 +172,9 @@ The November 2026 pre-load review issue #1 was closed as a duplicate: the manual
 
 Run locally: python3 -m unittest discover -s tests -p 'test_*.py' -v; node tests/test_launch.cjs; node tests/test_launch_week.cjs; node --check app.js; node --check sw.js; node --check assets/launch-week-core.js; node --check assets/launch-week.js.
 
-## Isolated live concept — Midnight Spectacular
-
-The separate interactive browser preview is at **/preview/celebration.html**.
-The production GTA VI countdown, PWA and 19 November regional launch logic are **unchanged**.
-
-The previous three hand-drawn motifs were not convincing fireworks. The preview now uses the open-source **Grand Fireworks JS v1.11.1** engine by Travis MacDonald (MIT licence) for genuine aerial shells, varied launch trajectories, rocket exhaust, long-exposure trails, spark fall, secondary crackles and a staged grand finale. The engine's browser build is self-hosted under preview/vendor/GrandFireworks.min.js, with the full MIT licence in preview/vendor/GRAND-FIREWORKS-LICENSE.txt. No external CDN required.
-
-- Automatic eight-second simulated countdown starts the firework show.
-- Visitors can start immediately, replay the show, restart the demo or trigger the staged grand finale manually.
-- The show is choreographed for approximately 33 seconds: opening volleys, alternating mid-show salvos and a multi-stage finale.
-- Full-width night sky gives fireworks the screen space they need; skyline and launch messages are secondary.
-- Original Ocean Drive at Midnight synthwave remains, alongside optional procedural booms and whistles from the engine. Sound is off by default and requires a click or tap.
-- Adjustable density, reduced motion and stage fullscreen, with the engine's Canvas 2D fallback.
-- No gameplay, story spoilers, Rockstar soundtrack or external photo assets.
-- GitHub Chromium QA verifies real engine mounting and active particle/rocket counts at phone/tablet/desktop widths, grand finale activation, replay, sound opt-in and isolation from the main PWA.
-
-### Midnight Spectacular v2.2 — Final ten-second music cue
-
-- The standalone preview now begins with a **20-second demo countdown**. Its final ten seconds change the stage appearance and cue a visitor-selected local audio recording.
-- GTA VI Trailer 1's song is **Tom Petty — Love Is a Long Road**. The copyrighted recording is **not included** in this repository or served to visitors. For private testing, use the preview's local file picker to choose a recording you are allowed to play, then select the cue's start position in seconds.
-- Local audio is decoded via the browser's Web Audio API. It stays in memory and is never uploaded, cached or sent to a server. Reloading the preview clears it. File size limit: 35 MB.
-- Music and fireworks sound remain **off by default** and require explicit opt-in. At T−10 the selected file fades in; at simulated midnight it fades out as the original Ocean Drive at Midnight synthwave soundtrack starts and the first fireworks fire.
-- **Preview final 10 seconds** restarts a short 11-second simulation so the T−10 trigger can be tested quickly without waiting for the full 20-second countdown.
-- The pyrotechnics sequence is now choreographed as **Act I — Skyline Salute** (gold shell opening), **Act II — Neon Rush** (alternating colourful salvos), and **Act III — Grand Finale** (layered carrier rockets, crackles and gold waterfall), approximately 42 seconds in total.
-- Browser QA verifies local WAV decoding, cue start at ten seconds, local-only audio, offset selection, fade-out at midnight, fireworks particles, mobile and desktop layouts, replay and existing PWA integrity.
-- Public hosting or automatic playback of Tom Petty's commercial recording would require the appropriate music licence; this personal file selection is a preview-only alternative.
-
-
 ## Cinematic Launch Mode v2.6 (main website and PWA)
 
-The main countdown now provides **Preview the cinematic 60-second countdown** inside the existing countdown card. Preview is a simulated 60-second journey and never changes the production countdown, regional launch state, spoilers or PWA settings. A **Jump to final 10 seconds** option allows fast testing. At zero it transitions to **WELCOME TO VICE CITY**, with a replay button and an optional link to the separate fireworks concept.
+The main countdown now provides **Preview the cinematic 60-second countdown** using the region-authoritative release clock. At the genuine scheduled midnight milestone it transitions to **WELCOME TO VICE CITY**. No simulation or pyrotechnic playback is included.
 
 When the selected region's real release clock enters the final 60 seconds, the fullscreen-styled cinematic overlay appears automatically (once per region/session). Visitors can exit, which prevents reopening against their wishes; **Return to Launch Mode** remains available during the remaining minute. The source of truth is the existing window.ViceCountdown.getState() release and selectedZone. The actual milestone shows no unsupported claim of game access; that still depends on the console account and storefront.
 
@@ -211,26 +183,7 @@ No third-party imagery, autoplay audio, commercial music or story spoilers are i
 
 ### v2.6.1 visual polish
 
-The simulated final-ten button now disappears as soon as the countdown reaches its final-ten sequence and stays hidden after the welcome transition. The separate fireworks concept link is accessible only in the explicit preview, not forced upon visitors at real midnight. Browser QA captures the completed welcome fade-in and includes an additional 320px narrow-mobile test. Static PWA cache namespace is `vice-city-countdown-v11`; existing region clock and spoiler controls remain unchanged.
-
-
-### v2.7.0 — Actual midnight fireworks integrated
-
-The cinematic launch mode now plays the **real Grand Fireworks JS** particle show **inside the main site** at the selected region's scheduled midnight, and at zero in the user-triggered simulation. No redirect to the separate concept preview is required. Real aerial rockets, shell bursts, spark trails and a 38-second sequence with a staged grand finale display behind a slightly lowered welcome title; **Replay fireworks** is available after the simulated or actual midnight transition.
-
-The commercial recording/music concept remains **out of the main website**. Fireworks are silent, audio is never requested or unlocked and no copyrighted song is included. Reduced-motion users get lower-density effects. Closing or restarting the cinematic experience destroys the fireworks renderer and cancels pending cues; replay replaces the renderer rather than piling up canvases. The already vendored MIT Grand Fireworks JS v1.11.1 is cached in the PWA core at `preview/vendor/GrandFireworks.min.js?v=1.11.1` (cache namespace `vice-city-countdown-v12`). Existing spoiler safeguards, user's selected release region, and no auto-launch-after-dismiss behaviour are preserved.
-
-Automated Chromium checks verify real particles, playback and replay on 320/360/1440-pixel viewports and automatic Sydney-midnight fireworks with no regression to timezone and offline-PWA tests.
-
-
-### v2.7.1 fireworks polish
-
-Refined the actual launch-mode firework renderer for subtler ignition flashes, reduced white glare, clearer pastel/gold shell palettes and smaller direct bursts. Mobile welcome text is raised to keep the two replay controls below it; these layouts are asserted at phone sizes. The updated PWA cache `vice-city-countdown-v13` serves versioned v2.7.1 CSS and JavaScript to installed devices.
-
-
-### v2.7.2 replay contrast
-
-The cinematic fireworks replay action uses a high-contrast white-on-deep-teal button on desktop and mobile. Chromium QA asserts its computed text colour. The PWA core has been advanced to `vice-city-countdown-v14` to refresh the CSS on installed devices.
+The final-ten presentation highlights the last ten seconds. The welcome transition is based on the real selected-region milestone; the region clock and spoiler controls remain unchanged.
 
 
 ## v2.8.0 — Editorial Newswire and opt-in Rockstar information guide
@@ -263,5 +216,12 @@ A contact sheet of all 27 official Vice City scenic screenshots was used to sele
 - A five-item first-session checklist is stored only in this browser under `vc-first-session-v1`, with an explicit reset control.
 - Quick routes to news, launch help, media, Leonida Files, Vice City History, and PWA settings each open their own page.
 - Shared desktop/page-menu navigation, home page directory and banner, PWA shortcuts, and offline shell include the new route.
-- The service-worker cache namespace is `vice-city-countdown-v34`. Versioned after-launch CSS is loaded on the home page and dedicated page; existing countdown and OBS scripts were not changed.
+- The service-worker cache namespace is `vice-city-countdown-v34`. Versioned after-launch CSS is loaded on the home page and dedicated page.
 - Privacy notice explicitly includes the new local checklist. Release news remains manually reviewed.
+
+## v3.8 — Simplified Midnight Presentation
+
+- The midnight overlay now transitions cleanly from the final countdown to **Welcome To Vice City** without particle effects or an external graphics engine.
+- OBS scenes keep their regional release trackers and final welcome screen. Their scripts and styling no longer load external visual effect libraries.
+- Retired the old standalone prototype and its engine assets; removed obsolete controls, PWA precache references and preview code from deployment.
+- The PWA cache namespace is `vice-city-countdown-v35`. For an installed PWA, use its refresh control if an old cached layout appears.
