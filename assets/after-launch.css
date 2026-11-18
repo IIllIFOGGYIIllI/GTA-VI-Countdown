@@ -47,3 +47,11 @@
 @media(max-width:920px){.after-hero{grid-template-columns:1fr}.after-clock{min-height:215px}.after-news-grid,.after-link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.after-intro{padding-top:14px}.after-hero{gap:12px}.after-hero-copy{min-height:0;padding:28px 20px}.after-hero h1{font-size:clamp(40px,12vw,54px)}.after-hero-copy>p{font-size:13px}.after-actions{flex-direction:column}.after-actions .btn{justify-content:center}.after-clock{padding:22px;gap:12px}.after-section{padding:24px 0 10px}.after-section-heading{align-items:start;flex-direction:column;gap:12px}.after-news-grid,.after-link-grid,.after-checks{grid-template-columns:1fr}.after-news-card,.after-link-grid a{padding:20px}.after-checks-footer{align-items:start;flex-direction:column}.after-progress{margin-bottom:0}}
 @media(prefers-reduced-motion:reduce){.after-link-grid a{transition:none}.after-link-grid a:hover{transform:none}}
+
+/* Featured cross-link on the home page remains neutral before midnight. */
+.after-home-feature{display:flex;gap:24px;align-items:center;justify-content:space-between;margin:12px auto 30px;padding:24px 29px;background:linear-gradient(110deg,#2b2541,#184145);border:1px solid #b7a1bf77;border-radius:12px}
+.after-home-feature h2{font:italic 900 clamp(26px,3vw,39px)/1.1 Impact,"Arial Black",sans-serif;color:#fff0e6;margin:8px 0}
+.after-home-feature p{font-size:13px;line-height:1.6;color:#e5d6df;max-width:740px;margin:0}
+.after-home-feature>a{color:#1d3240;background:#9dffec;border-radius:7px;font-size:12px;font-weight:900;white-space:nowrap;text-decoration:none;padding:14px 18px}
+.after-home-feature>a:hover{background:#cafff4}
+@media(max-width:650px){.after-home-feature{flex-direction:column;align-items:stretch;padding:22px 19px}.after-home-feature>a{text-align:center;white-space:normal}}
