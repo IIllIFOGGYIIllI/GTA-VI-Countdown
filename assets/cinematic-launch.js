@@ -1,4 +1,4 @@
-/* Vice City Countdown — Cinematic Midnight Mode v2.7
+/* Vice City Countdown — Cinematic Midnight Mode v3.7
  * Uses the authoritative window.ViceCountdown selected-region release.
  * No second release schedule, no spoilers, no automatically playing audio.
  * Runs only for the real regional launch instant, never a simulation.
@@ -21,9 +21,6 @@ const progress=$('vc-cinema-progress');
 const liveFlag=$('vc-cinema-live-flag');
 const welcome=$('vc-cinema-welcome');
 const countdownArea=$('vc-cinema-countdown-area');
-const fireworksStage=$('vc-cinema-fireworks-stage');
-const replayFireworksButton=$('vc-cinema-replay-fireworks');
-const fireworksStatus=$('vc-cinema-fireworks-status');
 const main=document.querySelector('main');
 const mobileNav=document.querySelector('.mobile-tabbar');
 const header=document.querySelector('.site-header');
@@ -34,7 +31,7 @@ const RECENT_LAUNCH_WINDOW_MS=90000;
 function updateLaunchAction(state){
  const finalMinute=!state.launched&&state.remainingMs>0&&state.remainingMs<=60000;
  realButton.hidden=!(finalMinute||state.launched);
- realButton.textContent=state.launched?'✹ Replay Launch Fireworks':'✦ Enter Final 60 Seconds';
+ realButton.textContent=state.launched?'✦ View Welcome Screen':'✦ Enter Final 60 Seconds';
  return finalMinute;
 }
 const motionPref=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||
@@ -43,105 +40,6 @@ let mode=null; // null | 'real'
 let realDismissedKey=null,realSeenKey=null;
 let lastRealRegion=null,visibleFocus=null,phaseName=null,lastDisplayedSecond=null;
 let interval=null;
-let fireworks=null,fireworksPlaying=false,fireworksTimers=[],fireworksRun=0;
-const FIREWORK_DURATION=38000;
-const FIREWORK_PALETTES=[
- ['#FFDCA0','#F9B77A','#FF91C5'],
- ['#88FFEE','#61DCE6','#FFE2B0'],
- ['#C9B6FF','#FF91CD','#FFC6E0'],
- ['#FFE5A5','#FFB58F','#FFD3B5']
-];
-function afterFireworks(ms,fn,run){
- const id=window.setTimeout(()=>{if(run===fireworksRun&&fireworksPlaying&&mode)fn();},ms);
- fireworksTimers.push(id);
-}
-function fireworkStats(){
- try{return fireworks?.getStats?.()||null;}catch{return null;}
-}
-function clearCelebration(){
- ++fireworksRun;
- fireworksTimers.forEach(window.clearTimeout);
- fireworksTimers=[];
- fireworksPlaying=false;
- overlay.classList.remove('vc-cinema-celebrating');
- if(fireworks){
-  try{fireworks.stop({immediate:true,finale:false});}catch{}
-  try{fireworks.destroy();}catch{}
-  fireworks=null;
- }
- fireworksStatus.textContent='';
-}
-function launchCelebration(){
- clearCelebration();
- if(!mode||phaseName!=='launched')return;
- const G=window.GrandFireworks;
- if(typeof G!=='function'){
-  fireworksStatus.textContent='Fireworks could not load on this device';
-  return;
- }
- const reduced=!!motionPref(),run=fireworksRun;
- try{
-  fireworks=new G({
-   container:fireworksStage,mode:'contained',placement:'overlay',clip:true,zIndex:1,
-   baseStyle:'cinematic',autoStart:false,duration:0,background:false,
-   renderer:{preferred:'canvas2d',fallback:'canvas2d'},
-   performance:{preset:reduced?'low':'medium',adaptive:true,secondary:reduced?.35:.49,
-    pauseWhenHidden:true,pauseWhenOffscreen:false,respectReducedMotion:true},
-   visuals:{opacity:.93,trails:true,trailFade:.23,bloom:.34,rocketExhaust:true,
-    explosionFlashes:!reduced,flashBangChance:0,flashScale:.50,flashAlpha:.06,
-    flashColor:'#FFCA98',flashLife:105,
-    sparkleChance:.27,shimmerChance:.35,starChance:.013,secondaryCrackle:true,
-    groupedSalvos:false},
-   show:{intensity:reduced?.23:.72,openingSalvo:reduced?2:5,
-    maxRockets:reduced?3:6,maxParticles:reduced?1100:3700,
-    minShellScale:.40,maxShellScale:.70,launchInterval:950,
-    closeShellChance:0,launchSpread:.77,
-    enabledTypes:['grand_peony','imperial_chrysanthemum','golden_brocade',
-     'weeping_willow','royal_palm','glitter_nova','crossette_supreme',
-     'diamond_ring','cascading_horsetail','crown_jewel'],
-    palettes:FIREWORK_PALETTES},
-   finale:{enabled:true,type:'super-grand-finale',trails:reduced?4:8,
-    trailFlight:1040,burstScale:.75,particleScale:reduced?.35:.66,
-    finishDelay:1600,maxDuration:11000},
-   sound:{enabled:false,volume:0}
-  });
-  fireworks.start();
-  fireworksPlaying=true;
-  overlay.classList.add('vc-cinema-celebrating');
-  fireworksStatus.textContent='Fireworks Show in Progress';
-  // A paced, 38-second show: salute, colour waves, gold willows, grand finale.
-  afterFireworks(1400,()=>{
-   const rect=fireworksStage.getBoundingClientRect();
-   fireworks.placeburst({x:rect.width*.28,y:rect.height*.23,
-     radius:Math.min(115,rect.width*.13),type:'golden_brocade',
-     density:.66,colors:['#FFE0A0','#FFBA7F','#FFAFBF']});
-  },run);
-  afterFireworks(2700,()=>fireworks.launch({type:'golden_brocade'}),run);
-  afterFireworks(5200,()=>fireworks.launch({type:'royal_palm'}),run);
-  afterFireworks(8500,()=>fireworks.launch({type:'glitter_nova'}),run);
-  afterFireworks(11400,()=>fireworks.launch({type:'crossette_supreme'}),run);
-  afterFireworks(14300,()=>fireworks.launch({type:'weeping_willow'}),run);
-  afterFireworks(18300,()=>{
-    fireworks.launch({type:'imperial_chrysanthemum'});
-    fireworks.launch({type:'diamond_ring'});
-  },run);
-  afterFireworks(25200,()=>{
-    fireworks.launchFinale({stopAfter:false});
-    fireworksStatus.textContent='✦ The Grand Finale ✦';
-  },run);
-  afterFireworks(FIREWORK_DURATION,()=>{
-    // Fade naturally, leaving the welcome screen and replay control visible.
-    fireworks.stop({finale:false});
-    fireworksPlaying=false;
-    fireworksStatus.textContent='Celebration Complete · Replay Anytime';
-  },run);
- }catch(error){
-  clearCelebration();
-  fireworksStatus.textContent='Fireworks are unavailable in this browser';
-  console.error('Cinematic fireworks could not start',error);
- }
-}
-
 const clamps=(n,min,max)=>Math.min(max,Math.max(min,n));
 const padded=n=>String(Math.max(0,n)).padStart(2,'0');
 const getRegion=state=>{
@@ -164,15 +62,12 @@ function setState(name){
   liveFlag.textContent='Scheduled Midnight';
   countdownArea.hidden=true;
   welcome.hidden=false;
-  replayFireworksButton.hidden=false;
-  launchCelebration();
  }else{
   phase.textContent=atTen?'The Final Ten Seconds':'The Final 60 Seconds';
   label.textContent=atTen?'This Is the Moment':'Vice City Is Calling';
   liveFlag.textContent='Live Region Countdown';
   countdownArea.hidden=false;
   welcome.hidden=true;
-  replayFireworksButton.hidden=true;
  }
 }
 function constrainFocus(event){
@@ -208,7 +103,6 @@ function open(){
 }
 function close(){
  if(!mode)return;
- clearCelebration();
  realDismissedKey=releaseKey(countdown.getState());
  mode=null;
  document.documentElement.classList.remove('vc-cinema-open');
@@ -269,9 +163,6 @@ function update(){
 }
 realButton.addEventListener('click',open);
 closeButton.addEventListener('click',close);
-replayFireworksButton.addEventListener('click',()=>{
- if(mode&&phaseName==='launched')launchCelebration();
-});
 overlay.addEventListener('keydown',constrainFocus);
 fullButton.addEventListener('click',async()=>{
  try{
@@ -290,16 +181,13 @@ document.addEventListener('visibilitychange',()=>{
  if(!document.hidden)update();
 });
 window.addEventListener('focus',update);
-window.addEventListener('pagehide',clearCelebration);
 // High-frequency visual updates for the last ten seconds and reliable zero,
 // while the source countdown still owns the release instant.
 interval=window.setInterval(update,100);
 window.ViceCinematicLaunch=Object.freeze({
  close,
  getState:()=>({mode,phase:phaseName,remainingMs:countdown.getState().remainingMs,
-   autoDismissed:realDismissedKey===releaseKey(countdown.getState()),
-   fireworksPlaying,fireworksMounted:!!fireworks,fireworksStatus:fireworksStatus.textContent}),
- getFireworksStats:fireworkStats
+   autoDismissed:realDismissedKey===releaseKey(countdown.getState())})
 });
 update();
 })();
