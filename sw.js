@@ -1,5 +1,5 @@
-/* Vice City Countdown · PWA v3.7 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-countdown-v34';
+/* Vice City Countdown · PWA v3.8 · Multi-page archive, approved material and offline fallback */
+const CACHE='vice-city-countdown-v35';
 const CORE=[
   "./",
   "./index.html",
@@ -20,11 +20,10 @@ const CORE=[
   "./assets/after-launch.css?v=1.0.1",
   "./assets/after-launch.js?v=1.0.0",
   "./assets/launch-mode.css?v=2.4.0",
-  "./assets/cinematic-launch.css?v=2.7.2",
+  "./assets/cinematic-launch.css?v=3.7.0",
   "./assets/site-pages.js?v=3.4.0",
   "./app.js?v=3.1.0",
-  "./preview/vendor/GrandFireworks.min.js?v=1.11.1",
-  "./assets/cinematic-launch.js?v=3.6.0",
+  "./assets/cinematic-launch.js?v=3.7.0",
   "./assets/region-clock.js?v=3.1.0",
   "./assets/launch-week.css?v=2.5.0",
   "./assets/launch-week-core.js?v=2.5.0",
