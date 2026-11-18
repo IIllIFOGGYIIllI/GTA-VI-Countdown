@@ -136,7 +136,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v35",sw)
+        self.assertIn("vice-city-countdown-v36",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -215,7 +215,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v35',worker)
+        self.assertIn('vice-city-countdown-v36',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
@@ -276,6 +276,8 @@ class SiteTests(unittest.TestCase):
         self.assertIn("realSeenKey=key;open();",script)
         self.assertNotIn('GrandFireworks',script)
         self.assertNotIn('vc-cinema-replay-fireworks',home)
+        self.assertIn('            <button id="vc-cinema-reopen"',home)
+        self.assertIn('position:static;', (ROOT/'assets/cinematic-launch.css').read_text(encoding='utf-8'))
 
     def test_launch_guard_and_midnight_welcome(self):
         shared=(ROOT/'assets/site-pages.js').read_text(encoding='utf-8')
