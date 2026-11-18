@@ -136,7 +136,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v34",sw)
+        self.assertIn("vice-city-countdown-v35",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -173,7 +173,7 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn('data/official-guide.json',sw.split('];',1)[0])
         self.assertIn('after-launch.html',sw)
         self.assertIn('id="vc-cinema"',home)
-        self.assertIn('assets/cinematic-launch.js?v=3.6.0',home)
+        self.assertIn('assets/cinematic-launch.js?v=3.7.0',home)
 
     def test_classic_vice_city_history_and_spoiler_reveal(self):
         page=self.pages['vice-city-history.html']
@@ -215,7 +215,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v34',worker)
+        self.assertIn('vice-city-countdown-v35',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
@@ -274,10 +274,10 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("open('preview')",script)
         self.assertNotIn('preview:',script)
         self.assertIn("realSeenKey=key;open();",script)
-        self.assertIn("launchCelebration()",script)
-        self.assertIn('id="vc-cinema-replay-fireworks"',home)
+        self.assertNotIn('GrandFireworks',script)
+        self.assertNotIn('vc-cinema-replay-fireworks',home)
 
-    def test_launch_guard_and_real_celebration_replay(self):
+    def test_launch_guard_and_midnight_welcome(self):
         shared=(ROOT/'assets/site-pages.js').read_text(encoding='utf-8')
         cinema=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
         home=self.pages['index.html']
@@ -287,11 +287,11 @@ class SiteTests(unittest.TestCase):
         self.assertIn('msUntilRelease>=-300000',shared)
         self.assertIn('const justLaunched=state.launched',cinema)
         self.assertIn('RECENT_LAUNCH_WINDOW_MS=90000',cinema)
-        self.assertIn('Replay Launch Fireworks',cinema)
-        self.assertIn('launchCelebration()',cinema)
-        self.assertIn('assets/cinematic-launch.js?v=3.6.0',home)
+        self.assertIn('View Welcome Screen',cinema)
+        self.assertNotIn('GrandFireworks',cinema)
+        self.assertIn('assets/cinematic-launch.js?v=3.7.0',home)
         for page in self.pages.values():
-            self.assertIn('assets/site-pages.js?v=3.3.0',page)
+            self.assertIn('assets/site-pages.js?v=3.4.0',page)
 
     def test_obs_browser_scene_isolation_and_release_contract(self):
         scenes=('starting','countdown','ending')
@@ -300,8 +300,8 @@ class SiteTests(unittest.TestCase):
             self.assertTrue(file.exists(),file)
             html=file.read_text(encoding='utf-8')
             self.assertIn(f'data-scene="{scene}"',html)
-            self.assertIn('obs.css?v=1.2.0',html)
-            self.assertIn('obs.js?v=1.2.0' if scene=='countdown' else 'obs.js?v=1.1.0',html)
+            self.assertIn('obs.css?v=1.3.0',html)
+            self.assertIn('obs.js?v=1.3.0,html)
             self.assertIn('class="scene-header"',html)
             self.assertNotIn('https://',html.split('</head>')[0])
             self.assertIn('width=device-width',html)
@@ -316,7 +316,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('1920px;height:1080px',css)
         self.assertIn('.is-overlay .scene{background:transparent}',css)
         self.assertIn('prefers-reduced-motion:reduce',css)
-        self.assertIn('cp -R assets data preview obs dist/',workflow)
+        self.assertIn('cp -R assets data obs dist/',workflow)
         self.assertIn('node --check obs/obs.js',workflow)
 
     def test_obs_live_regional_milestones_and_clean_titles(self):
@@ -328,8 +328,8 @@ class SiteTests(unittest.TestCase):
             self.assertNotIn('ENDS TONIGHT.',html)
             self.assertNotIn('FOR WATCHING.',html)
             self.assertNotIn('LOS SANTOS, YOUR TIME IS UP.',html)
-            self.assertIn('obs.css?v=1.2.0',html)
-            self.assertIn('obs.js?v=1.2.0' if scene=='countdown' else 'obs.js?v=1.1.0',html)
+            self.assertIn('obs.css?v=1.3.0',html)
+            self.assertIn('obs.js?v=1.3.0,html)
         js=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
         self.assertIn("Date.parse('2026-11-19T00:00:00+13:00')",js)
         self.assertIn('syncRegionStatus(now)',js)
@@ -348,20 +348,24 @@ class SiteTests(unittest.TestCase):
         self.assertIn('.is-overlay .scene-countdown .content{left:55px',css)
         self.assertIn('.is-overlay .scene-countdown .number-value{font-size:77px}',css)
 
-    def test_obs_fireworks_activate_only_after_nsw_release(self):
+    def test_no_retired_visual_effects_or_preview(self):
+        home=self.pages['index.html']
         html=(ROOT/'obs/countdown.html').read_text(encoding='utf-8')
         script=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
-        styles=(ROOT/'obs/obs.css').read_text(encoding='utf-8')
-        self.assertIn('GrandFireworks.min.js?v=1.11.1',html)
-        self.assertIn('id="obs-fireworks-stage"',html)
-        self.assertIn('id="obs-fireworks-status"',html)
-        self.assertIn('obs.js?v=1.2.0',html)
-        self.assertIn('CELEBRATION_MS=38000',script)
-        self.assertIn('AUTO_LAUNCH_WINDOW_MS=90000',script)
-        self.assertIn("state.launched&&Date.now()-TARGET_MS<=AUTO_LAUNCH_WINDOW_MS",script)
-        self.assertIn("sound:{enabled:false,volume:0}",script)
-        self.assertIn('replayFireworks:startFireworks',script)
-        self.assertIn('.is-overlay .obs-fireworks-stage{display:none!important}',styles)
+        cinema=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
+        css=(ROOT/'assets/cinematic-launch.css').read_text(encoding='utf-8')
+        sw=(ROOT/'sw.js').read_text(encoding='utf-8')
+        workflow=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
+        for content in (home,html,script,cinema,css,sw,workflow):
+            self.assertNotIn('GrandFireworks',content)
+            self.assertNotIn('fireworks-stage',content)
+            self.assertNotIn('replay-fireworks',content)
+        self.assertNotIn('preview/',workflow)
+        self.assertNotIn('preview/',sw)
+        self.assertIn('id="vc-cinema-welcome"',home)
+        self.assertIn('id="obs-launched"',html)
+        self.assertNotIn('startFireworks',script)
+        self.assertFalse((ROOT/'preview/celebration.html').exists())
 
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
