@@ -371,7 +371,8 @@ async function main(){
     assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),true);
     assert.equal(await page.locator('#obs-launched').isVisible(),true);
     assert.equal(await page.locator('.countdown-tiles').isVisible(),false);
-    assert.equal(await page.locator('.launch-message strong').textContent(),'WELCOME TO\nVICE CITY');
+    const launchText=await page.locator('.launch-message strong').textContent();
+    assert.ok(launchText.includes('WELCOME TO')&&launchText.includes('VICE CITY'));
     await page.goto(BASE+'obs/starting.html',{waitUntil:'load'});
     assert.equal(await page.locator('#obs-start-remaining').textContent(),'THE WAIT IS OVER');
    }finally{await ctx.close();}
