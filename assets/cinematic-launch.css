@@ -2,7 +2,7 @@
    All effects are original CSS/SVG. No copyrighted music or media. */
 html.vc-cinema-open,body.vc-cinema-open{overflow:hidden!important}
 #vc-cinema[hidden],#vc-cinema-reopen[hidden],#vc-cinema-sim-controls[hidden],#vc-cinema-welcome[hidden],
-#vc-cinema-countdown-area[hidden],#vc-cinema-replay-fireworks[hidden],#vc-cinema-restart[hidden]{display:none!important}
+#vc-cinema-countdown-area[hidden],#vc-cinema-restart[hidden]{display:none!important}
 #vc-cinema{
  position:fixed;inset:0;z-index:100000;
  overflow:hidden;isolation:isolate;
@@ -253,108 +253,17 @@ html.vc-cinema-open,body.vc-cinema-open{overflow:hidden!important}
  animation:none!important;transition:none!important;
 }
 
-/* v2.7 — Midnight fireworks are physically rendered in the cinematic
-   overlay behind the welcome lettering, never behind an external link. */
-#vc-cinema .vc-cinema-fireworks-stage{
- position:absolute;inset:0;z-index:1;
- overflow:hidden;pointer-events:none;
- visibility:hidden;
-}
-#vc-cinema.vc-cinema-celebrating .vc-cinema-fireworks-stage,
-#vc-cinema.vc-cinema-arrived .vc-cinema-fireworks-stage{visibility:visible}
-#vc-cinema .vc-cinema-fireworks-stage .grand-fireworks-root{
- position:absolute!important;inset:0!important;
- z-index:1!important;pointer-events:none!important;
-}
-#vc-cinema .vc-cinema-fireworks-stage canvas{pointer-events:none!important}
-#vc-cinema.vc-cinema-arrived .vc-cinema-hero{
- inset:11% 18px 13%;justify-content:flex-end;
-}
-#vc-cinema.vc-cinema-arrived #vc-cinema-welcome{
- width:min(100%,920px);
- padding:12px 24px 20px;
- background:linear-gradient(180deg,transparent,rgba(6,9,27,.12) 20%,rgba(6,9,27,.62) 80%,transparent);
- border-radius:10px;
-}
-#vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{
- font-size:clamp(58px,8.2vw,124px);
-}
-#vc-cinema .vc-cinema-fireworks-caption{
- min-height:22px;margin:12px 0 0;
- font-size:10px;line-height:1.4;
- letter-spacing:.20em;
- color:#b3fff1;font-weight:950;
- text-shadow:0 1px 15px #06071f;
-}
-#vc-cinema .vc-cinema-replay-fireworks{
- background:linear-gradient(105deg,#f9d4a8,#fb9fc6);
- color:#24152e;border-color:#ffecd5;
- box-shadow:0 2px 20px #f196c53b;
-}
-#vc-cinema.vc-cinema-celebrating .vc-cinema-sky{
- background:radial-gradient(ellipse 66% 38% at 50% 36%,rgba(232,102,171,.27),transparent 75%),
- linear-gradient(180deg,#04081c 0%,#11152c 45%,#4b2653 78%,#100e2b 100%);
-}
+
+/* Midnight resolves to a clean, accessible welcome state. */
+#vc-cinema.vc-cinema-arrived .vc-cinema-hero{inset:12% 16px 14%}
+#vc-cinema.vc-cinema-arrived #vc-cinema-welcome{width:min(100%,920px);padding:25px 18px}
+#vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(54px,8vw,121px)}
 @media(max-width:620px){
- #vc-cinema.vc-cinema-arrived .vc-cinema-hero{
-  inset:13% 10px 17%;
- }
- #vc-cinema.vc-cinema-arrived #vc-cinema-welcome{
-  padding:11px 10px 19px;
- }
- #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{
-  font-size:clamp(48px,13vw,84px);
- }
- #vc-cinema .vc-cinema-fireworks-caption{
-  font-size:9px;letter-spacing:.08em;
- }
+ #vc-cinema.vc-cinema-arrived .vc-cinema-hero{inset:16% 10px 20%}
+ #vc-cinema.vc-cinema-arrived #vc-cinema-welcome{padding:15px 12px}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(46px,12.5vw,80px)}
 }
 @media(max-height:620px){
- #vc-cinema.vc-cinema-arrived .vc-cinema-hero{inset:10% 8px 14%}
- #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(42px,12vh,89px)}
- #vc-cinema .vc-cinema-welcome-copy{font-size:11px}
-}
-
-
-/* v2.7.1 final mobile celebration layout: the controls must never sit
-   over the hero lettering or its status line. */
-#vc-cinema .vc-cinema-replay-fireworks{
- background:linear-gradient(105deg,#ffe3b7,#f7a0c3);
- color:#301d38;
- text-shadow:none;
- font-weight:950;
-}
-@media(max-width:620px){
- #vc-cinema.vc-cinema-arrived .vc-cinema-hero{
-  inset:11% 10px 29%;
- }
- #vc-cinema.vc-cinema-arrived .vc-cinema-standalone-actions{
-  left:15px;right:15px;bottom:clamp(71px,10.6vh,108px);
-  display:flex;justify-content:center;align-items:stretch;gap:8px;
- }
- #vc-cinema.vc-cinema-arrived .vc-cinema-standalone-actions>.vc-cinema-button{
-  flex:1;min-width:0;min-height:44px;max-width:50%;
-  font-size:9px;line-height:1.25;
-  padding:9px 9px;text-align:center;
- }
-}
-@media(max-height:690px) and (max-width:620px){
- #vc-cinema.vc-cinema-arrived .vc-cinema-hero{inset:9% 10px 32%}
- #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-mark{margin-bottom:6px}
- #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(41px,10vw,67px)}
- #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-copy{margin-top:8px}
- #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-note{margin-top:7px}
- #vc-cinema.vc-cinema-arrived .vc-cinema-fireworks-caption{margin-top:6px}
-}
-
-
-/* v2.7.2 — explicit, accessible replay-control contrast */
-#vc-cinema #vc-cinema-replay-fireworks{
- color:#eafff8!important;
- background:#173347!important;
- border-color:#92ffe9!important;
- text-shadow:none!important;
-}
-#vc-cinema #vc-cinema-replay-fireworks:hover{
- background:#244f62!important;
+ #vc-cinema.vc-cinema-arrived .vc-cinema-hero{inset:13% 10px 17%}
+ #vc-cinema.vc-cinema-arrived .vc-cinema-welcome-title{font-size:clamp(38px,12vh,84px)}
 }
