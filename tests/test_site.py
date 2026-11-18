@@ -303,7 +303,7 @@ class SiteTests(unittest.TestCase):
             self.assertNotIn('FOR WATCHING.',html)
             self.assertNotIn('LOS SANTOS, YOUR TIME IS UP.',html)
             self.assertIn('obs.css?v=1.2.0',html)
-            self.assertIn('obs.js?v=1.1.0',html)
+            self.assertIn('obs.js?v=1.2.0' if scene=='countdown' else 'obs.js?v=1.1.0',html)
         js=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
         self.assertIn("Date.parse('2026-11-19T00:00:00+13:00')",js)
         self.assertIn('syncRegionStatus(now)',js)
