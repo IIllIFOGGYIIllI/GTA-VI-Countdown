@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="3.8.1">
+  <meta name="app-version" content="3.8.2">
   <meta name="theme-color" content="#241739">
   <meta name="description" content="A spoiler-conscious GTA VI release countdown with regional launch times, official news and a cinematic midnight welcome.">
   <meta property="og:title" content="Vice City Countdown | GTA VI">
@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./assets/site-pages.css?v=3.2.0">
   <link rel="stylesheet" href="./assets/launch-mode.css?v=2.4.0">
   <link rel="stylesheet" href="./assets/after-launch.css?v=1.0.1">
-  <link rel="stylesheet" href="./assets/cinematic-launch.css?v=3.7.0">
+  <link rel="stylesheet" href="./assets/cinematic-launch.css?v=3.8.1">
   <script src="./assets/site-pages.js?v=3.4.0" defer></script>
   <script src="./app.js?v=3.1.0" defer></script>
   <script src="./assets/cinematic-launch.js?v=3.7.0" defer></script>
@@ -96,6 +96,7 @@
                 <a href="./news.html#news" class="launch-card-link secondary">Official updates <span aria-hidden="true">↓</span></a>
               </div>
             </div>
+            <button id="vc-cinema-reopen" type="button" hidden>✦ Enter Final 60 Seconds</button>
             <div class="zone-head"><label for="timezone">Your Launch Timezone</label><button id="detect-zone" class="text-button" type="button">↗ Detect mine</button></div>
             <div class="select-wrap"><select id="timezone" aria-describedby="zone-help"><option value="Australia/Sydney">Sydney · Australia</option></select><span class="select-caret" aria-hidden="true">⌄</span></div>
             <div class="zone-details"><div><span class="meta-caption">Scheduled Release In Region</span><strong id="zone-time">19 Nov · 12:00 AM</strong></div><div class="zone-side"><span class="meta-caption">Selected Region Clock</span><strong id="local-time">—</strong></div></div>
@@ -184,11 +185,10 @@
       <span>The App</span>
     </a>
   </nav>
-  <footer class="footer"><div class="shell"><div class="footer-main"><div><a href="./" class="footer-brand">Vice City Countdown</a><p>Wish you were here. No spoilers, only sunsets.</p></div><div class="footer-links"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./spoilers.html">Spoiler Policy</a><a href="https://github.com/IIllIFOGGYIIllI/GTA-VI-Countdown/issues" target="_blank" rel="noopener noreferrer">Feedback ↗</a></div></div><div class="footer-bottom"><span>© <span id="current-year">2026</span> Vice City Countdown · v3.8.1 · Unofficial fan project.</span><span>Grand Theft Auto VI and associated marks belong to Rockstar Games / Take-Two Interactive. Not affiliated or endorsed.</span></div></div></footer>
+  <footer class="footer"><div class="shell"><div class="footer-main"><div><a href="./" class="footer-brand">Vice City Countdown</a><p>Wish you were here. No spoilers, only sunsets.</p></div><div class="footer-links"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./spoilers.html">Spoiler Policy</a><a href="https://github.com/IIllIFOGGYIIllI/GTA-VI-Countdown/issues" target="_blank" rel="noopener noreferrer">Feedback ↗</a></div></div><div class="footer-bottom"><span>© <span id="current-year">2026</span> Vice City Countdown · v3.8.2 · Unofficial fan project.</span><span>Grand Theft Auto VI and associated marks belong to Rockstar Games / Take-Two Interactive. Not affiliated or endorsed.</span></div></div></footer>
   <!-- Cinematic launch mode uses the existing timezone-aware countdown.
        It appears automatically at T−60, or shortly after the actual release milestone.
        The experience uses the actual selected-region release clock and requires no sound. -->
-  <button id="vc-cinema-reopen" type="button" hidden>✦ Enter Final 60 Seconds</button>
   <section id="vc-cinema" hidden role="dialog" aria-modal="true" aria-label="Vice City cinematic launch countdown" tabindex="-1">
     <div class="vc-cinema-sky" aria-hidden="true"></div>
     <div class="vc-cinema-sun" aria-hidden="true"></div>
