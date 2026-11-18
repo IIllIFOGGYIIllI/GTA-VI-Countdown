@@ -275,7 +275,7 @@ class SiteTests(unittest.TestCase):
             html=file.read_text(encoding='utf-8')
             self.assertIn(f'data-scene="{scene}"',html)
             self.assertIn('obs.css?v=1.2.0',html)
-            self.assertIn('obs.js?v=1.1.0',html)
+            self.assertIn('obs.js?v=1.2.0' if scene=='countdown' else 'obs.js?v=1.1.0',html)
             self.assertIn('class="scene-header"',html)
             self.assertNotIn('https://',html.split('</head>')[0])
             self.assertIn('width=device-width',html)
