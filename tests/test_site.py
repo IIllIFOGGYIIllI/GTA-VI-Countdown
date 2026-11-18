@@ -322,6 +322,21 @@ class SiteTests(unittest.TestCase):
         self.assertIn('.is-overlay .scene-countdown .content{left:55px',css)
         self.assertIn('.is-overlay .scene-countdown .number-value{font-size:77px}',css)
 
+    def test_obs_fireworks_activate_only_after_nsw_release(self):
+        html=(ROOT/'obs/countdown.html').read_text(encoding='utf-8')
+        script=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
+        styles=(ROOT/'obs/obs.css').read_text(encoding='utf-8')
+        self.assertIn('GrandFireworks.min.js?v=1.11.1',html)
+        self.assertIn('id="obs-fireworks-stage"',html)
+        self.assertIn('id="obs-fireworks-status"',html)
+        self.assertIn('obs.js?v=1.2.0',html)
+        self.assertIn('CELEBRATION_MS=38000',script)
+        self.assertIn('AUTO_LAUNCH_WINDOW_MS=90000',script)
+        self.assertIn("state.launched&&Date.now()-TARGET_MS<=AUTO_LAUNCH_WINDOW_MS",script)
+        self.assertIn("sound:{enabled:false,volume:0}",script)
+        self.assertIn('replayFireworks:startFireworks',script)
+        self.assertIn('.is-overlay .obs-fireworks-stage{display:none!important}',styles)
+
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn(file,w)

@@ -1,4 +1,4 @@
-/* Vice City Countdown · OBS Browser Source scenes · v1.1
+/* Vice City Countdown · OBS Browser Source scenes · v1.2
    Release instant: 19 Nov 2026 00:00 AEDT (Australia/Sydney).
    Independent of the OBS machine timezone and refreshed from Date.now().
 */
@@ -59,6 +59,104 @@
      seconds:whole%60
    };
  };
+
+ // This is the identical local canvas-based fireworks engine used by
+ // the website's real launch celebration. It never plays audio.
+ const fireworksStage=byId('obs-fireworks-stage');
+ const fireworksStatus=byId('obs-fireworks-status');
+ const CELEBRATION_MS=38000;
+ const AUTO_LAUNCH_WINDOW_MS=90000;
+ const palettes=[
+   ['#FFDCA0','#F9B77A','#FF91C5'],
+   ['#88FFEE','#61DCE6','#FFE2B0'],
+   ['#C9B6FF','#FF91CD','#FFC6E0'],
+   ['#FFE5A5','#FFB58F','#FFD3B5']
+ ];
+ let fireworks=null,fireworksPlaying=false,fireworksTimers=[],fireworksRun=0;
+ const motionReduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
+ const afterFireworks=(ms,action,run)=>{
+   const id=setTimeout(()=>{
+     if(run!==fireworksRun||!fireworksPlaying)return;
+     try{action();}catch(error){console.warn('Fireworks sequence event skipped',error);}
+   },ms);
+   fireworksTimers.push(id);
+ };
+ function clearFireworks(){
+   ++fireworksRun;
+   fireworksTimers.forEach(clearTimeout);
+   fireworksTimers=[];
+   fireworksPlaying=false;
+   if(fireworks){
+     try{fireworks.stop({immediate:true,finale:false});}catch{}
+     try{fireworks.destroy();}catch{}
+     fireworks=null;
+   }
+ }
+ function startFireworks(){
+   if(SCENE!=='countdown'||overlay||!fireworksStage||Date.now()<TARGET_MS)return;
+   clearFireworks();
+   const G=window.GrandFireworks;
+   if(typeof G!=='function'){
+     if(fireworksStatus)fireworksStatus.textContent='Celebration visuals unavailable';
+     return;
+   }
+   const reduced=motionReduced(),run=fireworksRun;
+   try{
+     fireworks=new G({
+       container:fireworksStage,mode:'contained',placement:'overlay',clip:true,zIndex:1,
+       baseStyle:'cinematic',autoStart:false,duration:0,background:false,
+       renderer:{preferred:'canvas2d',fallback:'canvas2d'},
+       performance:{preset:reduced?'low':'medium',adaptive:true,secondary:reduced?.35:.49,
+         pauseWhenHidden:true,pauseWhenOffscreen:false,respectReducedMotion:true},
+       visuals:{opacity:.93,trails:true,trailFade:.23,bloom:.34,rocketExhaust:true,
+         explosionFlashes:!reduced,flashBangChance:0,flashScale:.5,flashAlpha:.06,
+         flashColor:'#FFCA98',flashLife:105,sparkleChance:.27,shimmerChance:.35,
+         starChance:.013,secondaryCrackle:true,groupedSalvos:false},
+       show:{intensity:reduced?.23:.72,openingSalvo:reduced?2:5,maxRockets:reduced?3:6,
+         maxParticles:reduced?1100:3700,minShellScale:.40,maxShellScale:.70,
+         launchInterval:950,closeShellChance:0,launchSpread:.77,
+         enabledTypes:['grand_peony','imperial_chrysanthemum','golden_brocade',
+           'weeping_willow','royal_palm','glitter_nova','crossette_supreme',
+           'diamond_ring','cascading_horsetail','crown_jewel'],palettes},
+       finale:{enabled:true,type:'super-grand-finale',trails:reduced?4:8,
+         trailFlight:1040,burstScale:.75,particleScale:reduced?.35:.66,
+         finishDelay:1600,maxDuration:11000},
+       sound:{enabled:false,volume:0}
+     });
+     fireworks.start();
+     fireworksPlaying=true;
+     if(fireworksStatus)fireworksStatus.textContent='Launch fireworks in progress';
+     afterFireworks(1400,()=>{
+       const rect=fireworksStage.getBoundingClientRect();
+       fireworks.placeburst({x:rect.width*.28,y:rect.height*.23,
+         radius:Math.min(115,rect.width*.13),type:'golden_brocade',
+         density:.66,colors:['#FFE0A0','#FFBA7F','#FFAFBF']});
+     },run);
+     afterFireworks(2700,()=>fireworks.launch({type:'golden_brocade'}),run);
+     afterFireworks(5200,()=>fireworks.launch({type:'royal_palm'}),run);
+     afterFireworks(8500,()=>fireworks.launch({type:'glitter_nova'}),run);
+     afterFireworks(11400,()=>fireworks.launch({type:'crossette_supreme'}),run);
+     afterFireworks(14300,()=>fireworks.launch({type:'weeping_willow'}),run);
+     afterFireworks(18300,()=>{
+       fireworks.launch({type:'imperial_chrysanthemum'});
+       fireworks.launch({type:'diamond_ring'});
+     },run);
+     afterFireworks(25200,()=>{
+       fireworks.launchFinale({stopAfter:false});
+       if(fireworksStatus)fireworksStatus.textContent='Grand finale in progress';
+     },run);
+     afterFireworks(CELEBRATION_MS,()=>{
+       fireworks.stop({finale:false});
+       fireworksPlaying=false;
+       if(fireworksStatus)fireworksStatus.textContent='Celebration complete';
+     },run);
+   }catch(error){
+     clearFireworks();
+     if(fireworksStatus)fireworksStatus.textContent='Celebration visuals unavailable';
+     console.error('OBS countdown fireworks failed to start',error);
+   }
+ }
+
  let wasLaunched=null,previousSecond=-1;
  function tick(){
    const now=Date.now();
@@ -69,6 +167,8 @@
    if(state.launched!==wasLaunched){
      root.classList.toggle('is-launched',state.launched);
      wasLaunched=state.launched;
+     if(state.launched&&Date.now()-TARGET_MS<=AUTO_LAUNCH_WINDOW_MS)
+       startFireworks();
    }
    root.classList.toggle('is-final-ten',!state.launched&&state.remainingMs<=10000);
    if(whole===previousSecond)return;
@@ -102,6 +202,7 @@
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});
  window.addEventListener('focus',tick);
  window.addEventListener('pageshow',tick);
+ window.addEventListener('pagehide',clearFireworks);
  window.OBSLaunchScenes=Object.freeze({
    scene:SCENE,
    releaseAt:TARGET_MS,
@@ -109,6 +210,8 @@
    getState:timeLeft,
    getRegions:()=>({nz:regionStatus(NZ_TARGET_MS,Date.now()),au:regionStatus(TARGET_MS,Date.now())}),
    refresh:tick,
+   replayFireworks:startFireworks,
+   getFireworksState:()=>({playing:fireworksPlaying,available:typeof window.GrandFireworks==='function',status:fireworksStatus?.textContent||''}),
    overlay
  });
 })();

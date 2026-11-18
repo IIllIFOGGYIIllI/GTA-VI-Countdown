@@ -401,6 +401,8 @@ async function main(){
     await page.goto(BASE+'obs/countdown.html',{waitUntil:'load'});
     await page.waitForFunction(()=>!!window.OBSLaunchScenes);
     assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),false);
+    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).playing,false);
+    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).available,true);
     assert.equal(await page.locator('#obs-hours').textContent(),'00');
     assert.equal(await page.locator('#obs-minutes').textContent(),'00');
     assert.ok(['02','01'].includes(await page.locator('#obs-seconds').textContent()));
@@ -408,6 +410,9 @@ async function main(){
     assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),true);
     assert.equal(await page.locator('#obs-launched').isVisible(),true);
     assert.equal(await page.locator('.countdown-tiles').isVisible(),false);
+    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).playing,true);
+    assert.ok(await page.locator('#obs-fireworks-stage canvas').count()>=1,'Fireworks canvas should appear at NSW midnight');
+    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).status,'Launch fireworks in progress');
     const launchText=await page.locator('.launch-message strong').textContent();
     assert.ok(launchText.includes('WELCOME TO')&&launchText.includes('VICE CITY'));
     await page.goto(BASE+'obs/starting.html',{waitUntil:'load'});

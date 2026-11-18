@@ -200,3 +200,11 @@ body.is-overlay{background:transparent}
 .is-overlay .scene.is-launched .content{left:55px;top:auto;bottom:60px}
 .is-overlay .scene.is-launched .launch-message{align-items:flex-start}
 .is-overlay .scene.is-launched .launch-message strong{font-size:57px}
+
+/* OBS Countdown — broadcast fireworks only at the genuine NSW release instant */
+.obs-fireworks-stage{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+.obs-fireworks-stage canvas{display:block}
+.scene-countdown.is-launched .launch-message{position:relative;z-index:7;text-shadow:0 7px 25px #0b102abb}
+.scene-countdown.is-launched .launch-message strong{text-shadow:0 8px 28px #0b102be6,5px 7px #38244c}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.is-overlay .obs-fireworks-stage{display:none!important}
