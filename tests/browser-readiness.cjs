@@ -449,8 +449,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v35')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v35');
+      if(!keys.includes('vice-city-countdown-v36')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-countdown-v36');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
