@@ -326,6 +326,79 @@ async function main(){
     assert.deepEqual(errors,[],'History page JavaScript errors');
    }finally{await ctx.close();}
   });
+  await runCase('OBS Starting Soon, Countdown and Ending in 1920x1080 and scaled previews',async()=>{
+   const browserSizes=[[1920,1080],[1280,720],[854,480]];
+   for(const [width,height] of browserSizes){
+    const ctx=await browser.newContext({viewport:{width,height},serviceWorkers:'block',
+      timezoneId:'Australia/Sydney',reducedMotion:'reduce'});
+    try{
+     const page=await ctx.newPage(),errors=[];
+     page.on('pageerror',e=>errors.push(e.message));
+     for(const scene of ['starting','countdown','ending']){
+      const res=await page.goto(BASE+'obs/'+scene+'.html',{waitUntil:'load'});
+      assert.equal(res.status(),200,scene+' page status');
+      await page.waitForFunction(()=>!!window.OBSLaunchScenes);
+      assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.scene),scene);
+      const bounds=await page.evaluate(()=>{
+       const rect=document.getElementById('scene').getBoundingClientRect();
+       return {left:rect.left,top:rect.top,width:rect.width,height:rect.height,
+        overflow:document.documentElement.scrollWidth>innerWidth+1
+        ||document.documentElement.scrollHeight>innerHeight+1};
+      });
+      assert.ok(!bounds.overflow,scene+' should never scroll');
+      assert.ok(bounds.width<=width+1&&bounds.height<=height+1,scene+' scales to source size');
+      assert.ok(bounds.width>width*.9&&bounds.height>height*.9,scene+' fills display');
+      if(width===1920)await page.screenshot({
+       path:path.join(SHOTS,'obs-'+scene+'-1920x1080.png'),fullPage:false});
+     }
+     assert.deepEqual(errors,[],'OBS scene JS exceptions');
+    }finally{await ctx.close();}
+   }
+  });
+  await runCase('OBS Sydney midnight accuracy and launched state',async()=>{
+   const ctx=await browser.newContext({viewport:{width:1920,height:1080},
+    timezoneId:'Pacific/Auckland',reducedMotion:'reduce',serviceWorkers:'block'});
+   try{
+    const page=await ctx.newPage();
+    await page.clock.install({time:new Date('2026-11-18T12:59:58.000Z')});
+    await page.goto(BASE+'obs/countdown.html',{waitUntil:'load'});
+    await page.waitForFunction(()=>!!window.OBSLaunchScenes);
+    assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),false);
+    assert.equal(await page.locator('#obs-hours').textContent(),'00');
+    assert.equal(await page.locator('#obs-minutes').textContent(),'00');
+    assert.ok(['02','01'].includes(await page.locator('#obs-seconds').textContent()));
+    await page.clock.runFor(2200);
+    assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),true);
+    assert.equal(await page.locator('#obs-launched').isVisible(),true);
+    assert.equal(await page.locator('.countdown-tiles').isVisible(),false);
+    assert.equal(await page.locator('.launch-message strong').textContent(),'WELCOME TO\nVICE CITY');
+    await page.goto(BASE+'obs/starting.html',{waitUntil:'load'});
+    assert.equal(await page.locator('#obs-start-remaining').textContent(),'THE WAIT IS OVER');
+   }finally{await ctx.close();}
+  });
+  await runCase('OBS transparent overlay and live scene styling',async()=>{
+   const ctx=await browser.newContext({viewport:{width:1920,height:1080},
+    serviceWorkers:'block'});
+   try{
+    const page=await ctx.newPage(),errors=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    await page.goto(BASE+'obs/countdown.html?overlay=1&channel=FOGGY',{waitUntil:'load'});
+    await page.waitForFunction(()=>!!window.OBSLaunchScenes);
+    const state=await page.evaluate(()=>({
+     overlay:window.OBSLaunchScenes.overlay,
+     body:document.body.classList.contains('is-overlay'),
+     sceneBackground:getComputedStyle(document.querySelector('.scene')).backgroundColor,
+     background:getComputedStyle(document.querySelector('.background')).display,
+     channel:document.getElementById('obs-footer-right').textContent
+    }));
+    assert.equal(state.overlay,true);
+    assert.equal(state.body,true);
+    assert.equal(state.sceneBackground,'rgba(0, 0, 0, 0)');
+    assert.equal(state.background,'none');
+    assert.ok(state.channel.includes('FOGGY'));
+    assert.deepEqual(errors,[]);
+   }finally{await ctx.close();}
+  });
   await runCase('PWA offline routes and updated shortcuts',async()=>{
    const ctx=await browser.newContext({viewport:{width:375,height:812},serviceWorkers:'allow',
     timezoneId:'Australia/Sydney'});

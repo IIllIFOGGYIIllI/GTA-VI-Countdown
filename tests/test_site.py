@@ -267,6 +267,32 @@ class SiteTests(unittest.TestCase):
         for page in self.pages.values():
             self.assertIn('assets/site-pages.js?v=3.3.0',page)
 
+    def test_obs_browser_scene_isolation_and_release_contract(self):
+        scenes=('starting','countdown','ending')
+        files=[ROOT/'obs'/f'{scene}.html' for scene in scenes]
+        for file,scene in zip(files,scenes):
+            self.assertTrue(file.exists(),file)
+            html=file.read_text(encoding='utf-8')
+            self.assertIn(f'data-scene="{scene}"',html)
+            self.assertIn('obs.css?v=1.0.0',html)
+            self.assertIn('obs.js?v=1.0.0',html)
+            self.assertIn('class="scene-header"',html)
+            self.assertNotIn('https://',html.split('</head>')[0])
+            self.assertIn('width=device-width',html)
+        script=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
+        css=(ROOT/'obs/obs.css').read_text(encoding='utf-8')
+        workflow=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
+        self.assertIn("Date.parse('2026-11-19T00:00:00+11:00')",script)
+        self.assertIn('TARGET_MS-Date.now()',script)
+        self.assertIn("params.get('overlay')==='1'",script)
+        self.assertIn("scene:SCENE",script)
+        self.assertIn('setInterval(tick,150)',script)
+        self.assertIn('1920px;height:1080px',css)
+        self.assertIn('.is-overlay .scene{background:transparent}',css)
+        self.assertIn('prefers-reduced-motion:reduce',css)
+        self.assertIn('cp -R assets data preview obs dist/',workflow)
+        self.assertIn('node --check obs/obs.js',workflow)
+
     def test_qa_and_deployment_preserved(self):
         w=(ROOT/'.github/workflows/deploy-pages.yml').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn(file,w)
