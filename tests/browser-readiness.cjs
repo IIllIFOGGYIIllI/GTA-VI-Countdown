@@ -1,4 +1,4 @@
-/* GTA VI Countdown v3.1 — responsive, isolation, spoiler, PWA and midnight QA. */
+/* GTA VI Countdown v3.8 — responsive, isolation, spoiler, PWA and midnight QA. */
 'use strict';
 const {chromium}=require('playwright');
 const {spawn}=require('node:child_process');
@@ -31,6 +31,7 @@ async function main(){
    ['index.html','countdown'],
    ['launch-info.html','milestones'],
    ['launch-kit.html','launch-kit'],
+   ['after-launch.html','after-launch'],
    ['news.html','news'],
    ['leonida-files.html','intel'],
    ['vice-city-history.html','history'],
@@ -50,7 +51,7 @@ async function main(){
       const visible=await page.locator('#'+section).isVisible();
       assert.equal(visible,true,file+' has no visible primary section');
       const mainSections=await page.locator('main section[id]').evaluateAll(nodes=>nodes.map(n=>n.id));
-      assert.ok(file==='vice-city-history.html'?mainSections.length===10:mainSections.length<=2,file+' has unexpected sections: '+mainSections);
+      assert.ok(file==='vice-city-history.html'?mainSections.length===10:(file==='after-launch.html'?mainSections.length===4:mainSections.length<=3),file+' has unexpected sections: '+mainSections);
       const sizes=await page.evaluate(()=>({
        document:document.documentElement.scrollWidth,viewport:innerWidth}));
       if(sizes.document>sizes.viewport+2){
@@ -115,7 +116,7 @@ async function main(){
     assert.equal(await page.evaluate(()=>window.VicePageRouter.isLaunchProtected()),false);
    }finally{await ctx.close();}
   });
-  await runCase('late arrival still sees midnight fireworks and can replay without simulation',async()=>{
+  await runCase('late arrival still sees midnight welcome and can reopen it',async()=>{
    const ctx=await browser.newContext({viewport:{width:375,height:812},
     timezoneId:'Australia/Sydney',reducedMotion:'reduce',serviceWorkers:'block'});
    try{
@@ -129,7 +130,7 @@ async function main(){
     assert.equal(await page.locator('#vc-cinema-preview').count(),0);
     await page.locator('#vc-cinema-close').click();
     assert.equal(await page.locator('#vc-cinema-reopen').isVisible(),true);
-    assert.ok((await page.locator('#vc-cinema-reopen').textContent()).includes('Replay Launch Fireworks'));
+    assert.ok((await page.locator('#vc-cinema-reopen').textContent()).includes('View Welcome Screen'));
     await page.locator('#vc-cinema-reopen').click();
     assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
     assert.equal((await page.evaluate(()=>window.ViceCinematicLaunch.getState())).mode,'real');
@@ -401,8 +402,6 @@ async function main(){
     await page.goto(BASE+'obs/countdown.html',{waitUntil:'load'});
     await page.waitForFunction(()=>!!window.OBSLaunchScenes);
     assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),false);
-    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).playing,false);
-    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).available,true);
     assert.equal(await page.locator('#obs-hours').textContent(),'00');
     assert.equal(await page.locator('#obs-minutes').textContent(),'00');
     assert.ok(['02','01'].includes(await page.locator('#obs-seconds').textContent()));
@@ -410,9 +409,8 @@ async function main(){
     assert.equal(await page.evaluate(()=>window.OBSLaunchScenes.getState().launched),true);
     assert.equal(await page.locator('#obs-launched').isVisible(),true);
     assert.equal(await page.locator('.countdown-tiles').isVisible(),false);
-    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).playing,true);
-    assert.ok(await page.locator('#obs-fireworks-stage canvas').count()>=1,'Fireworks canvas should appear at NSW midnight');
-    assert.equal((await page.evaluate(()=>window.OBSLaunchScenes.getFireworksState())).status,'Launch fireworks in progress');
+    assert.equal(await page.locator('#obs-launched').isVisible(),true);
+    assert.equal(await page.locator('#obs-fireworks-stage').count(),0);
     const launchText=await page.locator('.launch-message strong').textContent();
     assert.ok(launchText.includes('WELCOME TO')&&launchText.includes('VICE CITY'));
     await page.goto(BASE+'obs/starting.html',{waitUntil:'load'});
