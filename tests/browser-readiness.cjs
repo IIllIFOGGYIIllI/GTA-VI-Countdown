@@ -28,7 +28,9 @@ async function main(){
   await ready();
   browser=await chromium.launch({headless:true,args:['--disable-dev-shm-usage']});
   const routes=[
-   ['index.html','countdown'],
+   ['index.html','hub-intro'],
+   ['countdown-archive.html','countdown'],
+   ['player-hub.html','player-hub'],
    ['launch-info.html','milestones'],
    ['launch-kit.html','launch-kit'],
    ['after-launch.html','after-launch'],
@@ -63,7 +65,7 @@ async function main(){
          .slice(0,10).map(el=>({tag:el.tagName,classes:String(el.className).slice(0,70),right:Math.round(el.getBoundingClientRect().right)})));
        throw Error('Overflow '+file+' '+JSON.stringify(sizes)+' '+JSON.stringify(bounds)+' '+JSON.stringify(culprits));
       }
-      assert.equal(await page.locator('.desktop-nav a[aria-current="page"],.site-pages-menu a[aria-current="page"]').count(),2,file);
+      assert.equal(await page.locator('.desktop-nav a[aria-current="page"],.site-pages-menu a[aria-current="page"]').count(),file==='countdown-archive.html'?1:2,file);
       const title=await page.title();assert.ok(title.includes('GTA VI')||title.includes('Vice City'),file+' title');
       if(width===375)await page.screenshot({
        path:path.join(SHOTS,'v31-'+file.replace('.html','')+'-mobile.png'),fullPage:true});
@@ -80,13 +82,35 @@ async function main(){
     }finally{await ctx.close();}
    });
   }
+  await runCase('post-launch routes remain genuinely separate',async()=>{
+   const ctx=await browser.newContext({viewport:{width:375,height:812},serviceWorkers:'block'});
+   try{
+    const page=await ctx.newPage();
+    await page.goto(BASE+'index.html',{waitUntil:'load'});
+    assert.equal(await page.locator('#hub-intro').isVisible(),true);
+    assert.equal(await page.locator('#count-grid').count(),0);
+    assert.equal(await page.locator('#guide-content').count(),0);
+    assert.equal(await page.locator('#gallery-grid').count(),0);
+    await page.goto(BASE+'player-hub.html',{waitUntil:'load'});
+    assert.equal(await page.locator('#player-checklist').isVisible(),true);
+    assert.equal(await page.locator('#hub-news-grid').count(),0);
+    await page.locator('[data-player-task="console"]').check();
+    await page.reload({waitUntil:'load'});
+    assert.equal(await page.locator('[data-player-task="console"]').isChecked(),true);
+    await page.locator('#player-reset').click();
+    assert.equal(await page.locator('[data-player-task="console"]').isChecked(),false);
+    await page.goto(BASE+'countdown-archive.html',{waitUntil:'load'});
+    assert.equal(await page.locator('#countdown-panel').count(),1);
+    assert.equal(await page.locator('#hub-intro').count(),0);
+   }finally{await ctx.close();}
+  });
   await runCase('regional midnight and background clock recovery',async()=>{
    const ctx=await browser.newContext({viewport:{width:375,height:812},
     timezoneId:'Australia/Sydney',serviceWorkers:'block',reducedMotion:'reduce'});
    try{
     const page=await ctx.newPage();
     await page.clock.install({time:new Date('2026-11-18T12:59:58.000Z')});
-    await page.goto(BASE+'index.html',{waitUntil:'load'});
+    await page.goto(BASE+'countdown-archive.html',{waitUntil:'load'});
     await page.waitForFunction(()=>!!window.ViceCountdown);
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,false);
     assert.equal(await page.evaluate(()=>window.VicePageRouter.isLaunchProtected()),true);
@@ -123,7 +147,7 @@ async function main(){
     const page=await ctx.newPage(),errors=[];
     page.on('pageerror',e=>errors.push(e.message));
     await page.clock.install({time:new Date('2026-11-18T13:00:25.000Z')});
-    await page.goto(BASE+'index.html',{waitUntil:'load'});
+    await page.goto(BASE+'countdown-archive.html',{waitUntil:'load'});
     await page.waitForFunction(()=>window.ViceCinematicLaunch?.getState().phase==='launched');
     assert.equal((await page.evaluate(()=>window.ViceCountdown.getState())).launched,true);
     assert.equal(await page.locator('#vc-cinema-welcome').isVisible(),true);
@@ -449,8 +473,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-countdown-v36')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-countdown-v36');
+      if(!keys.includes('vice-city-hub-v1')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-hub-v1');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
