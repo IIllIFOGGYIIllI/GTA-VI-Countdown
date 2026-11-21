@@ -8,7 +8,9 @@ from urllib.parse import urlparse,unquote
 
 ROOT=Path(__file__).resolve().parents[1]
 PAGE_SECTIONS={
-    'index.html':{'countdown','launch-hub','after-home'},
+    'index.html':{'hub-intro','hub-news','hub-explore'},
+    'countdown-archive.html':{'countdown','launch-hub','after-home'},
+    'player-hub.html':{'player-hub','player-checklist','player-resources'},
     'launch-info.html':{'launch-hub','milestones'},
     'launch-kit.html':{'launch-kit'},
     'after-launch.html':{'after-launch','after-news','after-explore','after-checklist'},
@@ -19,7 +21,9 @@ PAGE_SECTIONS={
     'app.html':{'app','faq'},
 }
 MODULES={
-    'index.html':{'app.js','assets/cinematic-launch.js'},
+    'index.html':{'assets/hub-home.js'},
+    'countdown-archive.html':{'app.js','assets/cinematic-launch.js'},
+    'player-hub.html':{'assets/player-hub.js'},
     'launch-info.html':{'assets/region-clock.js'},
     'launch-kit.html':{'assets/region-clock.js','assets/launch-week.js'},
     'after-launch.html':{'assets/region-clock.js','assets/after-launch.js'},
@@ -81,7 +85,8 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('href="./leonida-files.html"',self.pages[f])
                 self.assertIn('href="./media.html"',self.pages[f])
                 self.assertIn('href="./vice-city-history.html"',self.pages[f])
-                self.assertIn('href="./after-launch.html"',self.pages[f])
+                self.assertIn('href="./player-hub.html"',self.pages[f])
+                self.assertIn('href="./countdown-archive.html"',self.pages[f])
                 self.assertIn('<link rel="canonical"',self.pages[f])
                 self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h or 'Countdown' in h
                                     for h in p.headings))
@@ -136,15 +141,16 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-countdown-v36",sw)
+        self.assertIn("vice-city-hub-v1",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
         self.assertIn('./news.html',urls)
-        self.assertIn('./launch-kit.html',urls)
+        self.assertIn('./player-hub.html',urls)
         self.assertIn('./media.html',urls)
         self.assertIn('./vice-city-history.html',urls)
-        self.assertIn('./index.html#countdown',urls)
+        self.assertIn('./index.html',urls)
+        self.assertIn('./countdown-archive.html',urls)
         self.assertIn('./after-launch.html',urls)
         sw=(ROOT/'sw.js').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn('./'+file,sw)
@@ -163,7 +169,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="after-news-grid"',html)
         self.assertIn('data-after-task="console"',html)
         self.assertIn('assets/after-launch.css?v=1.0.1',html)
-        self.assertIn('assets/after-launch.css?v=1.0.1',home)
+        self.assertIn('assets/hub-home.css?v=4.0.0',home)
         self.assertIn('vice:tick',js)
         self.assertIn('window.ViceCountdown',js)
         self.assertIn('vc-first-session-v1',js)
@@ -172,8 +178,34 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn('data/screenshots.json',sw.split('];',1)[0])
         self.assertNotIn('data/official-guide.json',sw.split('];',1)[0])
         self.assertIn('after-launch.html',sw)
-        self.assertIn('id="vc-cinema"',home)
-        self.assertIn('assets/cinematic-launch.js?v=3.7.0',home)
+        self.assertIn('id="vc-cinema"',self.pages['countdown-archive.html'])
+        self.assertIn('assets/cinematic-launch.js?v=3.7.0',self.pages['countdown-archive.html'])
+
+    def test_permanent_home_and_standalone_player_hub(self):
+        home=self.pages['index.html']
+        player=self.pages['player-hub.html']
+        archive=self.pages['countdown-archive.html']
+        sw=(ROOT/'sw.js').read_text(encoding='utf-8')
+        self.assertIn('id="hub-news-grid"',home)
+        self.assertIn('id="hub-explore"',home)
+        self.assertNotIn('id="count-grid"',home)
+        self.assertNotIn('id="vc-cinema"',home)
+        self.assertIn('assets/hub-home.js?v=4.0.0',home)
+        self.assertIn('assets/player-hub.js?v=4.0.0',player)
+        self.assertIn('id="player-checklist"',player)
+        self.assertIn('id="count-grid"',archive)
+        self.assertNotIn('id="player-checklist"',home)
+        self.assertNotIn('id="gallery-grid"',home)
+        self.assertNotIn('id="guide-grid"',home)
+        self.assertIn('./assets/hub-home.js?v=4.0.0',sw)
+        self.assertIn('./assets/player-hub.js?v=4.0.0',sw)
+        self.assertIn('./player-hub.html',sw)
+        self.assertIn('./countdown-archive.html',sw)
+        for f,html in self.pages.items():
+            self.assertIn('href="./player-hub.html"',html)
+            self.assertIn('href="./news.html"',html)
+            self.assertIn('href="./media.html"',html)
+            self.assertIn('href="./vice-city-history.html"',html)
 
     def test_classic_vice_city_history_and_spoiler_reveal(self):
         page=self.pages['vice-city-history.html']
@@ -215,7 +247,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-countdown-v36',worker)
+        self.assertIn('vice-city-hub-v1',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
@@ -266,7 +298,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn("if(locked())return;",script)
 
     def test_cinematic_launch_has_no_preview_simulator(self):
-        home=self.pages['index.html']
+        home=self.pages['countdown-archive.html']
         script=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
         self.assertNotIn('id="vc-cinema-preview"',home)
         self.assertNotIn('id="vc-cinema-sim-controls"',home)
@@ -282,7 +314,7 @@ class SiteTests(unittest.TestCase):
     def test_launch_guard_and_midnight_welcome(self):
         shared=(ROOT/'assets/site-pages.js').read_text(encoding='utf-8')
         cinema=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
-        home=self.pages['index.html']
+        home=self.pages['countdown-archive.html']
         self.assertIn('isLaunchProtected()',shared)
         self.assertIn("document.body.classList.contains('vc-cinema-open')",shared)
         self.assertIn('msUntilRelease<=120000',shared)
@@ -293,7 +325,7 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn('GrandFireworks',cinema)
         self.assertIn('assets/cinematic-launch.js?v=3.7.0',home)
         for page in self.pages.values():
-            self.assertIn('assets/site-pages.js?v=3.4.0',page)
+            self.assertIn('assets/site-pages.js?v=4.0.0',page)
 
     def test_obs_browser_scene_isolation_and_release_contract(self):
         scenes=('starting','countdown','ending')
@@ -351,7 +383,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('.is-overlay .scene-countdown .number-value{font-size:77px}',css)
 
     def test_no_retired_visual_effects_or_preview(self):
-        home=self.pages['index.html']
+        home=self.pages['countdown-archive.html']
         html=(ROOT/'obs/countdown.html').read_text(encoding='utf-8')
         script=(ROOT/'obs/obs.js').read_text(encoding='utf-8')
         cinema=(ROOT/'assets/cinematic-launch.js').read_text(encoding='utf-8')
