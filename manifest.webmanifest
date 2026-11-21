@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Vice City Countdown — GTA VI",
-  "short_name": "VI Countdown",
-  "description": "Unofficial spoiler-conscious GTA VI countdown, regional launch hub, approved news and optional media.",
+  "name": "Vice City Hub — GTA VI",
+  "short_name": "Vice City Hub",
+  "description": "Independent spoiler-conscious GTA VI hub for official news, Leonida, media, history and private player tools.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -40,21 +40,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Live Countdown",
-      "short_name": "Countdown",
-      "url": "./index.html#countdown",
-      "icons": [
-        {
-          "src": "./assets/icon-192.png?v=2.2.0",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "After Launch",
-      "short_name": "After Launch",
-      "url": "./after-launch.html",
+      "name": "Home",
+      "short_name": "Home",
+      "url": "./index.html",
       "icons": [
         {
           "src": "./assets/icon-192.png?v=2.2.0",
@@ -76,9 +64,9 @@
       ]
     },
     {
-      "name": "Launch Kit",
-      "short_name": "Launch Kit",
-      "url": "./launch-kit.html",
+      "name": "Player Hub",
+      "short_name": "Player Hub",
+      "url": "./player-hub.html",
       "icons": [
         {
           "src": "./assets/icon-192.png?v=2.2.0",
@@ -88,7 +76,7 @@
       ]
     },
     {
-      "name": "Official Media",
+      "name": "Media",
       "short_name": "Media",
       "url": "./media.html",
       "icons": [
@@ -103,6 +91,18 @@
       "name": "Vice City History",
       "short_name": "History",
       "url": "./vice-city-history.html",
+      "icons": [
+        {
+          "src": "./assets/icon-192.png?v=2.2.0",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Launch Archive",
+      "short_name": "Archive",
+      "url": "./countdown-archive.html",
       "icons": [
         {
           "src": "./assets/icon-192.png?v=2.2.0",
