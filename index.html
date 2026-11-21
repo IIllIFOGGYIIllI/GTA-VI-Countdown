@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="app-version" content="3.8.2">
+  <meta name="app-version" content="4.0.0">
   <meta name="theme-color" content="#241739">
-  <meta name="description" content="A spoiler-conscious GTA VI release countdown with regional launch times, official news and a cinematic midnight welcome.">
-  <meta property="og:title" content="Vice City Countdown | GTA VI">
-  <meta property="og:description" content="A spoiler-conscious GTA VI release countdown with regional launch times, official news and a polished launch-night celebration.">
+  <meta name="description" content="Vice City Hub: an unofficial spoiler-conscious GTA VI destination for official updates, Leonida information, media and Vice City history.">
+  <meta property="og:title" content="Vice City Hub | GTA VI">
+  <meta property="og:description" content="Explore GTA VI news, media, Leonida and Vice City history with spoiler-conscious controls.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://iillifoggyiilli.github.io/GTA-VI-Countdown/">
   <meta name="color-scheme" content="dark">
-  <title>GTA VI Countdown — Vice City Countdown</title>
+  <title>Vice City Hub | GTA VI News, Media And Leonida</title>
   <link rel="canonical" href="https://iillifoggyiilli.github.io/GTA-VI-Countdown/">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
@@ -20,12 +20,10 @@
   <link rel="stylesheet" href="./assets/vice-city-theme.css?v=2.2.0">
   <link rel="stylesheet" href="./assets/mobile-experience.css?v=2.3.0">
   <link rel="stylesheet" href="./assets/site-pages.css?v=3.2.0">
-  <link rel="stylesheet" href="./assets/launch-mode.css?v=2.4.0">
-  <link rel="stylesheet" href="./assets/after-launch.css?v=1.0.1">
-  <link rel="stylesheet" href="./assets/cinematic-launch.css?v=3.8.1">
+  <link rel="stylesheet" href="./assets/hub-home.css?v=4.0.0">
   <script src="./assets/site-pages.js?v=3.4.0" defer></script>
-  <script src="./app.js?v=3.1.0" defer></script>
-  <script src="./assets/cinematic-launch.js?v=3.7.0" defer></script>
+
+  <script src="./assets/hub-home.js?v=4.0.0" defer></script>
 </head>
 <body data-page="home">
   <a class="skip" href="#main">Skip to content</a>
@@ -39,133 +37,61 @@
       </a>
       <nav class="desktop-nav" aria-label="Main navigation"><a href="./index.html">Countdown</a><a href="./launch-info.html">Launch Info</a><a href="./after-launch.html">After Launch</a><a href="./launch-kit.html">Launch Kit</a><a href="./news.html">News</a><a href="./leonida-files.html">Leonida Files</a><a href="./vice-city-history.html">History</a><a href="./media.html">Media</a><a href="./app.html">The App</a></nav>
       <details class="site-pages-menu"><summary>Pages</summary><nav aria-label="All website pages"><a href="./index.html">Countdown</a><a href="./launch-info.html">Launch Info</a><a href="./after-launch.html">After Launch</a><a href="./launch-kit.html">Launch Kit</a><a href="./news.html">News</a><a href="./leonida-files.html">Leonida Files</a><a href="./vice-city-history.html">History</a><a href="./media.html">Media</a><a href="./app.html">The App</a></nav></details>
-      <a class="nav-cta" href="./index.html#countdown"><span class="live-dot" aria-hidden="true"></span><span id="header-state-label">Live Countdown</span></a>
+      <a class="nav-cta" href="./index.html#countdown"><span class="live-dot" aria-hidden="true"></span><span id="header-state-label">Regional Clock</span></a>
     </div>
   </header>
-  <main id="main">
-
-<section class="hero shell" id="countdown" aria-labelledby="hero-heading">
-      <div class="hero-visual" aria-hidden="true">
-        <div class="sun-disc"></div>
-        <div class="horizon"></div>
-        <div class="skyline skyline-back"></div>
-        <div class="skyline skyline-front"></div>
-        <span class="art-vi">VI</span>
-        <div class="grid-floor"></div>
+  <main id="main" class="hub-home">
+  <section class="hub-hero shell" id="hub-intro" aria-labelledby="hub-title">
+    <div class="hub-hero-primary">
+      <span class="hub-label">✦ Grand Theft Auto VI · Independent Fan Hub</span>
+      <h1 id="hub-title">Vice City <em>Hub</em></h1>
+      <p>Welcome to the next chapter of Leonida. Follow verified official announcements, explore the world of Vice City and revisit its history — all with a spoiler-conscious experience that puts you in control.</p>
+      <div class="hub-hero-actions">
+        <a href="./news.html#news">Explore Latest News ↗</a>
+        <a href="./leonida-files.html#intel">Discover Leonida ↗</a>
       </div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <div class="hero-splash">
-          <div class="eyebrow"><span class="eyebrow-line"></span> Live From Leonida · Since 2026 <span class="star">✦</span></div>
-          <p class="hero-kicker">Greetings from</p>
-          <h1 id="hero-heading" class="hero-title"><span class="hero-title-vice">Vice</span><span class="hero-title-city">City</span></h1>
-          </div>
-          <div class="hero-extras">
-          <p class="hero-intro" id="hero-intro">Sunset skies. Neon nights. One final countdown. Track the launch of Grand Theft Auto VI across the globe, without ruining a second of the story.</p>
-          <div class="city-stamp"><strong>✦</strong> Ocean Drive atmosphere <strong>✦</strong> No story spoilers</div>
-          <div class="hero-tags" aria-label="Launch facts"><span>19 Nov 2026</span><span>PS5 · Xbox Series X|S</span><span>100% Spoiler-Conscious</span></div>
-          <div class="hero-actions"><a class="btn btn-primary" id="hero-primary-action" href="./index.html#countdown-panel"><span id="hero-primary-label">See the countdown</span><span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="./news.html#news">Latest updates <span aria-hidden="true">↓</span></a></div>
-          <a class="hero-kit-link" href="./launch-kit.html#launch-kit">✦ Open your launch preparation kit ↗</a>
-          </div>
-        </div>
-        <div class="countdown-card" id="countdown-panel">
-          <div class="card-bar"><span class="card-status"><span class="live-dot" aria-hidden="true"></span><span id="card-status-label">Live · Your Region</span></span><span class="serial">VC—006 / 2026</span></div>
-          <div class="card-inner">
-            <p class="small-label">Grand Theft Auto VI · Release Board</p>
-            <h2 class="countdown-heading" id="countdown-heading">Midnight Calling</h2>
-            <p class="count-subtext" id="countdown-intro">Until midnight, 19 November 2026</p>
-            <div class="launch-eve-banner" id="launch-eve-banner" role="status" hidden><span class="eve-symbol" aria-hidden="true">✦</span><div><strong id="launch-eve-title">Final 24 Hours</strong><span id="launch-eve-detail">The night is almost here</span></div></div>
-            <div class="count-grid" id="count-grid" role="timer" aria-live="off" aria-label="Time until release">
-              <div class="count-item"><span id="days" class="count-value">--</span><span class="count-label">Days</span></div>
-              <div class="count-item"><span id="hours" class="count-value">--</span><span class="count-label">Hours</span></div>
-              <div class="count-item"><span id="minutes" class="count-value">--</span><span class="count-label">Mins</span></div>
-              <div class="count-item"><span id="seconds" class="count-value">--</span><span class="count-label">Secs</span></div>
-            </div>
-            <div class="count-progress" id="count-progress"><div id="progress-bar" class="progress-bar"></div></div>
-            <div class="launch-state" id="launch-state" hidden>
-              <div class="launch-state-symbol" aria-hidden="true">✦</div>
-              <p class="launch-state-kicker">Welcome To Leonida</p>
-              <h3>GTA VI Has Launched</h3>
-              <p class="launch-state-message" id="launch-state-message" role="status" aria-live="polite">The scheduled release time has arrived in your selected region</p>
-              <div class="launch-elapsed-panel">
-                <strong id="launch-elapsed">00H 00M</strong>
-                <span>Since The Scheduled Midnight Release</span>
-              </div>
-              <div class="launch-card-actions">
-                <a href="./launch-info.html#launch-hub" class="launch-card-link">Launch guide <span aria-hidden="true">↗</span></a>
-                <a href="./news.html#news" class="launch-card-link secondary">Official updates <span aria-hidden="true">↓</span></a>
-              </div>
-            </div>
-            <button id="vc-cinema-reopen" type="button" hidden>✦ Enter Final 60 Seconds</button>
-            <div class="zone-head"><label for="timezone">Your Launch Timezone</label><button id="detect-zone" class="text-button" type="button">↗ Detect mine</button></div>
-            <div class="select-wrap"><select id="timezone" aria-describedby="zone-help"><option value="Australia/Sydney">Sydney · Australia</option></select><span class="select-caret" aria-hidden="true">⌄</span></div>
-            <div class="zone-details"><div><span class="meta-caption">Scheduled Release In Region</span><strong id="zone-time">19 Nov · 12:00 AM</strong></div><div class="zone-side"><span class="meta-caption">Selected Region Clock</span><strong id="local-time">—</strong></div></div>
-            <p class="zone-help" id="zone-help">Uses Rockstar's midnight-local release schedule. Your platform account's region determines your actual access.</p>
-            
-          </div>
-          <div class="card-bottom"><span><span class="sparkle">✦</span> No Leaks · No Story Spoilers</span><span>Since 2026</span></div>
-        </div>
-      </div>
-      <div class="city-marquee" aria-hidden="true"><div class="city-marquee-inner"><span>✦ Vice City Nights</span><i>✧</i><b>19 November 2026</b><i>✧</i><span>Leonida After Dark</span><i>✧</i><b>Worldwide Countdown</b><i>✧</i><span>No Story Spoilers</span></div></div>
-      <div class="hero-bottom"><span id="hero-chapter">01 / The Final Countdown</span><span class="scroll-note">Scroll To Explore <span aria-hidden="true">↓</span></span></div>
-    </section>
-
-<nav class="page-directory shell" aria-label="Explore website pages"><h2>Explore Vice City Countdown</h2><div class="page-directory-grid">
-<a href="./launch-info.html"><span>01 / Launch</span><strong>Launch Information</strong><small>Official release times and regional launch guidance</small></a>
-<a href="./after-launch.html"><span>02 / Beyond Midnight</span><strong>After Launch</strong><small>The next chapter: approved news, media and first-session tools</small></a>
-<a href="./launch-kit.html"><span>03 / Prepare</span><strong>Launch Kit</strong><small>Checklist, shareable postcard and calendar reminders</small></a>
-<a href="./news.html"><span>04 / Updates</span><strong>Official News</strong><small>Reviewed Rockstar announcements and screenshots</small></a>
-<a href="./leonida-files.html"><span>05 / Optional</span><strong>Leonida Files</strong><small>Characters and locations behind your spoiler reveal</small></a>
-<a href="./vice-city-history.html"><span>06 / The Archives</span><strong>Vice City History</strong><small>The 2002 classic, iconic characters, radio and the road to GTA VI</small></a>
-<a href="./media.html"><span>07 / Explore</span><strong>Official Media</strong><small>Trailers and the full screenshot collection</small></a>
-<a href="./app.html"><span>08 / Install</span><strong>The App</strong><small>Install guidance, preferences and common questions</small></a>
-</div></nav>
-
-<section class="after-home-feature shell" id="after-home" aria-labelledby="after-home-title">
-   <div><span class="after-eyebrow">✦ The Next Chapter</span><h2 id="after-home-title">Beyond The Countdown</h2>
-   <p>Explore spoiler-conscious updates, official sources, and first-session essentials after your regional launch milestone. All available from a dedicated page.</p></div>
-   <a href="./after-launch.html">Open After Launch ↗</a>
+    </div>
+    <div class="hub-hero-aside">
+      <article class="hub-feature hub-feature-purple">
+        <span class="hub-label">01 / The Newsroom</span>
+        <h2>Official Updates</h2>
+        <p>Rockstar announcements reviewed before publication, without rumours, leaks or involuntary story reveals.</p>
+        <a class="hub-feature-link" href="./news.html#news">Visit Newsroom ↗</a>
+      </article>
+      <article class="hub-feature">
+        <span class="hub-label">02 / Your Journey</span>
+        <h2>Explore Leonida</h2>
+        <p>Discover locations and characters on your own terms. Story-sensitive information stays behind an explicit reveal.</p>
+        <a class="hub-feature-link" href="./leonida-files.html#intel">Open Leonida Files ↗</a>
+      </article>
+    </div>
   </section>
-
-<section class="launch-hub shell" id="launch-hub" hidden aria-labelledby="launch-hub-title">
-      <div class="launch-hub-head">
-        <div>
-          <p class="launch-hub-overline"><span aria-hidden="true">✦</span> Region-Based Release Milestone</p>
-          <h2 id="launch-hub-title">The City Is <em>Yours</em></h2>
-          <p class="launch-hub-intro">The announced launch time has passed in <strong id="launch-region-name">your selected region</strong>. Use your console account's storefront to confirm access. Your spoiler shield stays on.</p>
-        </div>
-        <div class="launch-hub-mark" aria-hidden="true"><span>VI</span><small>19 Nov 2026</small></div>
-      </div>
-      <div class="launch-guide-grid">
-        <article class="launch-guide-card">
-          <div class="launch-guide-top"><span>01 / Start Playing</span><span aria-hidden="true">↗</span></div>
-          <h3>Check Your Console</h3>
-          <p>Open your game library and check whether your copy is installed, updated and available to start. Console account region and storefront eligibility control actual access.</p>
-          <div class="launch-platform-links">
-            <a href="https://www.playstation.com/support/games/pre-order-games-automatic-download-ps-store" target="_blank" rel="noopener noreferrer">PS5 Support ↗</a>
-            <a href="https://support.xbox.com/help/subscriptions-billing/buy-games-apps/pre-order-faq" target="_blank" rel="noopener noreferrer">Xbox Support ↗</a>
-          </div>
-        </article>
-        <article class="launch-guide-card">
-          <div class="launch-guide-top"><span>02 / Release Help</span><span aria-hidden="true">↗</span></div>
-          <h3>Having Trouble?</h3>
-          <p>If the game remains locked, first check your account region and platform store. Rockstar's official support page explains the published regional launch schedule.</p>
-          <a href="https://support.rockstargames.com/articles/29jV3Cv2cCgvwM1XgtMO5o/grand-theft-auto-vi-regional-pre-load-and-release-times-on-playstation-5-and-xbox-series-x-or-s" target="_blank" rel="noopener noreferrer" class="launch-guide-link">Rockstar Release Guidance ↗</a>
-        </article>
-        <article class="launch-guide-card">
-          <div class="launch-guide-top"><span>03 / First Playthrough</span><span aria-hidden="true">✦</span></div>
-          <h3>Stay Spoiler-Free</h3>
-          <p>The launch transition doesn't unlock trailers, screenshots or story details. Media stays hidden until you choose to reveal it, even after release.</p>
-          <a href="./spoilers.html" class="launch-guide-link">Spoiler Policy ↗</a>
-        </article>
-      </div>
-      <div class="launch-hub-bottom">
-        <span><strong>The Countdown Is Over</strong> · The site remains your home for curated official updates and optional media</span>
-        <a href="./news.html#news">Visit the Newswire ↗</a>
-      </div>
-    </section>
-
-<section class="strip"><div class="shell strip-grid"><div><strong>19 November</strong><span>Official Release Date</span></div><div><strong>12:00 AM</strong><span>Midnight In Each Region</span></div><div><strong>PS5 + Xbox</strong><span>Series X|S</span></div><div><strong>No Spoilers</strong><span>Curated Updates Only</span></div></div></section>
+  <div class="hub-meta-line shell"><span>FAN DESTINATION · EST. 2026</span><span>NO LEAKS · OPTIONAL SPOILERS · OFFICIAL SOURCES</span></div>
+  <section class="hub-section shell" id="hub-news" aria-labelledby="hub-news-title">
+    <div class="hub-section-head">
+      <div><span class="hub-label">03 / Newswire</span><h2 id="hub-news-title">Latest Official Headlines</h2><p>Our most recently approved Rockstar stories. Publication is manually reviewed, and dates are shown openly.</p></div>
+      <a href="./news.html#news">All News ↗</a>
+    </div>
+    <p class="hub-news-status" id="hub-news-status" role="status">Loading Approved Headlines…</p>
+    <div class="hub-news-grid" id="hub-news-grid" aria-live="off"></div>
+  </section>
+  <section class="hub-section shell" id="hub-explore" aria-labelledby="hub-explore-title">
+    <div class="hub-section-head">
+      <div><span class="hub-label">04 / Your Vice City</span><h2 id="hub-explore-title">Explore The Hub</h2><p>Every destination opens its own page, keeping the website organised on desktop and mobile.</p></div>
+    </div>
+    <div class="hub-explore-grid">
+      <a href="./media.html#media"><span>MEDIA</span><strong>Trailers And Screenshots</strong><small>Official media with opt-in gallery controls and no forced playback</small></a>
+      <a href="./vice-city-history.html#history"><span>HISTORY</span><strong>Vice City Then And Now</strong><small>From the original classics to the modern Leonida setting</small></a>
+      <a href="./after-launch.html#after-checklist"><span>PLAYER HUB</span><strong>Your First Sessions</strong><small>A private on-device checklist and practical first-session links</small></a>
+      <a href="./leonida-files.html#intel"><span>LEONIDA</span><strong>The World And Its People</strong><small>Explore optional character and location information</small></a>
+      <a href="./app.html#app"><span>APP</span><strong>Install And Preferences</strong><small>PWA access, update checks and spoiler preferences</small></a>
+      <a href="./launch-info.html#launch-hub"><span>REFERENCE</span><strong>Launch Information</strong><small>Original console launch schedule and official support resources</small></a>
+    </div>
+  </section>
+  <aside class="hub-archive-strip shell" aria-label="Historical countdown archive">
+    <div><h2>The Countdown Is Part Of Our History</h2><p>Revisit the original 19 November 2026 launch milestone, the regional clock and the moment Vice City arrived.</p></div>
+    <a href="./countdown-archive.html#countdown">Open Launch Archive ↗</a>
+  </aside>
 </main>
   <nav class="mobile-tabbar" aria-label="Mobile quick navigation">
     <a href="./index.html#countdown" class="mobile-tab-link is-active" data-section="countdown" aria-current="page">
@@ -186,50 +112,6 @@
     </a>
   </nav>
   <footer class="footer"><div class="shell"><div class="footer-main"><div><a href="./" class="footer-brand">Vice City Countdown</a><p>Wish you were here. No spoilers, only sunsets.</p></div><div class="footer-links"><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="./spoilers.html">Spoiler Policy</a><a href="https://github.com/IIllIFOGGYIIllI/GTA-VI-Countdown/issues" target="_blank" rel="noopener noreferrer">Feedback ↗</a></div></div><div class="footer-bottom"><span>© <span id="current-year">2026</span> Vice City Countdown · v3.8.2 · Unofficial fan project.</span><span>Grand Theft Auto VI and associated marks belong to Rockstar Games / Take-Two Interactive. Not affiliated or endorsed.</span></div></div></footer>
-  <!-- Cinematic launch mode uses the existing timezone-aware countdown.
-       It appears automatically at T−60, or shortly after the actual release milestone.
-       The experience uses the actual selected-region release clock and requires no sound. -->
-  <section id="vc-cinema" hidden role="dialog" aria-modal="true" aria-label="Vice City cinematic launch countdown" tabindex="-1">
-    <div class="vc-cinema-sky" aria-hidden="true"></div>
-    <div class="vc-cinema-sun" aria-hidden="true"></div>
-    <div class="vc-cinema-stars" id="vc-cinema-stars" aria-hidden="true"></div>
-    <div class="vc-cinema-skyline" aria-hidden="true"></div>
-    <div class="vc-cinema-horizon" aria-hidden="true"></div>
-    <div class="vc-cinema-vignette" aria-hidden="true"></div>
-    <header class="vc-cinema-header">
-      <div class="vc-cinema-brand" aria-hidden="true"><strong>VI</strong><span>Vice City<small>Countdown</small></span></div>
-      <div class="vc-cinema-top-actions">
-        <button class="vc-cinema-button" id="vc-cinema-fullscreen" type="button">⛶ Fullscreen</button>
-        <button class="vc-cinema-button vc-cinema-close" id="vc-cinema-close" type="button" aria-label="Close launch mode">✕ Exit</button>
-      </div>
-    </header>
-    <div class="vc-cinema-hero">
-      <div id="vc-cinema-countdown-area">
-        <p class="vc-cinema-eyebrow" id="vc-cinema-phase">The Final 60 Seconds</p>
-        <h1 class="vc-cinema-label" id="vc-cinema-label">Vice City Is Calling</h1>
-        <div class="vc-cinema-number-wrap">
-          <svg class="vc-cinema-ring" viewBox="0 0 200 200" aria-hidden="true">
-            <circle class="vc-cinema-ring-base" cx="100" cy="100" r="90"/>
-            <circle id="vc-cinema-progress-ring" cx="100" cy="100" r="90"/>
-          </svg>
-          <strong id="vc-cinema-number" role="timer" aria-live="off" aria-label="Seconds until scheduled midnight">60</strong>
-        </div>
-        <p class="vc-cinema-sub" id="vc-cinema-left">The Last Minute Before Midnight</p>
-        <div class="vc-cinema-progress" aria-hidden="true"><span id="vc-cinema-progress"></span></div>
-      </div>
-      <div id="vc-cinema-welcome" hidden>
-        <p class="vc-cinema-welcome-mark">✦ The Wait Is Over ✦</p>
-        <h1 class="vc-cinema-welcome-title">Welcome To <em>Vice City</em></h1>
-        <p class="vc-cinema-welcome-copy">The scheduled midnight milestone has arrived in your selected region. The city is yours to explore when your platform grants access.</p>
-        <p class="vc-cinema-welcome-note">19 November 2026 · No Story Spoilers</p>
-      </div>
-    </div>
-    <div class="vc-cinema-footer">
-      <p class="vc-cinema-footnote" id="vc-cinema-description">Launch milestone follows your selected region, not an account entitlement.</p>
-      <p class="vc-cinema-region" id="vc-cinema-region">Your Selected Region</p>
-    </div>
-    <span class="sr-only" id="vc-cinema-live-flag" aria-live="polite">Live Region Countdown</span>
-  </section>
   <div class="toast" role="status" id="toast" hidden></div>
 </body>
 </html>
