@@ -1,6 +1,7 @@
-# Vice City Countdown — GTA VI
 
-Unofficial, spoiler-conscious Grand Theft Auto VI live countdown and installable progressive web app (PWA), optimized for GitHub Pages.
+# Vice City Hub — GTA VI
+
+An independent, spoiler-conscious Grand Theft Auto VI information hub and installable PWA, hosted on GitHub Pages.
 
 ## Features
 
@@ -225,3 +226,13 @@ A contact sheet of all 27 official Vice City scenic screenshots was used to sele
 - OBS scenes keep their regional release trackers and final welcome screen. Their scripts and styling no longer load external visual effect libraries.
 - Retired the old standalone prototype and its engine assets; removed obsolete controls, PWA precache references and preview code from deployment.
 - The PWA cache namespace is `vice-city-countdown-v35`. For an installed PWA, use its refresh control if an old cached layout appears.
+
+## v4.0 — Vice City Hub and independent pages
+
+The website now opens to **Vice City Hub**, a permanent post-launch destination rather than an expired countdown. The homepage is only a landing page with a short approved-news preview and direct routes to dedicated News, Leonida Files, Media, Vice City History, Player Hub, and App pages.
+
+- **Player Hub:** `player-hub.html` provides a local-only first-session checklist and links to separate sections; no tracking service or account required.
+- **Launch Archive:** `countdown-archive.html` preserves the original regional countdown and midnight presentation for historical purposes.
+- **Legacy paths:** `after-launch.html` and the launch information/kit pages remain available, but are not primary tabs.
+- **PWA:** same manifest ID/scope so existing installs can update; display name becomes Vice City Hub, offline cache changes to `vice-city-hub-v1` and removes legacy cache namespaces.
+- **Repository:** The existing `GTA-VI-Countdown` repository and GitHub Pages path are retained for URL continuity. Renaming the GitHub repository can be performed later in its Settings if desired; the website's public branding is independent of the repository slug.
