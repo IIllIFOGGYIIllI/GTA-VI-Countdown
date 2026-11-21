@@ -1,8 +1,10 @@
-/* Vice City Countdown · PWA v3.8 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-countdown-v36';
+/* Vice City Hub · PWA v4.0 · Multi-page archive, approved material and offline fallback */
+const CACHE='vice-city-hub-v1';
 const CORE=[
   "./",
   "./index.html",
+  "./player-hub.html",
+  "./countdown-archive.html",
   "./launch-info.html",
   "./launch-kit.html",
   "./after-launch.html",
@@ -17,11 +19,14 @@ const CORE=[
   "./assets/vice-city-theme.css?v=2.2.0",
   "./assets/mobile-experience.css?v=2.3.0",
   "./assets/site-pages.css?v=3.2.0",
+  "./assets/hub-home.css?v=4.0.0",
+  "./assets/hub-home.js?v=4.0.0",
+  "./assets/player-hub.js?v=4.0.0",
   "./assets/after-launch.css?v=1.0.1",
   "./assets/after-launch.js?v=1.0.0",
   "./assets/launch-mode.css?v=2.4.0",
   "./assets/cinematic-launch.css?v=3.8.1",
-  "./assets/site-pages.js?v=3.4.0",
+  "./assets/site-pages.js?v=4.0.0",
   "./app.js?v=3.1.0",
   "./assets/cinematic-launch.js?v=3.7.0",
   "./assets/region-clock.js?v=3.1.0",
@@ -57,7 +62,7 @@ self.addEventListener('install',event=>{
 self.addEventListener('activate',event=>{
   event.waitUntil((async()=>{
     const keys=await caches.keys();
-    await Promise.all(keys.filter(k=>k.startsWith('vice-city-countdown-')&&k!==CACHE).map(k=>caches.delete(k)));
+    await Promise.all(keys.filter(k=>(k.startsWith('vice-city-countdown-')||k.startsWith('vice-city-hub-'))&&k!==CACHE).map(k=>caches.delete(k)));
     await self.clients.claim();
   })());
 });
