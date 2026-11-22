@@ -1,5 +1,5 @@
 /* Vice City Hub · PWA v4.1 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-hub-v2';
+const CACHE='vice-city-hub-v3';
 const CORE=[
   "./",
   "./index.html",
@@ -22,8 +22,8 @@ const CORE=[
   "./assets/site-pages.css?v=4.1.0",
   "./assets/leonida-map.css?v=4.1.0",
   "./assets/leonida-map.js?v=4.1.0",
-  "./assets/hub-home.css?v=4.1.0",
-  "./assets/hub-home.js?v=4.1.0",
+  "./assets/hub-home.css?v=4.1.1",
+  "./assets/hub-home.js?v=4.1.1",
   "./assets/player-hub.js?v=4.0.0",
   "./assets/after-launch.css?v=1.0.1",
   "./assets/after-launch.js?v=1.0.0",
