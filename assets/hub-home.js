@@ -1,6 +1,13 @@
 /* Vice City Hub v4.0 — spoiler-conscious homepage, official reviewed news only. */
 (()=>{
  'use strict';
+ const poster=document.getElementById('hub-cover-poster');
+ if(poster)poster.addEventListener('error',()=>{
+  const fallback=poster.dataset.fallback;
+  if(!poster.dataset.fallbackUsed&&fallback&&fallback.startsWith('https://')){
+   poster.dataset.fallbackUsed='1';poster.src=fallback;
+  }else poster.closest('.hub-cover-poster')?.classList.add('is-unavailable');
+ });
  const grid=document.getElementById('hub-news-grid');
  const status=document.getElementById('hub-news-status');
  if(!grid||!status)return;
