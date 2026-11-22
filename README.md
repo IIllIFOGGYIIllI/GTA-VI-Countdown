@@ -236,3 +236,12 @@ The website now opens to **Vice City Hub**, a permanent post-launch destination 
 - **Legacy paths:** `after-launch.html` and the launch information/kit pages remain available, but are not primary tabs.
 - **PWA:** same manifest ID/scope so existing installs can update; display name becomes Vice City Hub, offline cache changes to `vice-city-hub-v1` and removes legacy cache namespaces.
 - **Repository:** The existing `GTA-VI-Countdown` repository and GitHub Pages path are retained for URL continuity. Renaming the GitHub repository can be performed later in its Settings if desired; the website's public branding is independent of the repository slug.
+
+## v4.1 — Official GTA VI Poster Art and Leonida Map
+
+- **Homepage artwork:** The full official GTA VI cover-art poster appears prominently on the Vice City Hub homepage, with credit and a direct Rockstar source link.
+- **Dedicated Leonida Map:** `leonida-map.html` has a standalone map poster viewer with wheel zoom, click/drag panning, pinch-to-zoom, touch drag, keyboard arrows, +/- and 0, reset, and optional fullscreen. It is a zoomable static poster, not GPS, an in-game map, or a geospatial map.
+- **Poster source:** The same exact illustrations the owner supplied. The build stages screen-sized JPEG copies from `https://leonidainteractive.com/img/media/Cover_Art_Poster.jpg` and `https://leonidainteractive.com/img/media/Leonida_Map_Poster.jpg`. Both depict Rockstar's official cover art and Leonida map released on 19 November 2026. Rights remain with Rockstar Games and Take-Two Interactive.
+- **Reliable delivery:** `scripts/stage_official_posters.py` downloads those files into the GitHub Pages output folder. Failure is nonfatal: the browser falls back to the public mirror and offers a Rockstar source link. The original printable map ZIP is linked directly from Rockstar's media CDN.
+- **Spoiler and PWA safeguards:** Neither poster is pre-cached during installation, though the service worker may cache a successfully visited local copy. Story and screenshot databases are still opt-in. The PWA cache is `vice-city-hub-v2`.
+- **Separate pages:** Desktop navigation, mobile bar, page menu and app shortcut link to `leonida-map.html`. News, Media, History, Player Hub and Leonida Files remain independent HTML pages.
