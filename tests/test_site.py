@@ -148,7 +148,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-hub-v2",sw)
+        self.assertIn("vice-city-hub-v3",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -176,7 +176,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="after-news-grid"',html)
         self.assertIn('data-after-task="console"',html)
         self.assertIn('assets/after-launch.css?v=1.0.1',html)
-        self.assertIn('assets/hub-home.css?v=4.1.0',home)
+        self.assertIn('assets/hub-home.css?v=4.1.1',home)
         self.assertIn('vice:tick',js)
         self.assertIn('window.ViceCountdown',js)
         self.assertIn('vc-first-session-v1',js)
@@ -197,14 +197,14 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="hub-explore"',home)
         self.assertNotIn('id="count-grid"',home)
         self.assertNotIn('id="vc-cinema"',home)
-        self.assertIn('assets/hub-home.js?v=4.1.0',home)
+        self.assertIn('assets/hub-home.js?v=4.1.1',home)
         self.assertIn('assets/player-hub.js?v=4.0.0',player)
         self.assertIn('id="player-checklist"',player)
         self.assertIn('id="count-grid"',archive)
         self.assertNotIn('id="player-checklist"',home)
         self.assertNotIn('id="gallery-grid"',home)
         self.assertNotIn('id="guide-grid"',home)
-        self.assertIn('./assets/hub-home.js?v=4.1.0',sw)
+        self.assertIn('./assets/hub-home.js?v=4.1.1',sw)
         self.assertIn('./assets/player-hub.js?v=4.0.0',sw)
         self.assertIn('./player-hub.html',sw)
         self.assertIn('./countdown-archive.html',sw)
@@ -283,7 +283,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-hub-v2',worker)
+        self.assertIn('vice-city-hub-v3',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
