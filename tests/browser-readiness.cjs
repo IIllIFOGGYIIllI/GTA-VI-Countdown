@@ -66,7 +66,7 @@ async function main(){
          .slice(0,10).map(el=>({tag:el.tagName,classes:String(el.className).slice(0,70),right:Math.round(el.getBoundingClientRect().right)})));
        throw Error('Overflow '+file+' '+JSON.stringify(sizes)+' '+JSON.stringify(bounds)+' '+JSON.stringify(culprits));
       }
-      assert.equal(await page.locator('.desktop-nav a[aria-current="page"],.site-pages-menu a[aria-current="page"]').count(),file==='countdown-archive.html'?1:2,file);
+      assert.equal(await page.locator('.desktop-nav a[aria-current="page"],.site-pages-menu a[aria-current="page"]').count(),['countdown-archive.html','launch-info.html','launch-kit.html'].includes(file)?1:2,file);
       const title=await page.title();assert.ok(title.includes('GTA VI')||title.includes('Vice City'),file+' title');
       if(width===375)await page.screenshot({
        path:path.join(SHOTS,'v31-'+file.replace('.html','')+'-mobile.png'),fullPage:true});
