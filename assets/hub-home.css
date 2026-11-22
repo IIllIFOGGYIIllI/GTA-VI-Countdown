@@ -57,3 +57,10 @@ body[data-page="home"] .mobile-tab-link[aria-current="page"]{color:#9ffff1}
 .hub-cover-poster.is-unavailable img{display:none}
 .hub-cover-poster.is-unavailable:before{content:"Official artwork temporarily unavailable — open the source below.";display:block;color:#ffdee5;font-size:13px;max-width:230px;text-align:center}
 @media(max-width:960px){.hub-hero-aside{grid-template-columns:none;grid-template-rows:none}.hub-cover-poster{max-width:650px;margin:0 auto}}
+
+/* No character image network request or reveal under the strict spoiler preference. */
+.hub-cover-locked{display:none}
+.vc-strict-spoilers .hub-cover-poster{min-height:430px;display:flex;align-items:center;justify-content:center}
+.vc-strict-spoilers .hub-cover-poster img{display:none!important}
+.vc-strict-spoilers .hub-cover-locked{display:block;text-align:center;font-size:14px;font-weight:900;line-height:1.9;color:#fff1e8;padding:35px}
+.hub-cover-locked a{color:#abfff0;font-size:12px}
