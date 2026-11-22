@@ -1,9 +1,10 @@
-/* Vice City Hub · PWA v4.0 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-hub-v1';
+/* Vice City Hub · PWA v4.1 · Multi-page archive, approved material and offline fallback */
+const CACHE='vice-city-hub-v2';
 const CORE=[
   "./",
   "./index.html",
   "./player-hub.html",
+  "./leonida-map.html",
   "./countdown-archive.html",
   "./launch-info.html",
   "./launch-kit.html",
@@ -18,15 +19,17 @@ const CORE=[
   "./styles.css?v=2.2.0",
   "./assets/vice-city-theme.css?v=2.2.0",
   "./assets/mobile-experience.css?v=2.3.0",
-  "./assets/site-pages.css?v=3.2.0",
-  "./assets/hub-home.css?v=4.0.0",
-  "./assets/hub-home.js?v=4.0.0",
+  "./assets/site-pages.css?v=4.1.0",
+  "./assets/leonida-map.css?v=4.1.0",
+  "./assets/leonida-map.js?v=4.1.0",
+  "./assets/hub-home.css?v=4.1.0",
+  "./assets/hub-home.js?v=4.1.0",
   "./assets/player-hub.js?v=4.0.0",
   "./assets/after-launch.css?v=1.0.1",
   "./assets/after-launch.js?v=1.0.0",
   "./assets/launch-mode.css?v=2.4.0",
   "./assets/cinematic-launch.css?v=3.8.1",
-  "./assets/site-pages.js?v=4.0.0",
+  "./assets/site-pages.js?v=4.1.0",
   "./app.js?v=3.1.0",
   "./assets/cinematic-launch.js?v=3.7.0",
   "./assets/region-clock.js?v=3.1.0",
