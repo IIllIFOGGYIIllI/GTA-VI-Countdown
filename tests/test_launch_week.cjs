@@ -59,7 +59,7 @@ assert.ok(!home.includes('id="kit-check-items"'),'Homepage should not duplicate 
 assert.ok(!media.includes('id="kit-strict"'),'Media must not hide a duplicate preferences control');
 assert.ok(guide.includes('id="guide-content" hidden'),'Spoiler content must require opt-in');
 assert.ok(!sw.split('];',1)[0].includes('data/official-guide.json'),'Spoiler files may never precache');
-assert.ok(sw.includes('vice-city-hub-v1'));
+assert.ok(sw.includes('vice-city-hub-v2'));
 for(const name of ['site-pages.js','region-clock.js','launch-week.js','news.js','media.js','install.js'])
  assert.ok(sw.includes(name),'Offline PWA must cache '+name);
 assert.ok(js.includes('settings.strict')&&js.includes("if(banner)"),'Shared spoiler settings and optional banner');
