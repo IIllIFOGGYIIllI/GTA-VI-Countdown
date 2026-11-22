@@ -46,3 +46,14 @@ body[data-page="home"] .mobile-tab-link[aria-current="page"]{color:#9ffff1}
 @media(max-width:960px){.hub-hero{grid-template-columns:1fr}.hub-hero-primary{min-height:385px}.hub-hero-aside{grid-template-columns:1fr 1fr;grid-template-rows:auto}.hub-news-grid,.hub-explore-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.hub-hero{padding-top:15px;gap:12px}.hub-hero-primary{min-height:370px;padding:29px 20px}.hub-hero-primary h1{font-size:clamp(58px,17vw,81px)}.hub-hero-primary p{font-size:13px}.hub-hero-actions{flex-direction:column}.hub-feature{padding:23px;min-height:185px}.hub-hero-aside,.hub-news-grid,.hub-explore-grid{grid-template-columns:1fr}.hub-section{padding:21px 0}.hub-section-head{flex-direction:column;align-items:flex-start;gap:9px}.hub-news-card{min-height:200px;padding:21px}.hub-archive-strip{flex-direction:column;align-items:start;padding:21px}.hub-archive-strip a{white-space:normal}}
 @media(prefers-reduced-motion:reduce){.hub-explore-grid a{transition:none}.hub-explore-grid a:hover{transform:none}}
+
+/* v4.1 — official cover poster, kept distinct from the site's spoiler-gated media page */
+.hub-hero-aside{display:block;min-width:0}
+.hub-cover-poster{margin:0;position:relative;border-radius:14px;overflow:hidden;border:1px solid #d0a0c68f;background:#210d31;box-shadow:0 18px 45px #06091c95}
+.hub-cover-poster img{display:block;width:100%;height:auto;aspect-ratio:1122/1536;object-fit:contain}
+.hub-cover-poster figcaption{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;background:linear-gradient(0deg,#110c24f6,#110c24d0 65%,transparent);color:#fce6f1;font-size:11px;font-weight:750;line-height:1.5}
+.hub-cover-poster figcaption a{color:#9fffeb;font-weight:950}
+.hub-cover-poster.is-unavailable{min-height:420px;display:flex;align-items:center;justify-content:center}
+.hub-cover-poster.is-unavailable img{display:none}
+.hub-cover-poster.is-unavailable:before{content:"Official artwork temporarily unavailable — open the source below.";display:block;color:#ffdee5;font-size:13px;max-width:230px;text-align:center}
+@media(max-width:960px){.hub-hero-aside{grid-template-columns:none;grid-template-rows:none}.hub-cover-poster{max-width:650px;margin:0 auto}}
