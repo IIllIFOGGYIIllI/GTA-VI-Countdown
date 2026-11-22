@@ -92,3 +92,7 @@ body[data-page="leonida-files"] .vc-intel {border-radius:13px}
 .news-visual-image[alt],.vc-intel-card-image[alt]{font-size:0}
 @media(max-width:650px){.page-lead-inner{min-height:0}.site-pages-menu nav{max-height:65vh;overflow-y:auto}.section-header{gap:12px}}
 @media(prefers-reduced-motion:reduce){.news-card,.vc-intel-card,.viewer-tile{transition:none!important;transform:none!important}}
+
+/* v4.1 — five distinct mobile destinations, including Leonida Map. */
+@media(max-width:900px){.mobile-tabbar{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.mobile-tab-link{font-size:9px}.mobile-tab-link svg{height:20px;width:20px}}
+@media(max-width:360px){.mobile-tabbar{gap:2px;padding-left:5px;padding-right:5px}.mobile-tab-link{font-size:8px;letter-spacing:0}}
