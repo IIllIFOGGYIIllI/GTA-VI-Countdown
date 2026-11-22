@@ -1,0 +1,36 @@
+/* Vice City Hub — dedicated Leonida poster viewer v4.1 */
+.map-page{padding-top:26px;padding-bottom:45px}
+.map-lead{display:flex;justify-content:space-between;align-items:end;gap:22px;margin:0 0 20px}
+.map-eyebrow{font-size:11px;font-weight:900;letter-spacing:.12em;color:#a3fff0}
+.map-lead h1{font:italic 900 clamp(39px,5.3vw,67px)/1 Impact,"Arial Black",sans-serif;letter-spacing:.01em;color:#fff0e5;margin:12px 0}
+.map-lead p{margin:0;max-width:760px;color:#dfd2e3;font-size:14px;line-height:1.7}
+.map-source{display:inline-flex;align-items:center;justify-content:center;flex:none;padding:12px 15px;font-weight:900;font-size:12px;color:#aaffef;border:1px solid #80e7d4a9;border-radius:8px;text-decoration:none}
+.map-surface{border:1px solid #87e9d3a1;border-radius:15px;overflow:hidden;background:linear-gradient(145deg,#27223c,#132934);box-shadow:0 18px 50px #08091a8c}
+.map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 16px;background:#211e36;border-bottom:1px solid #82c8d268}
+.map-toolbar-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.map-control{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px;min-height:44px;border:1px solid #8cc9ca91;border-radius:7px;background:#2c2847;color:#fff1e9;font-size:13px;font-weight:850;padding:9px 13px;cursor:pointer}
+.map-control:hover,.map-control:focus-visible{background:#3b355c;border-color:#a7f8ee}
+.map-control:disabled{opacity:.48;cursor:default}
+.map-zoom-readout{font-size:12px;color:#a9ffed;font-weight:950;min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.map-status{font-size:12px;color:#dfd0dc;min-height:1.4em}
+.map-viewport{position:relative;overflow:hidden;height:clamp(480px,74vh,960px);background:repeating-linear-gradient(0deg,transparent,transparent 60px,#ffffff09 61px),repeating-linear-gradient(90deg,transparent,transparent 60px,#ffffff09 61px),#123c50;touch-action:none;cursor:grab;user-select:none;overscroll-behavior:contain}
+.map-viewport.is-dragging{cursor:grabbing}
+.map-viewport img{position:absolute;left:50%;top:50%;display:block;max-width:none;max-height:none;transform-origin:center center;pointer-events:none;user-select:none;will-change:transform;box-shadow:0 5px 28px #0508178c}
+.map-viewport:focus-visible{outline:4px solid #b8ffef;outline-offset:-4px}
+.map-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:15px;padding:22px;color:#fff0e6;background:#143a4c;z-index:2}
+.map-empty[hidden]{display:none!important}
+.map-empty strong{font-size:20px}
+.map-empty p{font-size:13px;max-width:420px}
+.map-empty a{color:#a7fff0;font-weight:900}
+.map-help{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:14px 17px;background:#201b35;border-top:1px solid #82c8d268}
+.map-help p{font-size:12px;color:#d8cbdf;margin:0}
+.map-help span{font-size:11px;color:#b1ffec;font-weight:850}
+.map-reference{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:23px;align-items:center;padding:25px 26px;margin-top:23px;border:1px solid #b29ecb81;border-radius:13px;background:linear-gradient(130deg,#292542,#1c3442)}
+.map-reference h2{font:italic 900 27px/1.1 Impact,"Arial Black",sans-serif;color:#fff1e3;margin:0 0 10px}
+.map-reference p{font-size:13px;line-height:1.65;margin:0;color:#dcd1e0;max-width:780px}
+.map-reference-links{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.map-reference-links a{border:1px solid #a7deca83;border-radius:7px;padding:12px 16px;min-height:44px;font-size:12px;font-weight:850;color:#afffec;text-decoration:none}
+.map-reference-links a:hover{border-color:#c2fff2}
+@media(max-width:850px){.map-lead{flex-direction:column;align-items:flex-start}.map-reference{grid-template-columns:1fr}.map-reference-links{justify-content:flex-start}}
+@media(max-width:600px){.map-page{padding-top:17px}.map-lead h1{font-size:42px}.map-lead p{font-size:13px}.map-viewport{height:min(72vh,680px);min-height:360px}.map-toolbar{padding:9px;gap:7px}.map-toolbar-group{gap:5px}.map-control{padding:8px 10px}.map-status{width:100%;padding:0 3px}.map-help{padding:12px}.map-reference{padding:19px}.map-reference-links{flex-direction:column}.map-reference-links a{text-align:center}}
+@media(prefers-reduced-motion:reduce){.map-viewport img{will-change:auto}}
