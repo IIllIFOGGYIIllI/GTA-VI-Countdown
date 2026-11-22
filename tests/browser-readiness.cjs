@@ -1,4 +1,4 @@
-/* GTA VI Countdown v3.8 — responsive, isolation, spoiler, PWA and midnight QA. */
+/* Vice City Hub v4.1 — responsive, isolation, spoiler, PWA and midnight QA. */
 'use strict';
 const {chromium}=require('playwright');
 const {spawn}=require('node:child_process');
@@ -31,6 +31,7 @@ async function main(){
    ['index.html','hub-intro'],
    ['countdown-archive.html','countdown'],
    ['player-hub.html','player-hub'],
+   ['leonida-map.html','leonida-map'],
    ['launch-info.html','milestones'],
    ['launch-kit.html','launch-kit'],
    ['after-launch.html','after-launch'],
@@ -82,6 +83,28 @@ async function main(){
     }finally{await ctx.close();}
    });
   }
+  await runCase('Leonida Map has independent zoom, pan and reset controls',async()=>{
+   const ctx=await browser.newContext({viewport:{width:375,height:812},serviceWorkers:'block'});
+   try{
+    const page=await ctx.newPage(),errors=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    await page.goto(BASE+'leonida-map.html',{waitUntil:'domcontentloaded'});
+    assert.equal(await page.locator('#leonida-map').isVisible(),true);
+    assert.equal(await page.locator('#hub-news-grid').count(),0);
+    assert.equal(await page.locator('#guide-content').count(),0);
+    await page.evaluate(()=>{
+     const img=document.getElementById('leonida-map-image');
+     Object.defineProperty(img,'naturalWidth',{configurable:true,value:1122});
+     Object.defineProperty(img,'naturalHeight',{configurable:true,value:1536});
+     img.dispatchEvent(new Event('load'));
+    });
+    await page.locator('#map-zoom-in').click();
+    assert.ok(Number.parseInt(await page.locator('#map-zoom').textContent(),10)>100);
+    await page.locator('#map-reset').click();
+    assert.equal(await page.locator('#map-zoom').textContent(),'100%');
+    assert.deepEqual(errors,[]);
+   }finally{await ctx.close();}
+  });
   await runCase('post-launch routes remain genuinely separate',async()=>{
    const ctx=await browser.newContext({viewport:{width:375,height:812},serviceWorkers:'block'});
    try{
@@ -473,8 +496,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-hub-v1')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-hub-v1');
+      if(!keys.includes('vice-city-hub-v2')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-hub-v2');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
