@@ -32,6 +32,7 @@ jobs:
           node tests/test_launch_week.cjs
           node --check app.js
           node --check assets/cinematic-launch.js
+          node --check assets/leonida-map.js
           node --check assets/hub-home.js
           node --check assets/player-hub.js
           node --check assets/after-launch.js
@@ -54,8 +55,9 @@ jobs:
       - name: Prepare minimal static site
         run: |
           mkdir -p dist
-          cp index.html player-hub.html countdown-archive.html launch-info.html launch-kit.html after-launch.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
+          cp index.html leonida-map.html player-hub.html countdown-archive.html launch-info.html launch-kit.html after-launch.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
           cp -R assets data obs dist/
+          python3 scripts/stage_official_posters.py dist
           touch dist/.nojekyll
       - name: Download and verify original Vice City archive images
         run: |
