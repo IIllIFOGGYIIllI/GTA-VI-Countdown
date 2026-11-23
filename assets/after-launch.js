@@ -56,7 +56,7 @@
  }
  async function loadApproved(){
   try{
-   const response=await fetch('./data/news.json?v=3.1.0',{cache:'no-store'});
+   const response=await fetch('./data/news.json?v=4.2.0',{cache:'no-store'});
    if(!response.ok)throw Error('News offline');
    const data=await response.json();
    if(!Array.isArray(data.articles))throw Error('Invalid news');
