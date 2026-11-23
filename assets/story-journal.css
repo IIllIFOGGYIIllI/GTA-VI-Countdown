@@ -1,0 +1,31 @@
+/* Vice City Hub — The Story Journal (spoiler-free, standalone) */
+.story-page{padding:28px 0 52px;min-height:65vh}
+.story-eyebrow{display:block;font-size:11px;letter-spacing:.15em;font-weight:900;color:#9ffff0}
+.story-hero{isolation:isolate;overflow:hidden;position:relative;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(240px,.55fr);gap:28px;align-items:center;padding:clamp(28px,5vw,64px);border:1px solid #bc98bb85;border-radius:15px;background:radial-gradient(circle at 81% 17%,#e96d9d50,transparent 43%),linear-gradient(130deg,#35223f 6%,#30345b 58%,#14515d);box-shadow:0 20px 45px #07081785}
+.story-hero::before{content:"01";position:absolute;z-index:-1;right:-15px;bottom:-95px;font:italic 1000 clamp(180px,26vw,390px)/1 Impact,"Arial Black",sans-serif;color:#ffd6dc12;pointer-events:none}
+.story-hero h1{font:italic 900 clamp(48px,6vw,82px)/.99 Impact,"Arial Black",sans-serif;color:#fff0e4;margin:19px 0}
+.story-hero h1 em{display:block;color:#ffb9d0}
+.story-hero p{font-size:14px;line-height:1.8;color:#e9dce6;margin:0;max-width:630px}
+.story-hero-aside{border:1px solid #9bffec73;padding:23px;border-radius:13px;background:#161d37be;display:flex;flex-direction:column;gap:13px;align-self:stretch;justify-content:center}
+.story-hero-aside strong{font-size:24px;color:#fff3e6;line-height:1.15}
+.story-hero-aside p{font-size:12px}
+.story-ribbon{font-size:12px;font-weight:900;color:#9effe9;letter-spacing:.05em}
+.story-chapter{margin-top:25px;display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,.33fr);gap:18px;align-items:start}
+.story-paper{min-width:0;padding:clamp(26px,5vw,60px);border-radius:14px;border:1px solid #bfa1bf8c;background:linear-gradient(145deg,#29213b,#201e37 60%,#192f3f)}
+.story-chapter-heading{padding-bottom:27px;border-bottom:1px solid #ffffff29;margin-bottom:24px}
+.story-chapter-heading h2{font:italic 900 clamp(34px,4vw,54px)/1.05 Impact,"Arial Black",sans-serif;color:#fff0de;margin:10px 0}
+.story-chapter-heading p{font-size:12px;color:#b9f6eb;margin:0;letter-spacing:.045em}
+.story-prose{max-width:760px}
+.story-prose p{font:400 clamp(16px,1.5vw,19px)/1.95 Georgia,"Times New Roman",serif;color:#f0e4ed;margin:0 0 20px}
+.story-prose p:first-child::first-letter{font-size:1.9em;font-weight:bold;line-height:1;color:#ffc9cc}
+.story-prose p:last-child{margin-bottom:0}
+.story-coda{border-top:1px solid #ffffff29;margin-top:29px;padding-top:17px;font-size:12px;line-height:1.65;color:#bdd4da}
+.story-info{background:linear-gradient(150deg,#232c42,#1a3542);border:1px solid #8ad9d189;border-radius:13px;padding:25px;display:flex;flex-direction:column;gap:12px}
+.story-info h3{font-size:19px;color:#fff0e4;margin:0}
+.story-info p{font-size:13px;line-height:1.75;color:#e0d6e1;margin:0}
+.story-info a{font-size:12px;font-weight:900;color:#9ffff0}
+.story-actions{display:flex;gap:12px;flex-wrap:wrap;margin:23px 0 6px}
+.story-actions a{min-height:45px;display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;text-decoration:none;border:1px solid #96e6d6;border-radius:8px;font-weight:900;font-size:12px;color:#acffed;background:#222d44}
+.story-actions a:first-child{background:linear-gradient(100deg,#ffdeba,#ffa1c2);color:#2e2340;border-color:transparent}
+@media(max-width:850px){.story-hero,.story-chapter{grid-template-columns:1fr}.story-hero-aside{max-width:none}}
+@media(max-width:600px){.story-page{padding-top:15px}.story-hero{padding:28px 20px;gap:24px}.story-hero h1{font-size:clamp(43px,12vw,61px)}.story-paper{padding:26px 20px}.story-prose p{line-height:1.82;font-size:16px}.story-actions{flex-direction:column}.story-actions a{width:100%}}
