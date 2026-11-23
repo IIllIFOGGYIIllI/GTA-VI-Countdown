@@ -1,4 +1,4 @@
-/* Vice City Countdown v3.1 — approved Newswire, scoped to the News page */
+/* Vice City Hub v4.2 — approved Newswire, scoped to the News page */
 (()=>{
  'use strict';
  const $=id=>document.getElementById(id);
@@ -56,7 +56,7 @@
     const grid=$('news-grid'),status=$('news-status'),verified=$('news-verified');
     if(!grid||!status)return;
     try{
-      const response=await fetch('./data/news.json?v=3.1.0',{cache:'no-store'});
+      const response=await fetch('./data/news.json?v=4.2.0',{cache:'no-store'});
       if(!response.ok)throw Error('Approved news is unavailable');
       const feed=await response.json();
       if(!Array.isArray(feed.articles))throw Error('Invalid approved-news format');
