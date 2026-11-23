@@ -1,4 +1,4 @@
-/* Vice City Hub v4.0 — spoiler-conscious homepage, official reviewed news only. */
+/* Vice City Hub v4.2 — spoiler-conscious homepage, official reviewed news only. */
 (()=>{
  'use strict';
  const poster=document.getElementById('hub-cover-poster');
@@ -37,7 +37,7 @@
  };
  const refresh=async()=>{
   try{
-   const response=await fetch('./data/news.json?v=3.1.0',{cache:'no-store'});
+   const response=await fetch('./data/news.json?v=4.2.0',{cache:'no-store'});
    if(!response.ok)throw Error('News feed unavailable');
    const feed=await response.json();
    if(!Array.isArray(feed.articles))throw Error('Invalid feed');
