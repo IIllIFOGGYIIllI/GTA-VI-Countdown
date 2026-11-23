@@ -1,4 +1,4 @@
-"""Vice City Hub v4.1: standalone pages, official posters, spoiler and PWA contracts."""
+"""Vice City Hub v4.3: separate Story Journal, maps, news, spoiler and PWA contracts."""
 import json
 import re
 import unittest
@@ -12,6 +12,7 @@ PAGE_SECTIONS={
     'countdown-archive.html':{'countdown','launch-hub','after-home'},
     'player-hub.html':{'player-hub','player-checklist','player-resources'},
     'leonida-map.html':{'leonida-map'},
+    'story-journal.html':{'story-intro','story-chapter-one','story-next'},
     'launch-info.html':{'launch-hub','milestones'},
     'launch-kit.html':{'launch-kit'},
     'after-launch.html':{'after-launch','after-news','after-explore','after-checklist'},
@@ -26,6 +27,7 @@ MODULES={
     'countdown-archive.html':{'app.js','assets/cinematic-launch.js'},
     'player-hub.html':{'assets/player-hub.js'},
     'leonida-map.html':{'assets/leonida-map.js'},
+    'story-journal.html':set(),
     'launch-info.html':{'assets/region-clock.js'},
     'launch-kit.html':{'assets/region-clock.js','assets/launch-week.js'},
     'after-launch.html':{'assets/region-clock.js','assets/after-launch.js'},
@@ -90,6 +92,7 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('href="./player-hub.html"',self.pages[f])
                 self.assertIn('href="./countdown-archive.html"',self.pages[f])
                 self.assertIn('href="./leonida-map.html"',self.pages[f])
+                self.assertIn('href="./story-journal.html"',self.pages[f])
                 self.assertIn('<link rel="canonical"',self.pages[f])
                 self.assertTrue(any('Vice City' in h or 'GTA VI' in h or 'Leonida' in h or 'Launch' in h or 'Official' in h or 'Countdown' in h
                                     for h in p.headings))
@@ -119,7 +122,7 @@ class SiteTests(unittest.TestCase):
         news=json.loads((ROOT/'data/news.json').read_text(encoding='utf-8'))
         shots=json.loads((ROOT/'data/screenshots.json').read_text(encoding='utf-8'))
         guide=json.loads((ROOT/'data/official-guide.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(news['articles']),11)
+        self.assertEqual(len(news['articles']),16)
         self.assertEqual(len(guide['items']),19)
         self.assertEqual(len(shots['items']),138)
         shotmap={a['image']:a for a in shots['items']}
@@ -148,7 +151,7 @@ class SiteTests(unittest.TestCase):
         pre=sw.split('];',1)[0]
         self.assertNotIn("data/official-guide.json",pre)
         self.assertNotIn("data/screenshots.json",pre)
-        self.assertIn("vice-city-hub-v3",sw)
+        self.assertIn("vice-city-hub-v5",sw)
     def test_pwa_and_multiroute_shortcuts(self):
         m=json.loads((ROOT/'manifest.webmanifest').read_text(encoding='utf-8'))
         urls={x['url'] for x in m['shortcuts']}
@@ -159,6 +162,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('./index.html',urls)
         self.assertIn('./countdown-archive.html',urls)
         self.assertIn('./leonida-map.html',urls)
+        self.assertIn('./story-journal.html',urls)
         sw=(ROOT/'sw.js').read_text(encoding='utf-8')
         for file in PAGE_SECTIONS:self.assertIn('./'+file,sw)
         for asset in ('assets/news.js','assets/media.js','assets/region-clock.js',
@@ -166,7 +170,7 @@ class SiteTests(unittest.TestCase):
             self.assertIn(asset,sw)
         self.assertIn('SKIP_WAITING',sw)
         self.assertIn('assets/vice-city-history.js',sw)
-        self.assertIn('assets/after-launch.js?v=1.0.0',sw)
+        self.assertIn('assets/after-launch.js?v=4.2.0',sw)
         self.assertIn('assets/after-launch.css?v=1.0.1',sw)
     def test_after_launch_hub_keeps_release_and_spoiler_contract(self):
         html=self.pages['after-launch.html']
@@ -176,11 +180,11 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="after-news-grid"',html)
         self.assertIn('data-after-task="console"',html)
         self.assertIn('assets/after-launch.css?v=1.0.1',html)
-        self.assertIn('assets/hub-home.css?v=4.1.1',home)
+        self.assertIn('assets/hub-home.css?v=4.3.0',home)
         self.assertIn('vice:tick',js)
         self.assertIn('window.ViceCountdown',js)
         self.assertIn('vc-first-session-v1',js)
-        self.assertIn("data/news.json?v=3.1.0",js)
+        self.assertIn("data/news.json?v=4.2.0",js)
         self.assertIn("'https:'",js)
         self.assertNotIn('data/screenshots.json',sw.split('];',1)[0])
         self.assertNotIn('data/official-guide.json',sw.split('];',1)[0])
@@ -197,14 +201,14 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="hub-explore"',home)
         self.assertNotIn('id="count-grid"',home)
         self.assertNotIn('id="vc-cinema"',home)
-        self.assertIn('assets/hub-home.js?v=4.1.1',home)
+        self.assertIn('assets/hub-home.js?v=4.2.0',home)
         self.assertIn('assets/player-hub.js?v=4.0.0',player)
         self.assertIn('id="player-checklist"',player)
         self.assertIn('id="count-grid"',archive)
         self.assertNotIn('id="player-checklist"',home)
         self.assertNotIn('id="gallery-grid"',home)
         self.assertNotIn('id="guide-grid"',home)
-        self.assertIn('./assets/hub-home.js?v=4.1.1',sw)
+        self.assertIn('./assets/hub-home.js?v=4.2.0',sw)
         self.assertIn('./assets/player-hub.js?v=4.0.0',sw)
         self.assertIn('./player-hub.html',sw)
         self.assertIn('./countdown-archive.html',sw)
@@ -227,7 +231,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('id="map-zoom-out"',map_html)
         self.assertIn('id="map-reset"',map_html)
         self.assertIn('id="map-fullscreen"',map_html)
-        self.assertIn('assets/leonida-map.js?v=4.1.0',map_html)
+        self.assertIn('assets/leonida-map.js?v=4.2.0',map_html)
         self.assertIn('id="hub-cover-poster"',home)
         self.assertNotIn('id="leonida-map-viewport"',home)
         self.assertIn('assets/posters/cover-art.jpg',home)
@@ -239,9 +243,28 @@ class SiteTests(unittest.TestCase):
         self.assertIn('Leonida_Map_Poster.jpg',mirror)
         self.assertIn('scripts/stage_official_posters.py dist',workflow)
         self.assertIn('./leonida-map.html',sw)
-        self.assertIn('./assets/leonida-map.js?v=4.1.0',sw)
-        self.assertIn('./assets/leonida-map.css?v=4.1.0',sw)
+        self.assertIn('./assets/leonida-map.js?v=4.2.0',sw)
+        self.assertIn('./assets/leonida-map.css?v=4.2.0',sw)
         self.assertNotIn('./assets/posters/leonida-map.jpg',sw.split('];',1)[0])
+
+    def test_story_journal_has_spoiler_free_chapter_one_and_is_separate(self):
+        journal=self.pages['story-journal.html']
+        home=self.pages['index.html']
+        sw=(ROOT/'sw.js').read_text(encoding='utf-8')
+        self.assertIn('Just Like Paradise',journal)
+        self.assertIn('id="story-chapter-one"',journal)
+        self.assertIn('id="story-intro"',journal)
+        self.assertIn('id="story-next"',journal)
+        self.assertIn('no story spoilers',journal.lower())
+        self.assertNotIn('Unwanted Attention',journal)
+        self.assertNotIn('id="hub-news-grid"',journal)
+        self.assertNotIn('id="guide-content"',journal)
+        self.assertNotIn('id="story-chapter-one"',home)
+        self.assertIn('href="./story-journal.html#story-chapter-one"',home)
+        self.assertIn('./story-journal.html',sw)
+        self.assertIn('./assets/story-journal.css?v=4.3.0',sw)
+        self.assertNotIn('data/official-guide.json',sw.split('];',1)[0])
+        self.assertNotIn('data/screenshots.json',sw.split('];',1)[0])
 
     def test_classic_vice_city_history_and_spoiler_reveal(self):
         page=self.pages['vice-city-history.html']
@@ -283,7 +306,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('vh-gallery-full',script)
         self.assertIn("if(locked())return;",script)
         worker=(ROOT/'sw.js').read_text(encoding='utf-8')
-        self.assertIn('vice-city-hub-v3',worker)
+        self.assertIn('vice-city-hub-v5',worker)
         self.assertIn('vice-city-history.css?v=3.4.2',worker)
         self.assertIn('vice-city-history.js?v=3.4.3',worker)
         # The historical images can be fetched normally, but optional GTA VI
@@ -361,7 +384,7 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn('GrandFireworks',cinema)
         self.assertIn('assets/cinematic-launch.js?v=3.7.0',home)
         for page in self.pages.values():
-            self.assertIn('assets/site-pages.js?v=4.1.0',page)
+            self.assertIn('assets/site-pages.js?v=4.3.0',page)
 
     def test_obs_browser_scene_isolation_and_release_contract(self):
         scenes=('starting','countdown','ending')
