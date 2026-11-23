@@ -56,7 +56,8 @@ jobs:
         run: |
           mkdir -p dist
           cp index.html story-journal.html leonida-map.html player-hub.html countdown-archive.html launch-info.html launch-kit.html after-launch.html news.html leonida-files.html vice-city-history.html media.html app.html styles.css app.js sw.js manifest.webmanifest privacy.html terms.html spoilers.html dist/
-          cp -R assets data obs dist/
+          cp -R assets data obs broadcast dist/
+          test -s dist/broadcast/index.html
           # Pillow converts the 300 DPI official printable map to a smaller on-demand WebP.
           # A package/network failure must not take the rest of the site offline.
           python3 -m pip install --quiet Pillow || echo "Pillow unavailable; basic map fallback remains"
