@@ -245,3 +245,12 @@ The website now opens to **Vice City Hub**, a permanent post-launch destination 
 - **Reliable delivery:** `scripts/stage_official_posters.py` downloads those files into the GitHub Pages output folder. Failure is nonfatal: the browser falls back to the public mirror and offers a Rockstar source link. The original printable map ZIP is linked directly from Rockstar's media CDN.
 - **Spoiler and PWA safeguards:** Neither poster is pre-cached during installation, though the service worker may cache a successfully visited local copy. Story and screenshot databases are still opt-in. The PWA cache is `vice-city-hub-v2`.
 - **Separate pages:** Desktop navigation, mobile bar, page menu and app shortcut link to `leonida-map.html`. News, Media, History, Player Hub and Leonida Files remain independent HTML pages.
+
+## v4.3 — Separate, spoiler-free Story Journal
+
+- Created `story-journal.html` and `assets/story-journal.css` for a standalone atmospheric reading experience.
+- The first entry is **Chapter 1: Just Like Paradise**, a short original introduction that names no mission objectives, resolutions or major twists. The text is editorial mood-setting, not a factual plot recap.
+- **Unwanted Attention** is one of the missions within Chapter 1, not the chapter title. Its story details are intentionally omitted.
+- Story Journal has its own desktop and Pages menu links; a homepage feature and Player Hub card lead directly to the reading page. Other categories remain independently navigable.
+- No unreviewed mission details, spoilers, new remote data requests, analytics or new libraries were introduced.
+- PWA `vice-city-hub-v5` includes the journal HTML and stylesheet for offline reading. The deployment pipeline publishes the page alongside the existing website.
