@@ -230,7 +230,7 @@ async function main(){
     page.on('pageerror',e=>errors.push(e.message));
     await page.goto(BASE+'news.html?category=updates',{waitUntil:'load'});
     await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===16);
-    assert.equal(await page.locator('#news-grid .news-card:visible').count(),7);
+    assert.equal(await page.locator('#news-grid .news-card:visible').count(),11);
     await page.locator('.news-tools [data-filter="preload"]').click();
     assert.equal(await page.locator('#news-grid .news-card:visible').count(),1);
     assert.equal(new URL(page.url()).searchParams.get('category'),'preload');
