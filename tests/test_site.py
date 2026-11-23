@@ -409,7 +409,9 @@ class SiteTests(unittest.TestCase):
         self.assertIn('1920px;height:1080px',css)
         self.assertIn('.is-overlay .scene{background:transparent}',css)
         self.assertIn('prefers-reduced-motion:reduce',css)
-        self.assertIn('cp -R assets data obs dist/',workflow)
+        self.assertIn('cp -R assets data obs broadcast dist/',workflow)
+        self.assertIn('test -s dist/broadcast/index.html',workflow)
+        self.assertTrue((ROOT/'broadcast/index.html').is_file())
         self.assertIn('node --check obs/obs.js',workflow)
 
     def test_obs_live_regional_milestones_and_clean_titles(self):
