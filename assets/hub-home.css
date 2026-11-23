@@ -64,3 +64,10 @@ body[data-page="home"] .mobile-tab-link[aria-current="page"]{color:#9ffff1}
 .vc-strict-spoilers .hub-cover-poster img{display:none!important}
 .vc-strict-spoilers .hub-cover-locked{display:block;text-align:center;font-size:14px;font-weight:900;line-height:1.9;color:#fff1e8;padding:35px}
 .hub-cover-locked a{color:#abfff0;font-size:12px}
+
+/* v4.3 — link to the separate spoiler-free Story Journal. */
+.story-home-teaser{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:21px 25px;margin:0 auto 25px;border:1px solid #a7c8c89c;border-radius:13px;background:linear-gradient(113deg,#322445,#20344b)}
+.story-home-teaser h2{color:#fff0e3;font:italic 900 clamp(24px,2.8vw,36px)/1.1 Impact,"Arial Black",sans-serif;margin:8px 0}
+.story-home-teaser p{font-size:12px;line-height:1.65;color:#e6d5e1;margin:0;max-width:600px}
+.story-home-teaser>a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:12px;font-weight:900;color:#231f36;background:linear-gradient(110deg,#ffdab9,#ffa4c2);border-radius:8px;padding:13px 17px;min-height:47px;white-space:nowrap}
+@media(max-width:650px){.story-home-teaser{flex-direction:column;align-items:stretch;gap:15px;padding:20px}.story-home-teaser>a{white-space:normal;text-align:center}}
