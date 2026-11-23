@@ -1,4 +1,4 @@
-/* Vice City Hub v4.1 — responsive, isolation, spoiler, PWA and midnight QA. */
+/* Vice City Hub v4.3 — responsive, isolation, spoiler, PWA and midnight QA. */
 'use strict';
 const {chromium}=require('playwright');
 const {spawn}=require('node:child_process');
@@ -32,6 +32,7 @@ async function main(){
    ['countdown-archive.html','countdown'],
    ['player-hub.html','player-hub'],
    ['leonida-map.html','leonida-map'],
+   ['story-journal.html','story-intro'],
    ['launch-info.html','milestones'],
    ['launch-kit.html','launch-kit'],
    ['after-launch.html','after-launch'],
@@ -213,7 +214,7 @@ async function main(){
     await page.goto(BASE+'media.html',{waitUntil:'load'});
     assert.equal(await page.locator('#media-toggle').isDisabled(),true);
     await page.goto(BASE+'news.html',{waitUntil:'load'});
-    await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===11);
+    await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===16);
     assert.equal(await page.locator('#news-grid img.news-visual-image[src]').count(),0);
     await page.goto(BASE+'launch-kit.html',{waitUntil:'load'});
     await page.locator('#kit-strict').uncheck();
@@ -228,13 +229,13 @@ async function main(){
     const page=await ctx.newPage(),errors=[];
     page.on('pageerror',e=>errors.push(e.message));
     await page.goto(BASE+'news.html?category=updates',{waitUntil:'load'});
-    await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===11);
+    await page.waitForFunction(()=>document.querySelectorAll('#news-grid .news-card').length===16);
     assert.equal(await page.locator('#news-grid .news-card:visible').count(),7);
     await page.locator('.news-tools [data-filter="preload"]').click();
     assert.equal(await page.locator('#news-grid .news-card:visible').count(),1);
     assert.equal(new URL(page.url()).searchParams.get('category'),'preload');
-    assert.equal(await page.locator('#news-grid .news-card a[target="_blank"]').count(),11);
-    assert.equal(await page.locator('#news-grid .news-visual img[data-official-image]').count(),11);
+    assert.equal(await page.locator('#news-grid .news-card a[target="_blank"]').count(),16);
+    assert.equal(await page.locator('#news-grid .news-visual img[data-official-image]').count(),16);
     assert.deepEqual(errors,[]);
    }finally{await ctx.close();}
   });
@@ -496,8 +497,8 @@ async function main(){
     await page.evaluate(async()=>await navigator.serviceWorker.ready);
     await page.waitForFunction(async()=>{
       const keys=await caches.keys();
-      if(!keys.includes('vice-city-hub-v3')||!navigator.serviceWorker.controller)return false;
-      const cache=await caches.open('vice-city-hub-v3');
+      if(!keys.includes('vice-city-hub-v5')||!navigator.serviceWorker.controller)return false;
+      const cache=await caches.open('vice-city-hub-v5');
       return !!(await cache.match('./news.html'))&&!!(await cache.match('./launch-kit.html'));
     });
     await ctx.setOffline(true);
