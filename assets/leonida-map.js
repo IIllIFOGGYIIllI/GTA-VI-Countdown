@@ -3,12 +3,35 @@
 'use strict';
 const stage=document.getElementById('leonida-map-viewport');
 const img=document.getElementById('leonida-map-image');
+const detail=document.getElementById('leonida-map-detail-image');
 const zoomText=document.getElementById('map-zoom');
 const status=document.getElementById('map-status');
 const empty=document.getElementById('map-empty');
 if(!stage||!img||!zoomText||!status||!empty)return;
 let z=1,dx=0,dy=0,baseW=0,baseH=0,ready=false,usingFallback=false;
+let detailRequested=false,detailReady=false,detailFailed=false;
 const pointers=new Map();
+const DETAIL_THRESHOLD=1.25;
+const loadDetail=()=>{
+ if(!detail||detailRequested||detailFailed||!ready)return;
+ const source=detail.dataset.detailSrc;
+ if(!source||!source.startsWith('./assets/posters/'))return;
+ detailRequested=true;
+ status.textContent='Loading High-Resolution Leonida Map…';
+ detail.src=source;
+};
+if(detail){
+ detail.addEventListener('load',()=>{
+  if(!detail.naturalWidth||detail.naturalWidth<5000){detailFailed=true;return;}
+  detailReady=true;
+  status.textContent='High-Resolution Map Ready · Original Printable Detail';
+  paint();
+ });
+ detail.addEventListener('error',()=>{
+  detailFailed=true;detail.hidden=true;
+  status.textContent='Standard Map Ready · High-Resolution Copy Unavailable';
+ });
+}
 let lastCenter=null,lastDistance=0;
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 const fit=()=>{
@@ -17,6 +40,7 @@ const fit=()=>{
  const scale=Math.min((stage.clientWidth-26)/iw,(stage.clientHeight-26)/ih);
  baseW=Math.max(1,iw*scale);baseH=Math.max(1,ih*scale);
  img.style.width=baseW+'px';img.style.height=baseH+'px';
+ if(detail){detail.style.width=baseW+'px';detail.style.height=baseH+'px';}
  keepInside();paint();
 };
 const keepInside=()=>{
@@ -25,7 +49,13 @@ const keepInside=()=>{
  dx=clamp(dx,-maxX,maxX);dy=clamp(dy,-maxY,maxY);
 };
 const paint=()=>{
- img.style.transform='translate(-50%,-50%) translate('+dx+'px,'+dy+'px) scale('+z+')';
+ const transform='translate(-50%,-50%) translate('+dx+'px,'+dy+'px) scale('+z+')';
+ img.style.transform=transform;
+ if(detail){
+  detail.style.transform=transform;
+  detail.hidden=!(detailReady&&z>=DETAIL_THRESHOLD);
+  if(z>=DETAIL_THRESHOLD&&!detailRequested&&!detailFailed)loadDetail();
+ }
  zoomText.textContent=Math.round(z*100)+'%';
  document.getElementById('map-zoom-out').disabled=z<=1.001;
  document.getElementById('map-zoom-in').disabled=z>=5.999;
@@ -42,7 +72,7 @@ const reset=()=>{z=1;dx=0;dy=0;fit();};
 const pan=(x,y)=>{if(!ready)return;dx+=x;dy+=y;keepInside();paint();};
 const coords=e=>{const r=stage.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};};
 img.addEventListener('load',()=>{
- ready=true;empty.hidden=true;status.textContent='Map Ready · Drag To Move · Zoom Up To 600%';reset();
+ ready=true;empty.hidden=true;status.textContent='Map Ready · Zoom In For More Detail';reset();
 });
 img.addEventListener('error',()=>{
  if(!usingFallback){
