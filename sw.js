@@ -1,5 +1,5 @@
 /* Vice City Hub · PWA v4.1 · Multi-page archive, approved material and offline fallback */
-const CACHE='vice-city-hub-v3';
+const CACHE='vice-city-hub-v4';
 const CORE=[
   "./",
   "./index.html",
@@ -20,13 +20,13 @@ const CORE=[
   "./assets/vice-city-theme.css?v=2.2.0",
   "./assets/mobile-experience.css?v=2.3.0",
   "./assets/site-pages.css?v=4.1.0",
-  "./assets/leonida-map.css?v=4.1.0",
-  "./assets/leonida-map.js?v=4.1.0",
+  "./assets/leonida-map.css?v=4.2.0",
+  "./assets/leonida-map.js?v=4.2.0",
   "./assets/hub-home.css?v=4.1.1",
-  "./assets/hub-home.js?v=4.1.1",
+  "./assets/hub-home.js?v=4.2.0",
   "./assets/player-hub.js?v=4.0.0",
   "./assets/after-launch.css?v=1.0.1",
-  "./assets/after-launch.js?v=1.0.0",
+  "./assets/after-launch.js?v=4.2.0",
   "./assets/launch-mode.css?v=2.4.0",
   "./assets/cinematic-launch.css?v=3.8.1",
   "./assets/site-pages.js?v=4.1.0",
@@ -37,12 +37,12 @@ const CORE=[
   "./assets/launch-week-core.js?v=2.5.0",
   "./assets/launch-week.js?v=3.1.0",
   "./assets/editorial-images.css?v=2.9.1",
-  "./assets/news.js?v=3.1.0",
+  "./assets/news.js?v=4.2.0",
   "./assets/official-guide.css?v=2.8.0",
   "./assets/official-guide.js?v=3.1.0",
   "./assets/media.js?v=3.1.0",
   "./assets/install.js?v=3.1.0",
-  "./data/news.json?v=3.1.0",
+  "./data/news.json?v=4.2.0",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/icon-192.png",
@@ -103,7 +103,7 @@ self.addEventListener('fetch',event=>{
         event.waitUntil(caches.open(CACHE).then(c=>c.put(request,copy)));
       }
       return response;
-    }).catch(async()=>await caches.match('./data/news.json?v=3.1.0') ||
+    }).catch(async()=>await caches.match('./data/news.json?v=4.2.0') ||
       new Response('{"articles":[]}',{headers:{'Content-Type':'application/json'}})));
     return;
   }
