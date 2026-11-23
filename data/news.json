@@ -1,8 +1,44 @@
 {
   "schema": 1,
-  "reviewedAt": "2026-11-16T10:00:00+11:00",
-  "policy": "Editorial approval only. Scheduled checks create GitHub review issues and NEVER change this file.",
+  "reviewedAt": "2026-11-24T01:55:00+11:00",
+  "policy": "Manually reviewed announcements from official Rockstar Games news and media pages. Scheduled checks create GitHub review issues and NEVER change this file.",
   "articles": [
+    {
+      "id": "gtavi-album-available-20261120",
+      "category": "updates",
+      "tag": "Soundtrack Released",
+      "date": "2026-11-20",
+      "title": "Grand Theft Auto VI: The Album Is Out Now",
+      "summary": "Rockstar and Atlantic Records have released the official GTA VI soundtrack album on streaming services, with limited-edition vinyl and CD formats also announced.",
+      "url": "https://www.rockstargames.com/newswire/article/k4a8955a93o747/grand-theft-auto-vi-the-album-now-available",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_14.0fu8u9jh5hkg7.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 14",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
+    },
+    {
+      "id": "gtavi-now-available-20261119",
+      "category": "launch",
+      "tag": "Now Available",
+      "date": "2026-11-19",
+      "title": "Grand Theft Auto VI Is Now Available",
+      "summary": "Rockstar marks the launch of GTA VI for PlayStation 5 and Xbox Series X|S. Its announcement also links to the official media gallery and printable cover and map artwork.",
+      "url": "https://www.rockstargames.com/newswire/article/39akk424a9oo53/grand-theft-auto-vi-now-available",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_16.16hjjmnxqg9mv.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 15",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
+    },
+    {
+      "id": "gtavi-leonida-poster-20261119",
+      "category": "updates",
+      "tag": "Official Map",
+      "date": "2026-11-19",
+      "title": "Rockstar Releases Printable Leonida Map And Cover Art",
+      "summary": "Download official Leonida map and cover-art posters from Rockstar's GTA VI media section. Vice City Hub also has a separate zoomable map viewer.",
+      "url": "https://www.rockstargames.com/newswire/article/39akk424a9oo53/grand-theft-auto-vi-now-available",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_18.001ebutl6h-9w.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 16",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
+    },
     {
       "id": "gtavi-preload-20261110",
       "category": "preload",
@@ -76,6 +112,18 @@
       "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
+      "id": "gtavi-store-collection-20261008",
+      "category": "updates",
+      "tag": "Rockstar Store",
+      "date": "2026-10-08",
+      "title": "Official GTA VI Collection Arrives At The Rockstar Store",
+      "summary": "Rockstar announced a collection of official Grand Theft Auto VI apparel and collectibles, including Vice City-inspired designs.",
+      "url": "https://www.rockstargames.com/newswire/article/759875393o5253/grand-theft-auto-vi-collection-now-at-the-rockstar-store",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_19.01ow62.xq.64i.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 17",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
+    },
+    {
       "id": "gtavi-radio-20261008",
       "category": "updates",
       "tag": "In-Game Audio",
@@ -85,6 +133,18 @@
       "url": "https://www.rockstargames.com/newswire/article/o3982oa93a23k4/the-music-of-grand-theft-auto-vi-in-game-radio-stations",
       "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_07.0b3mhak4k78oh.jpg?akim=1&imdensity=1&imwidth=960",
       "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 07",
+      "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
+    },
+    {
+      "id": "gtavi-goodtime-collection-20260924",
+      "category": "updates",
+      "tag": "Collectibles",
+      "date": "2026-09-24",
+      "title": "The Goodtime State — Vice City Collection Announced",
+      "summary": "Rockstar introduced its Goodtime State — Vice City merchandise collection, with a limited pre-order announcement and additional GTA VI store items planned.",
+      "url": "https://www.rockstargames.com/newswire/article/9k2a49ook82o57/pre-order-the-goodtime-state-vice-city-collection-now-while-supplies-l",
+      "image": "https://www.rockstargames.com/VI/_next/static/media/Vice_City_20.18c75478u52nf.jpg?akim=1&imdensity=1&imwidth=960",
+      "imageAlt": "Official Rockstar Games GTA VI promotional screenshot: Vice City 18",
       "imageSource": "https://www.rockstargames.com/VI/media/screenshots"
     },
     {
