@@ -1,9 +1,9 @@
-/* Vice City Hub v4.1 — shared navigation, preferences and PWA lifecycle. */
+/* Vice City Hub v4.3 — shared navigation, preferences and PWA lifecycle. */
 (()=>{
  'use strict';
  const page=document.body.dataset.page||'home';
  const map={home:'./index.html',archive:'./countdown-archive.html','launch-info':'./launch-info.html','after-launch':'./player-hub.html','player-hub':'./player-hub.html','launch-kit':'./launch-kit.html',news:'./news.html',history:'./vice-city-history.html',
-  'leonida-files':'./leonida-files.html','leonida-map':'./leonida-map.html',media:'./media.html',app:'./app.html'};
+  'leonida-files':'./leonida-files.html','leonida-map':'./leonida-map.html','story-journal':'./story-journal.html',media:'./media.html',app:'./app.html'};
  const config={
   news:{selector:'.news-tools [data-filter]',values:['all','launch','preload','updates'],attr:'filter'},
   media:{selector:'#gallery-filters [data-category]',values:['All','Vice City','Characters','Leonida Keys','Port Gellhorn','Grassrivers','Ambrosia','Mount Kalaga'],attr:'category'},
